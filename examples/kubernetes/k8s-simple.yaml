@@ -1,0 +1,87 @@
+version: "1.0"
+metadata:
+  title: "Kubernetes Architecture"
+  description: "Simple Kubernetes cluster with namespaces and pods"
+  author: "Hippodamus Kubernetes Schema"
+  tags: ["kubernetes", "k8s", "containers", "microservices"]
+
+templates:
+  - name: "kubernetes-cluster"
+    template: "kubernetes/kubernetes-cluster.yaml"
+  - name: "kubernetes-namespace"
+    template: "kubernetes/kubernetes-namespace.yaml"
+  - name: "kubernetes-pod"
+    template: "kubernetes/kubernetes-pod.yaml"
+
+diagram:
+  pages:
+    - id: "K8S"
+      name: "Kubernetes Cluster"
+
+      elements:
+        - type: "template"
+          id: "cluster"
+          name: "Production Cluster"
+          template: "kubernetes-cluster"
+          properties:
+            custom:
+              clusterName: "Production Cluster"
+              region: "us-west-2"
+          children:
+            - type: "template"
+              id: "default-ns"
+              name: "default"
+              template: "kubernetes-namespace"
+              properties:
+                custom:
+                  namespaceName: "default"
+                  environment: "production"
+              children:
+                - type: "template"
+                  id: "web-pod"
+                  name: "web-server"
+                  template: "kubernetes-pod"
+                  properties:
+                    custom:
+                      podName: "web-server"
+                      image: "nginx:1.21"
+                      replicas: 3
+
+                - type: "template"
+                  id: "api-pod"
+                  name: "api-server"
+                  template: "kubernetes-pod"
+                  properties:
+                    custom:
+                      podName: "api-server"
+                      image: "node:16-alpine"
+                      replicas: 2
+
+            - type: "template"
+              id: "monitoring-ns"
+              name: "monitoring"
+              template: "kubernetes-namespace"
+              properties:
+                custom:
+                  namespaceName: "monitoring"
+                  environment: "production"
+              children:
+                - type: "template"
+                  id: "prometheus-pod"
+                  name: "prometheus"
+                  template: "kubernetes-pod"
+                  properties:
+                    custom:
+                      podName: "prometheus"
+                      image: "prom/prometheus:latest"
+                      replicas: 1
+
+                - type: "template"
+                  id: "grafana-pod"
+                  name: "grafana"
+                  template: "kubernetes-pod"
+                  properties:
+                    custom:
+                      podName: "grafana"
+                      image: "grafana/grafana:latest"
+                      replicas: 1

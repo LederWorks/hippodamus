@@ -1,0 +1,54 @@
+name: "kubernetes-cluster"
+description: "Kubernetes Cluster container"
+version: "1.0"
+
+parameters:
+  - name: "clusterName"
+    type: "string"
+    default: "Kubernetes Cluster"
+    description: "Cluster name"
+  - name: "region"
+    type: "string"
+    default: "us-west-2"
+    description: "Cluster region"
+  - name: "fillColor"
+    type: "color"
+    default: "#E3F2FD"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#1976D2"
+    description: "Border color"
+
+elements:
+  - type: "container"
+    properties:
+      width: 800
+      height: 600
+      label: "{{.clusterName}}"
+      custom:
+        region: "{{.region}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 3.0
+      strokeDashArray: "8,8"
+      dashed: true
+      fontFamily: "Segoe UI"
+      fontSize: 16
+      fontColor: "#000000"
+      fontStyle: "bold"
+      textAlign: "center"
+      verticalAlign: "top"
+      rounded: true
+      shadow: true
+    nesting:
+      mode: "container"
+      autoResize: true
+      padding:
+        top: 60
+        right: 30
+        bottom: 30
+        left: 30
+      spacing: 40
+      arrangement: "vertical"

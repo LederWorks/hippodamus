@@ -7,9 +7,9 @@ metadata:
 
 templates:
   - name: "azuredevops-organization"
-    template: "azuredevops-organization.yaml"
+    template: "azuredevops/azuredevops-organization.yaml"
   - name: "azuredevops-project"
-    template: "azuredevops-project.yaml"
+    template: "azuredevops/azuredevops-project.yaml"
 
 diagram:
   # Using all defaults for diagram properties

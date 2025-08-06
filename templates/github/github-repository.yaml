@@ -1,0 +1,55 @@
+name: "github-repository"
+description: "GitHub Repository"
+version: "1.0"
+
+dependencies:
+  - name: "organization"
+    type: "github-organization"
+    required: false
+    relationship: "parent"
+    description: "Parent GitHub organization (optional for personal repos)"
+
+parameters:
+  - name: "repoName"
+    type: "string"
+    default: "repository"
+    description: "Repository name"
+  - name: "visibility"
+    type: "string"
+    default: "public"
+    description: "Repository visibility (public, private)"
+  - name: "language"
+    type: "string"
+    default: "JavaScript"
+    description: "Primary programming language"
+  - name: "fillColor"
+    type: "color"
+    default: "#E7F3FF"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#0969DA"
+    description: "Border color"
+
+elements:
+  - type: "shape"
+    properties:
+      width: 200
+      height: 120
+      label: "{{.repoName}}"
+      shape: "rectangle"
+      custom:
+        visibility: "{{.visibility}}"
+        language: "{{.language}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 2.0
+      fontFamily: "Segoe UI"
+      fontSize: 12
+      fontColor: "#24292F"
+      fontStyle: "bold"
+      textAlign: "center"
+      verticalAlign: "middle"
+      rounded: true
+      shadow: true

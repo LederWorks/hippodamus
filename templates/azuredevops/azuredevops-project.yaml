@@ -2,6 +2,13 @@ name: "azure-project"
 description: "Azure DevOps Project container"
 version: "1.0"
 
+dependencies:
+  - name: "organization"
+    type: "azuredevops-organization"
+    required: true
+    relationship: "parent"
+    description: "Parent Azure DevOps organization that contains this project"
+
 parameters:
   - name: "projectName"
     type: "string"

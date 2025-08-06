@@ -2,6 +2,18 @@ name: "azure-pipeline"
 description: "Azure DevOps Pipeline"
 version: "1.0"
 
+dependencies:
+  - name: "repository"
+    type: "azuredevops-repository"
+    required: true
+    relationship: "parent"
+    description: "Parent repository that contains this pipeline"
+  - name: "project"
+    type: "azuredevops-project"
+    required: false
+    relationship: "ancestor"
+    description: "Ancestor project (resolved automatically through repository->project chain)"
+
 parameters:
   - name: "pipelineName"
     type: "string"

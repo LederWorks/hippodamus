@@ -1,0 +1,52 @@
+name: "github-organization"
+description: "GitHub Organization container"
+version: "1.0"
+
+parameters:
+  - name: "orgName"
+    type: "string"
+    default: "Organization"
+    description: "Organization name"
+  - name: "plan"
+    type: "string"
+    default: "Free"
+    description: "GitHub plan (Free, Pro, Team, Enterprise)"
+  - name: "fillColor"
+    type: "color"
+    default: "#F6F8FA"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#24292F"
+    description: "Border color"
+
+elements:
+  - type: "container"
+    properties:
+      width: 800
+      height: 600
+      label: "{{.orgName}}"
+      custom:
+        plan: "{{.plan}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 3.0
+      fontFamily: "Segoe UI"
+      fontSize: 16
+      fontColor: "#24292F"
+      fontStyle: "bold"
+      textAlign: "center"
+      verticalAlign: "top"
+      rounded: true
+      shadow: true
+    nesting:
+      mode: "container"
+      autoResize: true
+      padding:
+        top: 50
+        right: 30
+        bottom: 30
+        left: 30
+      spacing: 40
+      arrangement: "vertical"

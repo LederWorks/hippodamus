@@ -2,10 +2,17 @@ name: "azuredevops-repository"
 description: "Azure DevOps Repository with pipelines and service connections"
 version: "1.0"
 
+dependencies:
+  - name: "project"
+    type: "azuredevops-project"
+    required: true
+    relationship: "parent"
+    description: "Parent Azure DevOps project that contains this repository"
+
 parameters:
   - name: "repoName"
     type: "string"
-    required: true
+    default: "Repository"
     description: "Repository name"
   - name: "repoType"
     type: "string"

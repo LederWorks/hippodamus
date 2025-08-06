@@ -12,17 +12,19 @@ import (
 	"github.com/LederWorks/hippodamus/pkg/schema"
 )
 
-// TemplateProcessor handles template loading and processing
+// TemplateProcessor handles template loading and processing with hive support
 type TemplateProcessor struct {
 	templates   map[string]*schema.Template
 	templateDir string
+	hives       map[string][]string // Maps hive name to list of templates
 }
 
-// NewTemplateProcessor creates a new template processor
+// NewTemplateProcessor creates a new template processor with hive support
 func NewTemplateProcessor(templateDir string) *TemplateProcessor {
 	return &TemplateProcessor{
 		templates:   make(map[string]*schema.Template),
 		templateDir: templateDir,
+		hives:       make(map[string][]string),
 	}
 }
 
@@ -34,7 +36,7 @@ func (tp *TemplateProcessor) getElementDisplayName(element *schema.Element) stri
 	return element.ID
 }
 
-// LoadTemplates loads all templates from the configured template directory
+// LoadTemplates loads all templates from the configured template directory with hive support
 func (tp *TemplateProcessor) LoadTemplates() error {
 	if tp.templateDir == "" {
 		return nil // No templates directory specified
@@ -50,7 +52,20 @@ func (tp *TemplateProcessor) LoadTemplates() error {
 			if err != nil {
 				return fmt.Errorf("failed to load template %s: %w", path, err)
 			}
-			tp.templates[template.Name] = template
+
+			// Determine hive from file path
+			hive := tp.getHiveFromPath(path)
+			templateKey := tp.getTemplateKey(template.Name, hive)
+
+			tp.templates[templateKey] = template
+
+			// Register template in hive
+			if hive != "" {
+				if tp.hives[hive] == nil {
+					tp.hives[hive] = make([]string, 0)
+				}
+				tp.hives[hive] = append(tp.hives[hive], template.Name)
+			}
 		}
 
 		return nil
@@ -141,13 +156,25 @@ func (tp *TemplateProcessor) processPage(page *schema.Page) error {
 
 // processElements processes a list of elements and applies templates
 func (tp *TemplateProcessor) processElements(elements []schema.Element) error {
+	return tp.processElementsWithContext(elements, []string{})
+}
+
+// processElementsWithContext processes elements with parent template context
+func (tp *TemplateProcessor) processElementsWithContext(elements []schema.Element, parentTemplates []string) error {
 	for i := range elements {
-		if err := tp.processElement(&elements[i]); err != nil {
+		if err := tp.processElementWithContext(&elements[i], parentTemplates); err != nil {
 			return fmt.Errorf("failed to process element %s: %w", elements[i].ID, err)
 		}
 
-		// Process children recursively
-		if err := tp.processElements(elements[i].Children); err != nil {
+		// Process children recursively with updated parent context
+		var childContext []string
+		if elements[i].Template != "" {
+			childContext = append([]string{elements[i].Template}, parentTemplates...)
+		} else {
+			childContext = parentTemplates
+		}
+
+		if err := tp.processElementsWithContext(elements[i].Children, childContext); err != nil {
 			return fmt.Errorf("failed to process children of element %s: %w", elements[i].ID, err)
 		}
 	}
@@ -157,15 +184,29 @@ func (tp *TemplateProcessor) processElements(elements []schema.Element) error {
 
 // processElement processes a single element and applies its template if specified
 func (tp *TemplateProcessor) processElement(element *schema.Element) error {
+	return tp.processElementWithContext(element, []string{})
+}
+
+// processElementWithContext processes a single element with parent template context
+func (tp *TemplateProcessor) processElementWithContext(element *schema.Element, parentTemplates []string) error {
 	// Handle template type - inherit type from template
 	if element.Type == schema.ElementTypeTemplate {
 		if element.Template == "" {
 			return fmt.Errorf("element %s has type 'template' but no template specified", tp.getElementDisplayName(element))
 		}
 
-		template, exists := tp.templates[element.Template]
+		// Resolve template reference using hive-aware resolution
+		currentHive := tp.getCurrentHive(parentTemplates)
+		resolvedTemplate := tp.resolveTemplateReference(element.Template, currentHive)
+
+		template, exists := tp.templates[resolvedTemplate]
 		if !exists {
-			return fmt.Errorf("template %s not found for element %s", element.Template, tp.getElementDisplayName(element))
+			return fmt.Errorf("template %s not found for element %s (resolved to: %s)", element.Template, tp.getElementDisplayName(element), resolvedTemplate)
+		}
+
+		// Validate template dependencies
+		if err := tp.validateDependencies(element, template, parentTemplates); err != nil {
+			return fmt.Errorf("dependency validation failed for element %s: %w", tp.getElementDisplayName(element), err)
 		}
 
 		// Inherit the type from the template's first element
@@ -180,9 +221,13 @@ func (tp *TemplateProcessor) processElement(element *schema.Element) error {
 		return nil // No template to apply
 	}
 
-	template, exists := tp.templates[element.Template]
+	// Resolve template reference for non-template type elements too
+	currentHive := tp.getCurrentHive(parentTemplates)
+	resolvedTemplate := tp.resolveTemplateReference(element.Template, currentHive)
+
+	template, exists := tp.templates[resolvedTemplate]
 	if !exists {
-		return fmt.Errorf("template %s not found", element.Template)
+		return fmt.Errorf("template %s not found (resolved to: %s)", element.Template, resolvedTemplate)
 	}
 
 	// Apply template to element
@@ -551,4 +596,144 @@ func (tp *TemplateProcessor) ListTemplates() []string {
 		names = append(names, name)
 	}
 	return names
+}
+
+// validateDependencies validates that an element's template dependencies are satisfied
+func (tp *TemplateProcessor) validateDependencies(element *schema.Element, template *schema.Template, parentTemplates []string) error {
+	// If template has no dependencies, validation passes
+	if len(template.Dependencies) == 0 {
+		return nil
+	}
+
+	// Check each required dependency
+	for _, dep := range template.Dependencies {
+		if !dep.Required {
+			continue // Skip optional dependencies
+		}
+
+		switch dep.Relationship {
+		case "parent":
+			if !tp.hasParentOfType(parentTemplates, dep.Type) {
+				return fmt.Errorf("required parent dependency not satisfied: template %s requires a parent of type %s, but element %s has parents: %v",
+					template.Name, dep.Type, tp.getElementDisplayName(element), parentTemplates)
+			}
+		case "ancestor":
+			if !tp.hasAncestorOfType(parentTemplates, dep.Type) {
+				return fmt.Errorf("required ancestor dependency not satisfied: template %s requires an ancestor of type %s, but element %s has ancestors: %v",
+					template.Name, dep.Type, tp.getElementDisplayName(element), parentTemplates)
+			}
+		}
+	}
+
+	return nil
+}
+
+// hasParentOfType checks if there's a direct parent of the specified template type
+func (tp *TemplateProcessor) hasParentOfType(parentTemplates []string, templateType string) bool {
+	if len(parentTemplates) == 0 {
+		return false
+	}
+	// Direct parent is the first in the list
+	return parentTemplates[0] == templateType
+}
+
+// hasAncestorOfType checks if there's any ancestor of the specified template type
+func (tp *TemplateProcessor) hasAncestorOfType(parentTemplates []string, templateType string) bool {
+	for _, parent := range parentTemplates {
+		if parent == templateType {
+			return true
+		}
+	}
+	return false
+}
+
+// getCurrentHive determines the current hive context from parent templates
+func (tp *TemplateProcessor) getCurrentHive(parentTemplates []string) string {
+	if len(parentTemplates) == 0 {
+		return ""
+	}
+
+	// Get the hive from the most recent (first) parent template
+	parentTemplate := parentTemplates[0]
+
+	// Check if parent template contains hive notation
+	if strings.Contains(parentTemplate, "/") {
+		parts := strings.Split(parentTemplate, "/")
+		return parts[0]
+	}
+
+	return ""
+}
+
+// getHiveFromPath extracts the hive name from a template file path
+func (tp *TemplateProcessor) getHiveFromPath(templatePath string) string {
+	// Convert to forward slashes for consistent handling
+	templatePath = filepath.ToSlash(templatePath)
+	templateDir := filepath.ToSlash(tp.templateDir)
+
+	// Get relative path from template directory
+	relPath, err := filepath.Rel(templateDir, templatePath)
+	if err != nil {
+		return "" // Not in template directory, no hive
+	}
+
+	// Convert back to forward slashes
+	relPath = filepath.ToSlash(relPath)
+
+	// Check if template is in a subdirectory (hive)
+	parts := strings.Split(relPath, "/")
+	if len(parts) > 1 {
+		return parts[0] // First directory is the hive
+	}
+
+	return "" // Template is in root, no hive
+}
+
+// getTemplateKey generates a unique key for template storage
+func (tp *TemplateProcessor) getTemplateKey(templateName, hive string) string {
+	if hive == "" {
+		return templateName
+	}
+	return hive + "/" + templateName
+}
+
+// resolveTemplateReference resolves a template reference, supporting hive notation
+func (tp *TemplateProcessor) resolveTemplateReference(templateRef string, currentHive string) string {
+	// If template reference contains a slash, it's already fully qualified
+	if strings.Contains(templateRef, "/") {
+		return templateRef
+	}
+
+	// Try current hive first if we're in one
+	if currentHive != "" {
+		hiveKey := tp.getTemplateKey(templateRef, currentHive)
+		if _, exists := tp.templates[hiveKey]; exists {
+			return hiveKey
+		}
+	}
+
+	// Try root level
+	if _, exists := tp.templates[templateRef]; exists {
+		return templateRef
+	}
+
+	// Return original reference for error handling
+	return templateRef
+}
+
+// ListHives returns all available template hives
+func (tp *TemplateProcessor) ListHives() []string {
+	hives := make([]string, 0, len(tp.hives))
+	for hive := range tp.hives {
+		hives = append(hives, hive)
+	}
+	return hives
+}
+
+// ListTemplatesInHive returns all templates in a specific hive
+func (tp *TemplateProcessor) ListTemplatesInHive(hive string) []string {
+	if templates, exists := tp.hives[hive]; exists {
+		return templates
+	}
+	return []string{}
 }

@@ -219,11 +219,22 @@ type Style struct {
 
 // Template represents a reusable template
 type Template struct {
-	Name        string      `yaml:"name" json:"name"`
-	Description string      `yaml:"description,omitempty" json:"description,omitempty"`
-	Version     string      `yaml:"version,omitempty" json:"version,omitempty"`
-	Parameters  []Parameter `yaml:"parameters,omitempty" json:"parameters,omitempty"`
-	Elements    []Element   `yaml:"elements" json:"elements"`
+	Name         string       `yaml:"name" json:"name"`
+	Description  string       `yaml:"description,omitempty" json:"description,omitempty"`
+	Version      string       `yaml:"version,omitempty" json:"version,omitempty"`
+	Dependencies []Dependency `yaml:"dependencies,omitempty" json:"dependencies,omitempty"`
+	Parameters   []Parameter  `yaml:"parameters,omitempty" json:"parameters,omitempty"`
+	Elements     []Element    `yaml:"elements" json:"elements"`
+}
+
+// Dependency defines a template dependency relationship
+type Dependency struct {
+	Name         string `yaml:"name" json:"name"`                                   // Logical name for the dependency
+	Type         string `yaml:"type" json:"type"`                                   // Template type required
+	Required     bool   `yaml:"required,omitempty" json:"required,omitempty"`       // Whether dependency is mandatory
+	Description  string `yaml:"description,omitempty" json:"description,omitempty"` // Human-readable description
+	Relationship string `yaml:"relationship" json:"relationship"`                   // "parent", "peer", "child", "ancestor"
+	Multiple     bool   `yaml:"multiple,omitempty" json:"multiple,omitempty"`       // Allow multiple instances
 }
 
 // Parameter defines a template parameter
