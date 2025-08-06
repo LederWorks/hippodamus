@@ -1,0 +1,117 @@
+version: "1.0"
+metadata:
+  title: "GCP Folder Structure"
+  description: "GCP organization with nested folders and projects"
+
+variables:
+  companyName: "DataTech Corp"
+  
+diagram:
+  pages:
+    - id: "main"
+      name: "GCP Folder Structure"
+      elements:
+        # Root Organization
+        - id: "gcp-org"
+          name: "gcp-org"
+          type: "template"
+          template: "gcp-organization"
+          parameters:
+            organizationName: "{{.companyName}} GCP"
+            organizationId: "123456789012"
+            
+        # Environments Folder
+        - id: "environments-folder"
+          name: "environments-folder"
+          type: "template"
+          template: "gcp-folder"
+          parameters:
+            folderName: "Environments"
+            folderId: "folders/111111111111"
+            displayName: "Environment Folders"
+          dependencies:
+            - "gcp-org"
+            
+        # Shared Services Folder
+        - id: "shared-folder"
+          name: "shared-folder"
+          type: "template"
+          template: "gcp-folder"
+          parameters:
+            folderName: "Shared Services"
+            folderId: "folders/222222222222"
+            displayName: "Shared Services Folder"
+          dependencies:
+            - "gcp-org"
+            
+        # Production Folder under Environments
+        - id: "prod-folder"
+          name: "prod-folder"
+          type: "template"
+          template: "gcp-folder"
+          parameters:
+            folderName: "Production"
+            folderId: "folders/333333333333"
+            displayName: "Production Environment"
+          dependencies:
+            - "environments-folder"
+            
+        # Development Folder under Environments
+        - id: "dev-folder"
+          name: "dev-folder"
+          type: "template"
+          template: "gcp-folder"
+          parameters:
+            folderName: "Development"
+            folderId: "folders/444444444444"
+            displayName: "Development Environment"
+          dependencies:
+            - "environments-folder"
+            
+        # Production Project
+        - id: "prod-project"
+          name: "prod-project"
+          type: "template"
+          template: "gcp-project"
+          parameters:
+            projectName: "production-workloads"
+            projectId: "prod-workloads-001"
+            billingAccountId: "000000-111111-222222"
+          dependencies:
+            - "prod-folder"
+            
+        # Development Project
+        - id: "dev-project"
+          name: "dev-project"
+          type: "template"
+          template: "gcp-project"
+          parameters:
+            projectName: "development-workloads"
+            projectId: "dev-workloads-001"
+            billingAccountId: "000000-111111-222222"
+          dependencies:
+            - "dev-folder"
+            
+        # Shared Logging Project
+        - id: "logging-project"
+          name: "logging-project"
+          type: "template"
+          template: "gcp-project"
+          parameters:
+            projectName: "shared-logging"
+            projectId: "shared-logging-001"
+            billingAccountId: "000000-111111-222222"
+          dependencies:
+            - "shared-folder"
+            
+        # Shared Monitoring Project
+        - id: "monitoring-project"
+          name: "monitoring-project"
+          type: "template"
+          template: "gcp-project"
+          parameters:
+            projectName: "shared-monitoring"
+            projectId: "shared-monitoring-001"
+            billingAccountId: "000000-111111-222222"
+          dependencies:
+            - "shared-folder"

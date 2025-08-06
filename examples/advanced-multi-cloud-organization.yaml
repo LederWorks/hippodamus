@@ -1,0 +1,176 @@
+version: "1.0"
+metadata:
+  title: "Advanced Multi-Cloud Organization"
+  description: "Multi-cloud infrastructure with organizational units, management groups, and folders"
+
+variables:
+  orgName: "Enterprise Corp"
+  
+diagram:
+  pages:
+    - id: "main"
+      name: "Advanced Multi-Cloud Organization"
+      elements:
+        # AWS Infrastructure with Organizational Units
+        - id: "aws-org"
+          name: "aws-org"
+          type: "template"
+          template: "aws-organization"
+          parameters:
+            organizationName: "{{.orgName}} AWS"
+            
+        - id: "aws-prod-ou"
+          name: "aws-prod-ou"
+          type: "template"
+          template: "aws-organization-unit"
+          parameters:
+            ouName: "Production OU"
+            ouId: "ou-prod123456"
+            description: "Production environment organizational unit"
+          dependencies:
+            - "aws-org"
+            
+        - id: "aws-production"
+          name: "aws-production"
+          type: "template"
+          template: "aws-account"
+          parameters:
+            accountName: "Production Account"
+            accountId: "123456789012"
+          dependencies:
+            - "aws-prod-ou"
+            
+        - id: "aws-us-east"
+          name: "aws-us-east"
+          type: "template"
+          template: "aws-region"
+          parameters:
+            regionName: "us-east-1"
+          dependencies:
+            - "aws-production"
+            
+        - id: "aws-k8s-cluster"
+          name: "aws-k8s-cluster"
+          type: "template"
+          template: "aws-eks-cluster"
+          parameters:
+            clusterName: "production-eks"
+            version: "1.28"
+          dependencies:
+            - "aws-us-east"
+
+        # Azure Infrastructure with Management Groups
+        - id: "azure-tenant"
+          name: "azure-tenant"
+          type: "template"
+          template: "azure-tenant"
+          parameters:
+            tenantName: "{{.orgName}} Azure AD"
+            position:
+              x: 800
+              y: 0
+              
+        - id: "azure-prod-mg"
+          name: "azure-prod-mg"
+          type: "template"
+          template: "azure-management-group"
+          parameters:
+            managementGroupName: "Production MG"
+            managementGroupId: "prod-mg-001"
+            displayName: "Production Management Group"
+          dependencies:
+            - "azure-tenant"
+            
+        - id: "azure-production-sub"
+          name: "azure-production-sub"
+          type: "template"
+          template: "azure-subscription"
+          parameters:
+            subscriptionName: "Production Subscription"
+            subscriptionId: "11111111-2222-3333-4444-555555555555"
+          dependencies:
+            - "azure-prod-mg"
+            
+        - id: "azure-k8s-rg"
+          name: "azure-k8s-rg"
+          type: "template"
+          template: "azure-resource-group"
+          parameters:
+            resourceGroupName: "k8s-resources"
+            location: "East US"
+          dependencies:
+            - "azure-production-sub"
+            
+        - id: "azure-k8s-cluster"
+          name: "azure-k8s-cluster"
+          type: "template"
+          template: "azure-aks-cluster"
+          parameters:
+            clusterName: "production-aks"
+            version: "1.28"
+          dependencies:
+            - "azure-k8s-rg"
+
+        # GCP Infrastructure with Folders
+        - id: "gcp-org"
+          name: "gcp-org"
+          type: "template"
+          template: "gcp-organization"
+          parameters:
+            organizationName: "{{.orgName}} GCP"
+            position:
+              x: 1600
+              y: 0
+              
+        - id: "gcp-prod-folder"
+          name: "gcp-prod-folder"
+          type: "template"
+          template: "gcp-folder"
+          parameters:
+            folderName: "Production Folder"
+            folderId: "folders/123456789"
+            displayName: "Production Environment"
+          dependencies:
+            - "gcp-org"
+            
+        - id: "gcp-k8s-project"
+          name: "gcp-k8s-project"
+          type: "template"
+          template: "gcp-project"
+          parameters:
+            projectName: "kubernetes-production"
+            projectId: "k8s-prod-123"
+          dependencies:
+            - "gcp-prod-folder"
+            
+        - id: "gcp-us-central"
+          name: "gcp-us-central"
+          type: "template"
+          template: "gcp-region"
+          parameters:
+            regionName: "us-central1"
+          dependencies:
+            - "gcp-k8s-project"
+            
+        - id: "gcp-k8s-cluster"
+          name: "gcp-k8s-cluster"
+          type: "template"
+          template: "gcp-gke-cluster"
+          parameters:
+            clusterName: "production-gke"
+            version: "1.28"
+          dependencies:
+            - "gcp-us-central"
+
+        # Cross-cloud applications
+        - id: "global-api-gateway"
+          name: "global-api-gateway"
+          type: "template"
+          template: "kubernetes-service"
+          parameters:
+            serviceName: "global-api-gateway"
+            serviceType: "LoadBalancer"
+            clusterType: "multi-cloud"
+            position:
+              x: 200
+              y: 900

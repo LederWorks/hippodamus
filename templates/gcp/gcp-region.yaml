@@ -3,9 +3,14 @@ description: "Google Cloud Region container"
 version: "1.0"
 
 dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
   - name: "project"
     type: "gcp-project"
-    required: false
+    required: true
     relationship: "parent"
     description: "Parent GCP project"
 

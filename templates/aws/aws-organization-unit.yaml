@@ -1,5 +1,5 @@
-name: "gcp-project"
-description: "Google Cloud Project container"
+name: "aws-organization-unit"
+description: "AWS Organizational Unit for grouping accounts"
 version: "1.0"
 
 dependencies:
@@ -9,58 +9,54 @@ dependencies:
     relationship: "parent"
     description: "Custom parent object"
   - name: "organization"
-    type: "gcp-organization"
+    type: "aws-organization"
     required: false
     relationship: "parent"
-    description: "Parent GCP organization"
-  - name: "folder"
-    type: "gcp-folder"
+    description: "Parent AWS organization"
+  - name: "parentOu"
+    type: "aws-organization-unit"
     required: false
     relationship: "parent"
-    description: "Parent folder"
+    description: "Parent organizational unit"
 
 parameters:
-  - name: "projectName"
+  - name: "ouName"
     type: "string"
-    default: "production-project"
-    description: "Project name"
-  - name: "projectId"
+    default: "Production OU"
+    description: "Organizational unit name"
+  - name: "ouId"
     type: "string"
-    default: "my-project-123456"
-    description: "Project ID"
-  - name: "projectNumber"
+    default: "ou-example123456"
+    description: "AWS OU ID"
+  - name: "description"
     type: "string"
-    default: "123456789012"
-    description: "Project number"
-  - name: "environment"
-    type: "string"
-    default: "Production"
-    description: "Environment type"
+    default: "Production organizational unit"
+    description: "OU description"
   - name: "fillColor"
     type: "color"
-    default: "#F3E5F5"
+    default: "#FFF3E0"
     description: "Background color"
   - name: "strokeColor"
     type: "color"
-    default: "#7B1FA2"
+    default: "#FF9800"
     description: "Border color"
 
 elements:
   - type: "container"
     properties:
-      width: 800
-      height: 500
-      label: "{{.projectName}} ({{.projectId}})"
+      width: 700
+      height: 400
+      label: "OU: {{.ouName}}"
       custom:
-        projectId: "{{.projectId}}"
-        projectNumber: "{{.projectNumber}}"
-        environment: "{{.environment}}"
+        ouName: "{{.ouName}}"
+        ouId: "{{.ouId}}"
+        description: "{{.description}}"
     style:
       fillColor: "{{.fillColor}}"
       strokeColor: "{{.strokeColor}}"
-      strokeWidth: 3.0
+      strokeWidth: 2.0
       fontFamily: "Segoe UI"
-      fontSize: 16
+      fontSize: 14
       fontColor: "#000000"
       fontStyle: "bold"
       textAlign: "center"
@@ -71,9 +67,9 @@ elements:
       mode: "container"
       autoResize: true
       padding:
-        top: 50
-        right: 25
-        bottom: 25
-        left: 25
-      spacing: 30
+        top: 40
+        right: 20
+        bottom: 20
+        left: 20
+      spacing: 25
       arrangement: "vertical"

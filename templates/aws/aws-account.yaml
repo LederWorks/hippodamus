@@ -3,11 +3,21 @@ description: "AWS Account container"
 version: "1.0"
 
 dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
   - name: "organization"
     type: "aws-organization"
     required: false
     relationship: "parent"
     description: "Parent AWS organization"
+  - name: "organizationUnit"
+    type: "aws-organization-unit"
+    required: false
+    relationship: "parent"
+    description: "Parent organizational unit"
 
 parameters:
   - name: "accountName"

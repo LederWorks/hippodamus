@@ -1,5 +1,5 @@
-name: "azure-subscription"
-description: "Azure Subscription container"
+name: "azure-management-group"
+description: "Azure Management Group for organizing subscriptions"
 version: "1.0"
 
 dependencies:
@@ -13,49 +13,50 @@ dependencies:
     required: false
     relationship: "parent"
     description: "Parent Azure AD tenant"
-  - name: "managementGroup"
+  - name: "parentMg"
     type: "azure-management-group"
     required: false
     relationship: "parent"
     description: "Parent management group"
 
 parameters:
-  - name: "subscriptionName"
+  - name: "managementGroupName"
     type: "string"
-    default: "Production Subscription"
-    description: "Subscription name"
-  - name: "subscriptionId"
+    default: "Production MG"
+    description: "Management group name"
+  - name: "managementGroupId"
     type: "string"
-    default: "00000000-0000-0000-0000-000000000000"
-    description: "Azure Subscription ID"
-  - name: "subscriptionType"
+    default: "prod-mg-001"
+    description: "Management group ID"
+  - name: "displayName"
     type: "string"
-    default: "Pay-As-You-Go"
-    description: "Subscription type"
+    default: "Production Management Group"
+    description: "Management group display name"
   - name: "fillColor"
     type: "color"
-    default: "#F3E5F5"
+    default: "#E8F5E8"
     description: "Background color"
   - name: "strokeColor"
     type: "color"
-    default: "#7B1FA2"
+    default: "#4CAF50"
     description: "Border color"
 
 elements:
   - type: "container"
     properties:
-      width: 800
-      height: 500
-      label: "{{.subscriptionName}}"
+      width: 750
+      height: 450
+      label: "MG: {{.managementGroupName}}"
       custom:
-        subscriptionId: "{{.subscriptionId}}"
-        subscriptionType: "{{.subscriptionType}}"
+        managementGroupName: "{{.managementGroupName}}"
+        managementGroupId: "{{.managementGroupId}}"
+        displayName: "{{.displayName}}"
     style:
       fillColor: "{{.fillColor}}"
       strokeColor: "{{.strokeColor}}"
-      strokeWidth: 3.0
+      strokeWidth: 2.0
       fontFamily: "Segoe UI"
-      fontSize: 16
+      fontSize: 14
       fontColor: "#000000"
       fontStyle: "bold"
       textAlign: "center"
@@ -66,9 +67,9 @@ elements:
       mode: "container"
       autoResize: true
       padding:
-        top: 50
-        right: 25
-        bottom: 25
-        left: 25
-      spacing: 30
+        top: 40
+        right: 20
+        bottom: 20
+        left: 20
+      spacing: 25
       arrangement: "vertical"

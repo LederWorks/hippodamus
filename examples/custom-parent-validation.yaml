@@ -1,0 +1,85 @@
+version: "1.0"
+metadata:
+  title: "Custom Parent Validation Example"
+  description: "Testing custom parent dependencies with proper cloud hierarchies"
+
+variables:
+  companyName: "Test Corp"
+
+diagram:
+  pages:
+    - id: "main"
+      name: "Custom Parent Test"
+      elements:
+        # Enterprise container
+        - id: "enterprise"
+          name: "enterprise"
+          type: "container"
+          style:
+            fillColor: "#f0f0f0"
+            strokeColor: "#cccccc"
+            fontColor: "#333333"
+          parameters:
+            description: "{{.companyName}} Enterprise Container"
+
+        # AWS Org under enterprise
+        - id: "aws-org"
+          name: "aws-org"
+          type: "template"
+          template: "aws-organization"
+          dependencies:
+            - id: "enterprise"
+              relationship: "custom"
+          parameters:
+            organizationName: "{{.companyName}} AWS"
+            organizationId: "o-example123456"
+            masterAccountId: "123456789012"
+
+        # AWS OU under AWS org
+        - id: "aws-ou"
+          name: "aws-ou"
+          type: "template"
+          template: "aws-organization-unit"
+          dependencies:
+            - id: "aws-org"
+              relationship: "organization"
+          parameters:
+            ouName: "Development OU"
+            ouId: "ou-root-example123"
+
+        # AWS Account under OU
+        - id: "aws-account"
+          name: "aws-account"
+          type: "template"
+          template: "aws-account"
+          dependencies:
+            - id: "aws-ou"
+              relationship: "organizationUnit"
+          parameters:
+            accountName: "Development Account"
+            accountId: "222222222222"
+            accountEmail: "dev@testcorp.com"
+
+        # AWS Region under Account
+        - id: "aws-region"
+          name: "aws-region"
+          type: "template"
+          template: "aws-region"
+          dependencies:
+            - id: "aws-account"
+              relationship: "account"
+          parameters:
+            regionName: "us-west-2"
+            regionDescription: "Development Region"
+
+        # EKS Cluster under Region
+        - id: "aws-eks"
+          name: "aws-eks"
+          type: "template"
+          template: "aws-eks-cluster"
+          dependencies:
+            - id: "aws-region"
+              relationship: "region"
+          parameters:
+            clusterName: "dev-eks-cluster"
+            version: "1.28"

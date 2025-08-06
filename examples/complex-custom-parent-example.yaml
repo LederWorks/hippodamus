@@ -1,0 +1,236 @@
+version: "1.0"
+metadata:
+  title: "Complex Custom Parent Example"
+  description: "Demonstrates flexible parent-child relationships with mixed organizational structures"
+
+variables:
+  companyName: "Global Enterprise"
+
+diagram:
+  pages:
+    - id: "enterprise-overview"
+      name: "Enterprise Cloud Architecture"
+      elements:
+        # Top-level enterprise container
+        - id: "enterprise"
+          name: "enterprise"
+          type: "container"
+          style:
+            fillColor: "#e6f3ff"
+            strokeColor: "#0066cc"
+            fontColor: "#003d7a"
+          parameters:
+            description: "{{.companyName}} - Multi-Cloud Infrastructure"
+
+        # Development Division Container
+        - id: "dev-division"
+          name: "dev-division"
+          type: "container"
+          dependencies:
+            - id: "enterprise"
+              relationship: "parent"
+          style:
+            fillColor: "#e6ffe6"
+            strokeColor: "#00cc00"
+            fontColor: "#006600"
+          parameters:
+            description: "Development Division"
+
+        # Production Division Container
+        - id: "prod-division"
+          name: "prod-division"
+          type: "container"
+          dependencies:
+            - id: "enterprise"
+              relationship: "parent"
+          style:
+            fillColor: "#ffe6e6"
+            strokeColor: "#cc0000"
+            fontColor: "#660000"
+          parameters:
+            description: "Production Division"
+
+        # AWS Organization under Development
+        - id: "aws-dev-org"
+          name: "aws-dev-org"
+          type: "template"
+          template: "aws-organization"
+          dependencies:
+            - id: "dev-division"
+              relationship: "custom"
+          parameters:
+            organizationName: "{{.companyName}} AWS Development"
+            organizationId: "o-dev123456"
+            masterAccountId: "111111111111"
+
+        # Azure Tenant under Production
+        - id: "azure-prod-tenant"
+          name: "azure-prod-tenant"
+          type: "template"
+          template: "azure-tenant"
+          dependencies:
+            - id: "prod-division"
+              relationship: "custom"
+          parameters:
+            tenantName: "{{.companyName}} Azure Production"
+            tenantId: "11111111-2222-3333-4444-555555555555"
+            domainName: "prod.enterprise.com"
+
+        # GCP Organization directly under Enterprise
+        - id: "gcp-shared-org"
+          name: "gcp-shared-org"
+          type: "template"
+          template: "gcp-organization"
+          dependencies:
+            - id: "enterprise"
+              relationship: "custom"
+          parameters:
+            organizationName: "{{.companyName}} GCP Shared Services"
+            organizationId: "987654321098"
+            domain: "shared.enterprise.com"
+
+        # AWS Development OU
+        - id: "aws-dev-ou"
+          name: "aws-dev-ou"
+          type: "template"
+          template: "aws-organization-unit"
+          dependencies:
+            - id: "aws-dev-org"
+              relationship: "organization"
+          parameters:
+            ouName: "Development Teams"
+            ouId: "ou-root-dev123"
+
+        # Azure Production Management Group
+        - id: "azure-prod-mg"
+          name: "azure-prod-mg"
+          type: "template"
+          template: "azure-management-group"
+          dependencies:
+            - id: "azure-prod-tenant"
+              relationship: "tenant"
+          parameters:
+            managementGroupName: "Production Workloads"
+            managementGroupId: "prod-mg-001"
+            displayName: "Production Management Group"
+
+        # GCP Shared Folder
+        - id: "gcp-shared-folder"
+          name: "gcp-shared-folder"
+          type: "template"
+          template: "gcp-folder"
+          dependencies:
+            - id: "gcp-shared-org"
+              relationship: "organization"
+          parameters:
+            folderName: "Shared Infrastructure"
+            folderId: "777888999000"
+            displayName: "Shared Infrastructure Folder"
+
+        # AWS Development Account
+        - id: "aws-dev-account"
+          name: "aws-dev-account"
+          type: "template"
+          template: "aws-account"
+          dependencies:
+            - id: "aws-dev-ou"
+              relationship: "organizationUnit"
+          parameters:
+            accountName: "Development Account"
+            accountId: "222222222222"
+            accountEmail: "aws-dev@enterprise.com"
+
+        # Azure Production Subscription
+        - id: "azure-prod-sub"
+          name: "azure-prod-sub"
+          type: "template"
+          template: "azure-subscription"
+          dependencies:
+            - id: "azure-prod-mg"
+              relationship: "managementGroup"
+          parameters:
+            subscriptionName: "Production Subscription"
+            subscriptionId: "22222222-3333-4444-5555-666666666666"
+
+        # GCP Shared Project
+        - id: "gcp-shared-project"
+          name: "gcp-shared-project"
+          type: "template"
+          template: "gcp-project"
+          dependencies:
+            - id: "gcp-shared-folder"
+              relationship: "folder"
+          parameters:
+            projectName: "Shared Infrastructure Project"
+            projectId: "shared-infra-123"
+            projectNumber: "555666777888"
+
+        # AWS Development Region
+        - id: "aws-dev-region"
+          name: "aws-dev-region"
+          type: "template"
+          template: "aws-region"
+          dependencies:
+            - id: "aws-dev-account"
+              relationship: "account"
+          parameters:
+            regionName: "us-west-2"
+            regionDescription: "Development Region"
+
+        # Azure Production Resource Group
+        - id: "azure-prod-rg"
+          name: "azure-prod-rg"
+          type: "template"
+          template: "azure-resource-group"
+          dependencies:
+            - id: "azure-prod-sub"
+              relationship: "subscription"
+          parameters:
+            resourceGroupName: "prod-workloads-rg"
+            location: "East US"
+
+        # GCP Shared Region
+        - id: "gcp-shared-region"
+          name: "gcp-shared-region"
+          type: "template"
+          template: "gcp-region"
+          dependencies:
+            - id: "gcp-shared-project"
+              relationship: "project"
+          parameters:
+            regionName: "us-central1"
+            regionDescription: "Shared Services Region"
+
+        # Kubernetes Clusters
+        - id: "aws-dev-eks"
+          name: "aws-dev-eks"
+          type: "template"
+          template: "aws-eks-cluster"
+          dependencies:
+            - id: "aws-dev-region"
+              relationship: "region"
+          parameters:
+            clusterName: "dev-eks-cluster"
+            version: "1.28"
+
+        - id: "azure-prod-aks"
+          name: "azure-prod-aks"
+          type: "template"
+          template: "azure-aks-cluster"
+          dependencies:
+            - id: "azure-prod-rg"
+              relationship: "resourceGroup"
+          parameters:
+            clusterName: "prod-aks-cluster"
+            kubernetesVersion: "1.28.5"
+
+        - id: "gcp-shared-gke"
+          name: "gcp-shared-gke"
+          type: "template"
+          template: "gcp-gke-cluster"
+          dependencies:
+            - id: "gcp-shared-region"
+              relationship: "region"
+          parameters:
+            clusterName: "shared-gke-cluster"
+            kubernetesVersion: "1.28.4-gke.1043000"

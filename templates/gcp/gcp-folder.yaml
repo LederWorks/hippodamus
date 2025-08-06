@@ -1,5 +1,5 @@
-name: "gcp-project"
-description: "Google Cloud Project container"
+name: "gcp-folder"
+description: "GCP Folder for organizing projects"
 version: "1.0"
 
 dependencies:
@@ -13,54 +13,50 @@ dependencies:
     required: false
     relationship: "parent"
     description: "Parent GCP organization"
-  - name: "folder"
+  - name: "parentFolder"
     type: "gcp-folder"
     required: false
     relationship: "parent"
     description: "Parent folder"
 
 parameters:
-  - name: "projectName"
+  - name: "folderName"
     type: "string"
-    default: "production-project"
-    description: "Project name"
-  - name: "projectId"
+    default: "Production Folder"
+    description: "Folder name"
+  - name: "folderId"
     type: "string"
-    default: "my-project-123456"
-    description: "Project ID"
-  - name: "projectNumber"
+    default: "folders/123456789"
+    description: "GCP folder ID"
+  - name: "displayName"
     type: "string"
-    default: "123456789012"
-    description: "Project number"
-  - name: "environment"
-    type: "string"
-    default: "Production"
-    description: "Environment type"
+    default: "Production Environment"
+    description: "Folder display name"
   - name: "fillColor"
     type: "color"
-    default: "#F3E5F5"
+    default: "#E3F2FD"
     description: "Background color"
   - name: "strokeColor"
     type: "color"
-    default: "#7B1FA2"
+    default: "#2196F3"
     description: "Border color"
 
 elements:
   - type: "container"
     properties:
-      width: 800
-      height: 500
-      label: "{{.projectName}} ({{.projectId}})"
+      width: 720
+      height: 420
+      label: "Folder: {{.folderName}}"
       custom:
-        projectId: "{{.projectId}}"
-        projectNumber: "{{.projectNumber}}"
-        environment: "{{.environment}}"
+        folderName: "{{.folderName}}"
+        folderId: "{{.folderId}}"
+        displayName: "{{.displayName}}"
     style:
       fillColor: "{{.fillColor}}"
       strokeColor: "{{.strokeColor}}"
-      strokeWidth: 3.0
+      strokeWidth: 2.0
       fontFamily: "Segoe UI"
-      fontSize: 16
+      fontSize: 14
       fontColor: "#000000"
       fontStyle: "bold"
       textAlign: "center"
@@ -71,9 +67,9 @@ elements:
       mode: "container"
       autoResize: true
       padding:
-        top: 50
-        right: 25
-        bottom: 25
-        left: 25
-      spacing: 30
+        top: 40
+        right: 20
+        bottom: 20
+        left: 20
+      spacing: 25
       arrangement: "vertical"

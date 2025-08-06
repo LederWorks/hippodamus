@@ -2,6 +2,13 @@ name: "azure-tenant"
 description: "Azure AD Tenant root container"
 version: "1.0"
 
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+
 parameters:
   - name: "tenantName"
     type: "string"
