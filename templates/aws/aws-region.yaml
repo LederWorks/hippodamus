@@ -1,30 +1,30 @@
-name: "kubernetes-namespace"
-description: "Kubernetes Namespace container"
+name: "aws-region"
+description: "AWS Region container"
 version: "1.0"
 
 dependencies:
-  - name: "cluster"
-    type: "kubernetes-cluster"
+  - name: "account"
+    type: "aws-account"
     required: false
     relationship: "parent"
-    description: "Parent Kubernetes cluster (optional for inner-only diagrams)"
+    description: "Parent AWS account"
 
 parameters:
-  - name: "namespaceName"
+  - name: "regionName"
     type: "string"
-    default: "default"
-    description: "Namespace name"
-  - name: "environment"
+    default: "us-west-2"
+    description: "AWS region name"
+  - name: "regionDisplayName"
     type: "string"
-    default: "development"
-    description: "Environment (development, staging, production)"
+    default: "US West (Oregon)"
+    description: "Region display name"
   - name: "fillColor"
     type: "color"
-    default: "#F1F8E9"
+    default: "#E8F5E8"
     description: "Background color"
   - name: "strokeColor"
     type: "color"
-    default: "#689F38"
+    default: "#4CAF50"
     description: "Border color"
 
 elements:
@@ -32,13 +32,15 @@ elements:
     properties:
       width: 700
       height: 400
-      label: "{{.namespaceName}}"
+      label: "{{.regionDisplayName}} ({{.regionName}})"
       custom:
-        environment: "{{.environment}}"
+        regionName: "{{.regionName}}"
     style:
       fillColor: "{{.fillColor}}"
       strokeColor: "{{.strokeColor}}"
       strokeWidth: 2.0
+      strokeDashArray: "5,5"
+      dashed: true
       fontFamily: "Segoe UI"
       fontSize: 14
       fontColor: "#000000"
@@ -55,5 +57,5 @@ elements:
         right: 20
         bottom: 20
         left: 20
-      spacing: 30
-      arrangement: "horizontal"
+      spacing: 25
+      arrangement: "vertical"

@@ -1,0 +1,64 @@
+name: "aws-account"
+description: "AWS Account container"
+version: "1.0"
+
+dependencies:
+  - name: "organization"
+    type: "aws-organization"
+    required: false
+    relationship: "parent"
+    description: "Parent AWS organization"
+
+parameters:
+  - name: "accountName"
+    type: "string"
+    default: "Production Account"
+    description: "Account name"
+  - name: "accountId"
+    type: "string"
+    default: "123456789012"
+    description: "AWS Account ID"
+  - name: "accountType"
+    type: "string"
+    default: "Production"
+    description: "Account type (Production, Staging, Development, Security, Logging)"
+  - name: "fillColor"
+    type: "color"
+    default: "#F3E5F5"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#7B1FA2"
+    description: "Border color"
+
+elements:
+  - type: "container"
+    properties:
+      width: 800
+      height: 500
+      label: "{{.accountName}} ({{.accountId}})"
+      custom:
+        accountId: "{{.accountId}}"
+        accountType: "{{.accountType}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 3.0
+      fontFamily: "Segoe UI"
+      fontSize: 16
+      fontColor: "#000000"
+      fontStyle: "bold"
+      textAlign: "center"
+      verticalAlign: "top"
+      rounded: true
+      shadow: true
+    nesting:
+      mode: "container"
+      autoResize: true
+      padding:
+        top: 50
+        right: 25
+        bottom: 25
+        left: 25
+      spacing: 30
+      arrangement: "vertical"

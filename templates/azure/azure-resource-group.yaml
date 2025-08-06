@@ -1,30 +1,34 @@
-name: "kubernetes-namespace"
-description: "Kubernetes Namespace container"
+name: "azure-resource-group"
+description: "Azure Resource Group container"
 version: "1.0"
 
 dependencies:
-  - name: "cluster"
-    type: "kubernetes-cluster"
+  - name: "subscription"
+    type: "azure-subscription"
     required: false
     relationship: "parent"
-    description: "Parent Kubernetes cluster (optional for inner-only diagrams)"
+    description: "Parent Azure subscription"
 
 parameters:
-  - name: "namespaceName"
+  - name: "resourceGroupName"
     type: "string"
-    default: "default"
-    description: "Namespace name"
+    default: "rg-production"
+    description: "Resource group name"
+  - name: "location"
+    type: "string"
+    default: "West US 2"
+    description: "Azure region"
   - name: "environment"
     type: "string"
-    default: "development"
-    description: "Environment (development, staging, production)"
+    default: "Production"
+    description: "Environment (Production, Staging, Development)"
   - name: "fillColor"
     type: "color"
-    default: "#F1F8E9"
+    default: "#E8F5E8"
     description: "Background color"
   - name: "strokeColor"
     type: "color"
-    default: "#689F38"
+    default: "#4CAF50"
     description: "Border color"
 
 elements:
@@ -32,13 +36,16 @@ elements:
     properties:
       width: 700
       height: 400
-      label: "{{.namespaceName}}"
+      label: "{{.resourceGroupName}} ({{.location}})"
       custom:
+        location: "{{.location}}"
         environment: "{{.environment}}"
     style:
       fillColor: "{{.fillColor}}"
       strokeColor: "{{.strokeColor}}"
       strokeWidth: 2.0
+      strokeDashArray: "5,5"
+      dashed: true
       fontFamily: "Segoe UI"
       fontSize: 14
       fontColor: "#000000"
@@ -55,5 +62,5 @@ elements:
         right: 20
         bottom: 20
         left: 20
-      spacing: 30
-      arrangement: "horizontal"
+      spacing: 25
+      arrangement: "vertical"

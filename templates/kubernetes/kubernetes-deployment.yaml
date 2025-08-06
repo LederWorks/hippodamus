@@ -1,0 +1,67 @@
+name: "kubernetes-deployment"
+description: "Kubernetes Deployment resource"
+version: "1.0"
+
+dependencies:
+  - name: "cluster"
+    type: "kubernetes-cluster"
+    required: false
+    relationship: "parent"
+    description: "Parent Kubernetes cluster (optional)"
+
+parameters:
+  - name: "deploymentName"
+    type: "string"
+    default: "my-deployment"
+    description: "Name of the deployment"
+  - name: "replicas"
+    type: "number"
+    default: 3
+    description: "Number of replicas"
+  - name: "image"
+    type: "string"
+    default: "nginx:latest"
+    description: "Container image"
+  - name: "clusterType"
+    type: "string"
+    default: "native"
+    description: "Type of cluster (native, aks, gke, eks, multi-cloud, none)"
+  - name: "fillColor"
+    type: "color"
+    default: "#E8F5E8"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#4CAF50"
+    description: "Border color"
+
+elements:
+  - type: "shape"
+    properties:
+      width: 200
+      height: 120
+      label: "{{.deploymentName}}\n({{.replicas}} replicas)"
+      shape: "rectangle"
+      custom:
+        deploymentName: "{{.deploymentName}}"
+        replicas: "{{.replicas}}"
+        image: "{{.image}}"
+        clusterType: "{{.clusterType}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 2.0
+      fontFamily: "Segoe UI"
+      fontSize: 12
+      fontColor: "#000000"
+      textAlign: "center"
+      verticalAlign: "middle"
+      rounded: true
+      shadow: true
+    icon:
+      type: "shape"
+      shape: "cylinder"
+      fillColor: "#4CAF50"
+      strokeColor: "#2E7D32"
+      position: "top-right"
+      size: 20

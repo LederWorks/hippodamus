@@ -1,0 +1,61 @@
+name: "aws-organization"
+description: "AWS Organization root container"
+version: "1.0"
+
+parameters:
+  - name: "orgName"
+    type: "string"
+    default: "AWS Organization"
+    description: "Organization name"
+  - name: "managementAccountId"
+    type: "string"
+    default: "123456789012"
+    description: "Management account ID"
+  - name: "fillColor"
+    type: "color"
+    default: "#FFF8E1"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#FF9900"
+    description: "Border color"
+
+elements:
+  - type: "container"
+    properties:
+      width: 1000
+      height: 700
+      label: "{{.orgName}}"
+      custom:
+        managementAccountId: "{{.managementAccountId}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 4.0
+      strokeDashArray: "10,10"
+      dashed: true
+      fontFamily: "Segoe UI"
+      fontSize: 18
+      fontColor: "#000000"
+      fontStyle: "bold"
+      textAlign: "center"
+      verticalAlign: "top"
+      rounded: true
+      shadow: true
+      custom:
+        html: "1"
+        whiteSpace: "wrap"
+        spacingLeft: "15"
+        spacingTop: "15"
+        spacingRight: "55"
+        spacingBottom: "15"
+    nesting:
+      mode: "container"
+      autoResize: true
+      padding:
+        top: 60
+        right: 30
+        bottom: 30
+        left: 30
+      spacing: 40
+      arrangement: "vertical"

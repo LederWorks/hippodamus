@@ -717,11 +717,17 @@ func (tp *TemplateProcessor) resolveTemplateReference(templateRef string, curren
 		return templateRef
 	}
 
+	// If not found in current hive or root, search all hives
+	for hive := range tp.hives {
+		hiveKey := tp.getTemplateKey(templateRef, hive)
+		if _, exists := tp.templates[hiveKey]; exists {
+			return hiveKey
+		}
+	}
+
 	// Return original reference for error handling
 	return templateRef
-}
-
-// ListHives returns all available template hives
+} // ListHives returns all available template hives
 func (tp *TemplateProcessor) ListHives() []string {
 	hives := make([]string, 0, len(tp.hives))
 	for hive := range tp.hives {
@@ -736,4 +742,13 @@ func (tp *TemplateProcessor) ListTemplatesInHive(hive string) []string {
 		return templates
 	}
 	return []string{}
+}
+
+// ListAllTemplateKeys returns all template keys for debugging
+func (tp *TemplateProcessor) ListAllTemplateKeys() []string {
+	keys := make([]string, 0, len(tp.templates))
+	for key := range tp.templates {
+		keys = append(keys, key)
+	}
+	return keys
 }

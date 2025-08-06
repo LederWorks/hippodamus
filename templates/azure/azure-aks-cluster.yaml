@@ -1,0 +1,75 @@
+name: "azure-aks-cluster"
+description: "Azure Kubernetes Service (AKS) Cluster"
+version: "1.0"
+
+dependencies:
+  - name: "resourceGroup"
+    type: "azure-resource-group"
+    required: false
+    relationship: "parent"
+    description: "Parent Azure resource group"
+
+parameters:
+  - name: "clusterName"
+    type: "string"
+    default: "aks-cluster"
+    description: "AKS cluster name"
+  - name: "version"
+    type: "string"
+    default: "1.28"
+    description: "Kubernetes version"
+  - name: "nodePoolName"
+    type: "string"
+    default: "default"
+    description: "Node pool name"
+  - name: "vmSize"
+    type: "string"
+    default: "Standard_DS2_v2"
+    description: "VM size"
+  - name: "nodeCount"
+    type: "number"
+    default: 3
+    description: "Node count"
+  - name: "fillColor"
+    type: "color"
+    default: "#E3F2FD"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#1976D2"
+    description: "Border color"
+
+elements:
+  - type: "container"
+    properties:
+      width: 600
+      height: 300
+      label: "AKS: {{.clusterName}} ({{.version}})"
+      custom:
+        clusterName: "{{.clusterName}}"
+        version: "{{.version}}"
+        nodePoolName: "{{.nodePoolName}}"
+        vmSize: "{{.vmSize}}"
+        nodeCount: "{{.nodeCount}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 2.0
+      fontFamily: "Segoe UI"
+      fontSize: 13
+      fontColor: "#000000"
+      fontStyle: "bold"
+      textAlign: "center"
+      verticalAlign: "top"
+      rounded: true
+      shadow: true
+    nesting:
+      mode: "container"
+      autoResize: true
+      padding:
+        top: 35
+        right: 15
+        bottom: 15
+        left: 15
+      spacing: 20
+      arrangement: "free"

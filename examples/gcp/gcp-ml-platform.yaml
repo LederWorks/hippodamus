@@ -1,0 +1,97 @@
+name: "gcp-ml-platform"
+description: "GCP GKE cluster optimized for machine learning workloads"
+
+variables:
+  orgName: "DataTech AI"
+  environment: "research"
+  
+elements:
+  # GCP Infrastructure Hierarchy
+  - name: "gcp-organization"
+    template: "gcp-organization"
+    parameters:
+      organizationName: "{{.orgName}}"
+      organizationId: "123456789"
+      
+  - name: "ml-project"
+    template: "gcp-project"
+    parameters:
+      projectName: "machine-learning-{{.environment}}"
+      projectId: "ml-research-001"
+      billingAccountId: "000000-111111-222222"
+    dependencies:
+      - "gcp-organization"
+      
+  - name: "us-central-region"
+    template: "gcp-region"
+    parameters:
+      regionName: "us-central1"
+      zones: ["us-central1-a", "us-central1-b", "us-central1-c"]
+    dependencies:
+      - "ml-project"
+      
+  - name: "gke-ml-cluster"
+    template: "gcp-gke-cluster"
+    parameters:
+      clusterName: "ml-{{.environment}}-cluster"
+      version: "1.28"
+      nodePoolName: "gpu-nodes"
+      machineType: "n1-standard-8"
+      nodeCount: 3
+    dependencies:
+      - "us-central-region"
+
+  # ML Platform Components
+  - name: "jupyter-hub"
+    template: "kubernetes-deployment"
+    parameters:
+      deploymentName: "jupyterhub"
+      replicas: 1
+      clusterType: "gke"
+    dependencies:
+      - "gke-ml-cluster"
+      
+  - name: "ml-pipeline"
+    template: "kubernetes-deployment"
+    parameters:
+      deploymentName: "kubeflow-pipelines"
+      replicas: 2
+      clusterType: "gke"
+    dependencies:
+      - "gke-ml-cluster"
+      
+  - name: "model-serving"
+    template: "kubernetes-service"
+    parameters:
+      serviceName: "tensorflow-serving"
+      serviceType: "LoadBalancer"
+      clusterType: "gke"
+    dependencies:
+      - "gke-ml-cluster"
+      
+  - name: "data-processing"
+    template: "kubernetes-deployment"
+    parameters:
+      deploymentName: "spark-workers"
+      replicas: 4
+      clusterType: "gke"
+    dependencies:
+      - "gke-ml-cluster"
+      
+  - name: "model-storage"
+    template: "kubernetes-deployment"
+    parameters:
+      deploymentName: "minio-storage"
+      replicas: 1
+      clusterType: "gke"
+    dependencies:
+      - "gke-ml-cluster"
+      
+  - name: "experiment-tracking"
+    template: "kubernetes-deployment"
+    parameters:
+      deploymentName: "mlflow-server"
+      replicas: 1
+      clusterType: "gke"
+    dependencies:
+      - "gke-ml-cluster"

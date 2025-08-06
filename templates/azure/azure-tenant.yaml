@@ -1,0 +1,59 @@
+name: "azure-tenant"
+description: "Azure AD Tenant root container"
+version: "1.0"
+
+parameters:
+  - name: "tenantName"
+    type: "string"
+    default: "Azure Tenant"
+    description: "Tenant name"
+  - name: "tenantId"
+    type: "string"
+    default: "00000000-0000-0000-0000-000000000000"
+    description: "Azure Tenant ID"
+  - name: "domain"
+    type: "string"
+    default: "contoso.onmicrosoft.com"
+    description: "Primary domain"
+  - name: "fillColor"
+    type: "color"
+    default: "#E8F4FD"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#0078D4"
+    description: "Border color"
+
+elements:
+  - type: "container"
+    properties:
+      width: 1000
+      height: 700
+      label: "{{.tenantName}} ({{.domain}})"
+      custom:
+        tenantId: "{{.tenantId}}"
+        domain: "{{.domain}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 4.0
+      strokeDashArray: "10,10"
+      dashed: true
+      fontFamily: "Segoe UI"
+      fontSize: 18
+      fontColor: "#000000"
+      fontStyle: "bold"
+      textAlign: "center"
+      verticalAlign: "top"
+      rounded: true
+      shadow: true
+    nesting:
+      mode: "container"
+      autoResize: true
+      padding:
+        top: 60
+        right: 30
+        bottom: 30
+        left: 30
+      spacing: 40
+      arrangement: "vertical"

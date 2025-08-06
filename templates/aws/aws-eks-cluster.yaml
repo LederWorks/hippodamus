@@ -1,31 +1,31 @@
-name: "kubernetes-cluster"
-description: "Kubernetes Cluster container"
+name: "aws-eks-cluster"
+description: "Amazon EKS Cluster"
 version: "1.0"
 
 dependencies:
-  - name: "infrastructure"
-    type: "cluster-infrastructure"
+  - name: "region"
+    type: "aws-region"
     required: false
     relationship: "parent"
-    description: "Parent cloud infrastructure (native, aks, gke, eks, or none for standalone)"
+    description: "Parent AWS region"
 
 parameters:
   - name: "clusterName"
     type: "string"
-    default: "Kubernetes Cluster"
-    description: "Cluster name"
-  - name: "clusterType"
-    type: "string"
-    default: "native"
-    description: "Cluster type (native, aks, gke, eks, none)"
+    default: "eks-cluster"
+    description: "EKS cluster name"
   - name: "version"
     type: "string"
     default: "1.28"
     description: "Kubernetes version"
-  - name: "region"
+  - name: "nodeGroupName"
     type: "string"
-    default: "us-west-2"
-    description: "Cluster region"
+    default: "worker-nodes"
+    description: "Node group name"
+  - name: "instanceType"
+    type: "string"
+    default: "t3.medium"
+    description: "EC2 instance type"
   - name: "fillColor"
     type: "color"
     default: "#E3F2FD"
@@ -38,19 +38,20 @@ parameters:
 elements:
   - type: "container"
     properties:
-      width: 800
-      height: 600
-      label: "{{.clusterName}}"
+      width: 600
+      height: 300
+      label: "EKS: {{.clusterName}} ({{.version}})"
       custom:
-        region: "{{.region}}"
+        clusterName: "{{.clusterName}}"
+        version: "{{.version}}"
+        nodeGroupName: "{{.nodeGroupName}}"
+        instanceType: "{{.instanceType}}"
     style:
       fillColor: "{{.fillColor}}"
       strokeColor: "{{.strokeColor}}"
-      strokeWidth: 3.0
-      strokeDashArray: "8,8"
-      dashed: true
+      strokeWidth: 2.0
       fontFamily: "Segoe UI"
-      fontSize: 16
+      fontSize: 13
       fontColor: "#000000"
       fontStyle: "bold"
       textAlign: "center"
@@ -61,9 +62,9 @@ elements:
       mode: "container"
       autoResize: true
       padding:
-        top: 60
-        right: 30
-        bottom: 30
-        left: 30
-      spacing: 40
-      arrangement: "vertical"
+        top: 35
+        right: 15
+        bottom: 15
+        left: 15
+      spacing: 20
+      arrangement: "free"

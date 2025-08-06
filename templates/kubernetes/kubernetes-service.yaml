@@ -1,0 +1,72 @@
+name: "kubernetes-service"
+description: "Kubernetes Service resource"
+version: "1.0"
+
+dependencies:
+  - name: "cluster"
+    type: "kubernetes-cluster"
+    required: false
+    relationship: "parent"
+    description: "Parent Kubernetes cluster (optional)"
+
+parameters:
+  - name: "serviceName"
+    type: "string"
+    default: "my-service"
+    description: "Name of the service"
+  - name: "serviceType"
+    type: "string"
+    default: "ClusterIP"
+    description: "Service type (ClusterIP, NodePort, LoadBalancer, ExternalName)"
+  - name: "port"
+    type: "number"
+    default: 80
+    description: "Service port"
+  - name: "targetPort"
+    type: "number"
+    default: 8080
+    description: "Target port"
+  - name: "clusterType"
+    type: "string"
+    default: "native"
+    description: "Type of cluster (native, aks, gke, eks, multi-cloud, none)"
+  - name: "fillColor"
+    type: "color"
+    default: "#E3F2FD"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#2196F3"
+    description: "Border color"
+
+elements:
+  - type: "shape"
+    properties:
+      width: 180
+      height: 100
+      label: "{{.serviceName}}\n{{.serviceType}}:{{.port}}"
+      shape: "ellipse"
+      custom:
+        serviceName: "{{.serviceName}}"
+        serviceType: "{{.serviceType}}"
+        port: "{{.port}}"
+        targetPort: "{{.targetPort}}"
+        clusterType: "{{.clusterType}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 2.0
+      fontFamily: "Segoe UI"
+      fontSize: 12
+      fontColor: "#000000"
+      textAlign: "center"
+      verticalAlign: "middle"
+      rounded: true
+      shadow: true
+    icon:
+      type: "shape"
+      shape: "triangle"
+      fillColor: "#2196F3"
+      strokeColor: "#1565C0"
+      position: "top-right"
+      size: 18

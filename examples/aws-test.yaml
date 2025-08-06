@@ -1,0 +1,16 @@
+version: "1.0"
+metadata:
+  title: "AWS Test"
+  description: "Simple AWS test"
+
+diagram:
+  pages:
+    - id: "main"
+      name: "AWS Test"
+      elements:
+        - id: "test-org"
+          name: "test-org"
+          type: "template"
+          template: "aws-organization"
+          parameters:
+            organizationName: "Test Organization"
