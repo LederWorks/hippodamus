@@ -1,0 +1,108 @@
+version: "1.0"
+metadata:
+  title: "Simple Infrastructure Diagram"
+  description: "A basic example showing servers and connections"
+  author: "Hippodamus Example"
+  tags: ["infrastructure", "example"]
+
+templates:
+  - name: "server"
+    template: "server.yaml"
+  - name: "database"
+    template: "database.yaml"
+
+diagram:
+  properties:
+    grid:
+      enabled: true
+      size: 10
+      color: "#cccccc"
+    background:
+      color: "#ffffff"
+    scale: 1.0
+
+  pages:
+    - id: "page1"
+      name: "Infrastructure Overview"
+      properties:
+        width: 1200
+        height: 800
+        background: "#f8f9fa"
+
+      layers:
+        - id: "infrastructure"
+          name: "Infrastructure Layer"
+          visible: true
+          locked: false
+          elements:
+            - type: "shape"
+              id: "web-server"
+              template: "server"
+              properties:
+                x: 100
+                y: 100
+                label: "Web Server"
+                custom:
+                  serverType: "nginx"
+                  environment: "production"
+
+            - type: "shape"
+              id: "app-server"
+              template: "server"
+              properties:
+                x: 300
+                y: 100
+                label: "Application Server"
+                custom:
+                  serverType: "tomcat"
+                  environment: "production"
+
+            - type: "shape"
+              id: "database"
+              template: "database"
+              properties:
+                x: 500
+                y: 100
+                label: "PostgreSQL DB"
+                custom:
+                  dbType: "postgresql"
+                  version: "15"
+
+        - id: "connections"
+          name: "Network Connections"
+          visible: true
+          locked: false
+          elements:
+            - type: "connector"
+              id: "web-to-app"
+              properties:
+                source: "web-server"
+                target: "app-server"
+                label: "HTTP/8080"
+              style:
+                strokeColor: "#2196F3"
+                strokeWidth: 2
+
+            - type: "connector"
+              id: "app-to-db"
+              properties:
+                source: "app-server"
+                target: "database"
+                label: "TCP/5432"
+              style:
+                strokeColor: "#4CAF50"
+                strokeWidth: 2
+
+      elements:
+        - type: "text"
+          id: "title"
+          properties:
+            x: 50
+            y: 20
+            width: 400
+            height: 40
+            label: "Infrastructure Diagram"
+          style:
+            fontSize: 24
+            fontStyle: "bold"
+            fontColor: "#333333"

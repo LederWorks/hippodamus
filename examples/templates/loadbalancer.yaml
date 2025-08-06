@@ -1,0 +1,25 @@
+name: "loadbalancer"
+description: "A load balancer template"
+version: "1.0"
+
+parameters:
+  - name: "technology"
+    type: "string"
+    default: "nginx"
+    description: "Load balancer technology"
+
+elements:
+  - type: "shape"
+    properties:
+      width: 120
+      height: 60
+      shape: "rhombus;whiteSpace=wrap;html=1;"
+      label: "{{.label}}"
+    style:
+      fillColor: "#FFF8E1"
+      strokeColor: "#F57F17"
+      strokeWidth: 2
+      fontFamily: "Arial"
+      fontSize: 11
+      fontColor: "#333333"
+      textAlign: "center"

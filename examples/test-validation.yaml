@@ -1,0 +1,41 @@
+version: "1.0"
+metadata:
+  title: "Test Validation"
+  description: "Test validation for ID/Name requirements"
+
+diagram:
+  properties:
+    grid:
+      enabled: true
+      size: 20
+    background:
+      color: "#fafafa"
+    scale: 1.0
+
+  pages:
+    - id: "test-page"
+      name: "Test Page"
+      properties:
+        width: 800
+        height: 600
+        background: "#ffffff"
+
+      elements:
+        # This should work - page element has both id and name
+        - type: "container"
+          id: "container1"
+          name: "Main Container"
+          properties:
+            x: 20
+            y: 20
+            width: 300
+            height: 200
+          children:
+            # This should work - child element has name
+            - type: "shape"
+              name: "Shape 1"
+              properties:
+                x: 10
+                y: 10
+                width: 100
+                height: 50

@@ -1,0 +1,93 @@
+name: "azure-project"
+description: "Azure DevOps Project container"
+version: "1.0"
+
+parameters:
+  - name: "projectName"
+    type: "string"
+    required: true
+    description: "Project name"
+  - name: "projectType"
+    type: "string"
+    default: "Agile"
+    description: "Project template (Agile, Scrum, CMMI, Basic)"
+  - name: "iconImage"
+    type: "string"
+    default: ""
+    description: "Icon image (SVG path)"
+  - name: "iconShape"
+    type: "string"
+    default: ""
+    description: "Icon shape (draw.io shape)"
+  - name: "fillColor"
+    type: "color"
+    default: "#F1F8E9"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#759C3E"
+    description: "Border color"
+
+elements:
+  - type: "container"
+    properties:
+      width: 700
+      height: 400
+      label: "{{.projectName}} ({{.projectType}})"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 2
+      fontFamily: "Segoe UI"
+      fontSize: 14
+      fontStyle: "bold"
+      fontColor: "#000000"
+      textAlign: "left"
+      verticalAlign: "top"
+      rounded: true
+      shadow: true
+      custom:
+        html: "1"
+        whiteSpace: "wrap"
+        spacingLeft: "55"
+        spacingTop: "15"
+        spacingRight: "15"
+        spacingBottom: "15"
+    nesting:
+      mode: "container"
+      autoResize: true
+      padding:
+        top: 30
+        right: 15
+        bottom: 15
+        left: 15
+      spacing: 15
+      arrangement: "grid"
+    children:
+      - type: "shape"
+        properties:
+          x: 10
+          y: 10
+          width: 40
+          height: 40
+          label: ""
+        style:
+          custom:
+            html: "1"
+            sketch: "0"
+            aspect: "fixed"
+            points: "[]"
+            align: "center"
+            fontSize: "12"
+            fontStyle: "0"
+            pointerEvents: "1"
+            image: "{{.iconImage}}"
+            shape: "{{.iconShape}}"
+            outlineConnect: "0"
+            fontColor: "#232F3E"
+            gradientColor: "none"
+            fillColor: "#DD344C"
+            strokeColor: "none"
+            dashed: "0"
+            verticalLabelPosition: "bottom"
+            verticalAlign: "top"

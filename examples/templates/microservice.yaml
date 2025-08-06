@@ -1,0 +1,34 @@
+name: "microservice"
+description: "A microservice template with technology-specific styling"
+version: "1.0"
+
+parameters:
+  - name: "serviceType"
+    type: "string"
+    default: "api"
+    description: "Type of service (api, database, cache, queue, frontend)"
+  - name: "technology"
+    type: "string"
+    default: "generic"
+    description: "Technology stack used"
+  - name: "port"
+    type: "number"
+    default: 8080
+    description: "Service port number"
+
+elements:
+  - type: "shape"
+    properties:
+      width: 100
+      height: 60
+      shape: "rounded=1;whiteSpace=wrap;html=1;"
+      label: "{{.label}}"
+    style:
+      fillColor: "#E1F5FE"
+      strokeColor: "#0277BD"
+      strokeWidth: 1.5
+      fontFamily: "Arial"
+      fontSize: 10
+      fontColor: "#333333"
+      textAlign: "center"
+      rounded: true

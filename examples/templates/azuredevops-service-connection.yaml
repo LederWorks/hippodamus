@@ -1,0 +1,38 @@
+name: "azure-service-connection"
+description: "Azure DevOps Service Connection"
+version: "1.0"
+
+parameters:
+  - name: "connectionName"
+    type: "string"
+    required: true
+    description: "Service connection name"
+  - name: "connectionType"
+    type: "string"
+    default: "Azure Resource Manager"
+    description: "Connection type"
+  - name: "fillColor"
+    type: "color"
+    default: "#FCE4EC"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#C2185B"
+    description: "Border color"
+
+elements:
+  - type: "shape"
+    properties:
+      width: 140
+      height: 60
+      label: "🔗 {{.connectionName}}"
+      shape: "rounded=1;whiteSpace=wrap;html=1;"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 2
+      fontFamily: "Segoe UI"
+      fontSize: 11
+      fontColor: "#880E4F"
+      textAlign: "center"
+      rounded: true

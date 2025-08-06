@@ -1,0 +1,49 @@
+version: "1.0"
+metadata:
+  title: "Simple Diagram Without Templates"
+  description: "Basic diagram without using templates"
+
+diagram:
+  pages:
+    - id: "page1"
+      name: "Main Page"
+      elements:
+        - type: "shape"
+          id: "shape1"
+          properties:
+            x: 100
+            y: 100
+            width: 120
+            height: 80
+            label: "Manual Shape"
+            shape: "rectangle"
+          style:
+            fillColor: "#FFE0B2"
+            strokeColor: "#FF9800"
+            strokeWidth: 2
+            fontFamily: "Arial"
+            fontSize: 14
+
+        - type: "shape"
+          id: "shape2"
+          properties:
+            x: 300
+            y: 100
+            width: 120
+            height: 80
+            label: "Another Shape"
+            shape: "ellipse"
+          style:
+            fillColor: "#C8E6C9"
+            strokeColor: "#4CAF50"
+            strokeWidth: 2
+
+        - type: "connector"
+          id: "conn1"
+          properties:
+            source: "shape1"
+            target: "shape2"
+            label: "Connection"
+          style:
+            strokeColor: "#2196F3"
+            strokeWidth: 2

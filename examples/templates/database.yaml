@@ -1,0 +1,38 @@
+name: "database"
+description: "A database template with customizable properties"
+version: "1.0"
+
+parameters:
+  - name: "dbType"
+    type: "string"
+    default: "generic"
+    description: "Type of database (postgresql, mysql, mongodb, etc.)"
+  - name: "version"
+    type: "string"
+    default: "latest"
+    description: "Database version"
+  - name: "fillColor"
+    type: "color"
+    default: "#E8F5E8"
+    description: "Background color of the database shape"
+  - name: "strokeColor"
+    type: "color"
+    default: "#388E3C"
+    description: "Border color of the database shape"
+
+elements:
+  - type: "shape"
+    properties:
+      width: 100
+      height: 100
+      shape: "cylinder3;whiteSpace=wrap;html=1;"
+      label: "{{.label}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 2
+      fontFamily: "Arial"
+      fontSize: 12
+      fontColor: "#333333"
+      textAlign: "center"
+      shadow: true

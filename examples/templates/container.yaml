@@ -1,0 +1,26 @@
+name: "container"
+description: "A container/pod template for deployment diagrams"
+version: "1.0"
+
+parameters:
+  - name: "technology"
+    type: "string"
+    default: "docker"
+    description: "Container technology (docker, kubernetes, etc.)"
+
+elements:
+  - type: "shape"
+    properties:
+      width: 80
+      height: 50
+      shape: "rounded=0;whiteSpace=wrap;html=1;"
+      label: "{{.label}}"
+    style:
+      fillColor: "#F5F5F5"
+      strokeColor: "#424242"
+      strokeWidth: 1
+      fontFamily: "Arial"
+      fontSize: 9
+      fontColor: "#333333"
+      textAlign: "center"
+      strokeDashArray: "3,3"

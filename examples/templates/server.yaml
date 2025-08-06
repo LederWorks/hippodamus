@@ -1,0 +1,39 @@
+name: "server"
+description: "A generic server template with customizable properties"
+version: "1.0"
+
+parameters:
+  - name: "serverType"
+    type: "string"
+    default: "generic"
+    description: "Type of server (nginx, apache, tomcat, etc.)"
+  - name: "environment"
+    type: "string"
+    default: "development"
+    description: "Environment (development, staging, production)"
+  - name: "fillColor"
+    type: "color"
+    default: "#E3F2FD"
+    description: "Background color of the server shape"
+  - name: "strokeColor"
+    type: "color"
+    default: "#1976D2"
+    description: "Border color of the server shape"
+
+elements:
+  - type: "shape"
+    properties:
+      width: 120
+      height: 80
+      shape: "rounded=1;whiteSpace=wrap;html=1;"
+      label: "{{.label}}"
+    style:
+      fillColor: "{{.fillColor}}"
+      strokeColor: "{{.strokeColor}}"
+      strokeWidth: 2
+      fontFamily: "Arial"
+      fontSize: 12
+      fontColor: "#333333"
+      textAlign: "center"
+      rounded: true
+      shadow: true

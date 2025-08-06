@@ -1,0 +1,78 @@
+version: "1.0"
+metadata:
+  title: "Simple Azure DevOps Organization"
+  description: "Simplified Azure DevOps organization with two projects"
+  author: "Hippodamus Azure DevOps Schema"
+  tags: ["azure-devops", "simple", "organization"]
+
+templates:
+  - name: "azuredevops-organization"
+    template: "azuredevops-organization.yaml"
+  - name: "azuredevops-project"
+    template: "azuredevops-project.yaml"
+
+diagram:
+  properties:
+    grid:
+      enabled: true
+      size: 20
+    background:
+      color: "#fafafa"
+    scale: 1.0
+
+  pages:
+    - id: "ADO"
+      name: "Azure DevOps Organization"
+      properties:
+        width: 1600
+        height: 1200
+        background: "#ffffff"
+
+      elements:
+        - type: "template"
+          id: "org"
+          name: "ado-org"
+          template: "azuredevops-organization"
+          properties:
+            x: 20
+            y: 20
+            custom:
+              orgName: "ado-org"
+              showIcon: true
+              iconImage: "mxgraph.aws3.organization"
+          nesting:
+            mode: "container"
+            autoResize: true
+            padding:
+              top: 50
+              right: 30
+              bottom: 30
+              left: 30
+            spacing: 40
+            arrangement: "vertical"
+          children:
+            # Project 1: AWS Landing Zone
+            - type: "template"
+              name: "aws-lz"
+              template: "azuredevops-project"
+              properties:
+                x: 0
+                y: 0
+                custom:
+                  projectName: "aws-lz"
+                  projectType: "Agile"
+                  iconImage: "img/lib/mscae/Azure_Repos.svg"
+                  iconShape: ""
+
+            # Project 2: AWS Security
+            - type: "template"
+              name: "aws-sec"
+              template: "azuredevops-project"
+              properties:
+                x: 0
+                y: 0
+                custom:
+                  projectName: "aws-sec"
+                  projectType: "Scrum"
+                  iconImage: ""
+                  iconShape: "mxgraph.aws4.connector"
