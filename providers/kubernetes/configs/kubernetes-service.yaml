@@ -1,0 +1,22 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - kubernetes-service"
+      elements:
+        - id: "kubernetes-service-test-id"
+          name: "kubernetes-service-test"
+          template: "kubernetes-service"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          serviceName: "my-service"
+          serviceType: "ClusterIP"
+          port: "80
+    description: "
+          targetPort: "8080
+    description: "
+          clusterType: "native"
+          fillColor: "#E3F2FD"
+          strokeColor: "#2196F3"

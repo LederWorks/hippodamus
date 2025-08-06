@@ -1,7 +1,7 @@
 # Makefile for Hippodamus
 
 # Variables
-BINARY_NAME=hippodamus
+BINARY_NAME=hippo
 BINARY_WINDOWS=$(BINARY_NAME).exe
 BINARY_LINUX=$(BINARY_NAME)
 BINARY_DARWIN=$(BINARY_NAME)

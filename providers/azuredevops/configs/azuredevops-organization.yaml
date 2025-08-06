@@ -1,0 +1,19 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - azuredevops-organization"
+      elements:
+        - id: "azuredevops-organization-test-id"
+          name: "azuredevops-organization-test"
+          template: "azuredevops-organization"
+          position:
+            x: 100
+            y: 100
+      parameters:
+        orgName: "Azure DevOps Organization"
+        fillColor: "#E8F5E8"
+        strokeColor: "#4CAF50"
+        showIcon: "true"
+        description: "Example Azure DevOps Organization"
+        iconImage: "img/lib/mscae/Azure_DevOps.svg"

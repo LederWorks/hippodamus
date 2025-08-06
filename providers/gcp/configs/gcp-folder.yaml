@@ -1,0 +1,18 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - gcp-folder"
+      elements:
+        - id: "gcp-folder-test-id"
+          name: "gcp-folder-test"
+          template: "gcp-folder"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          folderName: "Production Folder"
+          folderId: "folders/123456789"
+          displayName: "Production Environment"
+          fillColor: "#E3F2FD"
+          strokeColor: "#2196F3"

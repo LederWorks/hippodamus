@@ -1,0 +1,18 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - aws-organization-unit"
+      elements:
+        - id: "aws-organization-unit-test-id"
+          name: "aws-organization-unit-test"
+          template: "aws-organization-unit"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          ouName: "Production OU"
+          ouId: "ou-example123456"
+          description: "Production organizational unit"
+          fillColor: "#FFF3E0"
+          strokeColor: "#FF9800"

@@ -1,0 +1,17 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - server"
+      elements:
+        - id: "server-test-id"
+          name: "server-test"
+          template: "server"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          serverType: "generic"
+          environment: "development"
+          fillColor: "#E3F2FD"
+          strokeColor: "#1976D2"

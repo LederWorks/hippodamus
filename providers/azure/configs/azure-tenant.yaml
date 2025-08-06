@@ -1,0 +1,18 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - azure-tenant"
+      elements:
+        - id: "azure-tenant-test-id"
+          name: "azure-tenant-test"
+          template: "azure-tenant"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          tenantName: "Azure Tenant"
+          tenantId: "00000000-0000-0000-0000-000000000000"
+          domain: "contoso.onmicrosoft.com"
+          fillColor: "#E8F4FD"
+          strokeColor: "#0078D4"

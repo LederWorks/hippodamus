@@ -1,0 +1,19 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - kubernetes-cluster"
+      elements:
+        - id: "kubernetes-cluster-test-id"
+          name: "kubernetes-cluster-test"
+          template: "kubernetes-cluster"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          clusterName: "Kubernetes Cluster"
+          clusterType: "native"
+          version: "1.28"
+          region: "us-west-2"
+          fillColor: "#E3F2FD"
+          strokeColor: "#1976D2"

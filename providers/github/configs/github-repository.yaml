@@ -1,0 +1,18 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - github-repository"
+      elements:
+        - id: "github-repository-test-id"
+          name: "github-repository-test"
+          template: "github-repository"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          repoName: "repository"
+          visibility: "public"
+          language: "JavaScript"
+          fillColor: "#E7F3FF"
+          strokeColor: "#0969DA"

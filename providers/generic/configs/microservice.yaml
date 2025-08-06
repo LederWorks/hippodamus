@@ -1,0 +1,17 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - microservice"
+      elements:
+        - id: "microservice-test-id"
+          name: "microservice-test"
+          template: "microservice"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          serviceType: "api"
+          technology: "generic"
+          port: "8080
+    description: "

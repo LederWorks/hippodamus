@@ -1,0 +1,14 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - loadbalancer"
+      elements:
+        - id: "loadbalancer-test-id"
+          name: "loadbalancer-test"
+          template: "loadbalancer"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          technology: "nginx"
