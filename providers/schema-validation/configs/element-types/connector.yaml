@@ -1,0 +1,103 @@
+version: "1.0"
+metadata:
+  title: "Connector Element Configuration"
+  description: "Standalone connector element that can be used independently or as a template input"
+  author: "Hippodamus Schema"
+  created: "2025-08-06T10:00:00Z"
+  tags: ["connector", "element", "standalone", "reusable"]
+
+diagram:
+  properties:
+    grid:
+      enabled: true
+      size: 10
+      color: "#E0E0E0"
+    background:
+      color: "#FFFFFF"
+    scale: 1.0
+
+  pages:
+    - id: "connector-page"
+      name: "Connector Element"
+      properties:
+        width: 500
+        height: 300
+        background: "#F8F9FA"
+      
+      elements:
+        # Source shape for connector
+        - type: "shape"
+          id: "source-shape"
+          name: "Source Shape"
+          properties:
+            x: 50
+            y: 100
+            width: 100
+            height: 60
+            label: "Source"
+            shape: "rectangle"
+          style:
+            fillColor: "#E8F5E8"
+            strokeColor: "#4CAF50"
+            strokeWidth: 2
+            fontSize: 12
+            textAlign: "center"
+            verticalAlign: "middle"
+
+        # Target shape for connector
+        - type: "shape"
+          id: "target-shape"
+          name: "Target Shape"
+          properties:
+            x: 350
+            y: 100
+            width: 100
+            height: 60
+            label: "Target"
+            shape: "rectangle"
+          style:
+            fillColor: "#FFF3E0"
+            strokeColor: "#FF9800"
+            strokeWidth: 2
+            fontSize: 12
+            textAlign: "center"
+            verticalAlign: "middle"
+
+        # Standalone connector element with comprehensive configuration
+        - type: "connector"
+          id: "primary-connector"
+          name: "Primary Connector"
+          properties:
+            source: "source-shape"
+            target: "target-shape"
+            sourcePort: "right"
+            targetPort: "left"
+            waypoints:
+              - x: 150
+                y: 130
+              - x: 200
+                y: 80
+              - x: 250
+                y: 80
+              - x: 300
+                y: 130
+              - x: 350
+                y: 130
+            custom:
+              connectionType: "flow"
+              bidirectional: false
+              animated: true
+          style:
+            # Stroke properties
+            strokeColor: "#D32F2F"
+            strokeWidth: 3
+            strokeOpacity: 1.0
+            strokeDashArray: "8,4"
+            
+            # Custom connector properties
+            custom:
+              startArrow: "none"
+              endArrow: "classic"
+              curved: "1"
+              edgeStyle: "orthogonalEdgeStyle"
+          tags: ["primary", "connector", "reusable"]

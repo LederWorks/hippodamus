@@ -1,0 +1,113 @@
+version: "1.0"
+
+# Simple Composition Example
+# Shows basic patterns for using individual element configurations
+
+# Diagram metadata
+metadata:
+  title: "Basic Composition Example"
+  description: "Simple flowchart using reusable element configurations"
+  author: "Schema Validation Provider"
+
+# Basic diagram composition
+diagram:
+  # Canvas settings
+  settings:
+    canvas:
+      width: 800
+      height: 600
+      background_color: "#ffffff"
+  
+  # Elements using individual configurations as templates
+  elements:
+    # Start node using shape configuration
+    - id: "start"
+      type: "shape"
+      position: { x: 100, y: 50 }
+      size: { width: 120, height: 60 }
+      content: "Start"
+      style:
+        background_color: "#c8e6c9"
+        border_color: "#4caf50"
+        shape: "ellipse"
+    
+    # Process node using shape configuration
+    - id: "process"
+      type: "shape"
+      position: { x: 100, y: 150 }
+      size: { width: 120, height: 60 }
+      content: "Process Data"
+      style:
+        background_color: "#bbdefb"
+        border_color: "#2196f3"
+        shape: "rectangle"
+    
+    # Decision node using shape configuration  
+    - id: "decision"
+      type: "shape"
+      position: { x: 100, y: 250 }
+      size: { width: 120, height: 60 }
+      content: "Valid Data?"
+      style:
+        background_color: "#fff3e0"
+        border_color: "#ff9800"
+        shape: "diamond"
+    
+    # End node using shape configuration
+    - id: "end"
+      type: "shape"
+      position: { x: 100, y: 350 }
+      size: { width: 120, height: 60 }
+      content: "End"
+      style:
+        background_color: "#ffcdd2"
+        border_color: "#f44336"
+        shape: "ellipse"
+    
+    # Flow connectors using connector configuration
+    - id: "start_to_process"
+      type: "connector"
+      source: "start"
+      target: "process"
+      style:
+        line_type: "straight"
+        arrow_style: "standard"
+        color: "#666666"
+    
+    - id: "process_to_decision"
+      type: "connector"
+      source: "process"
+      target: "decision"
+      style:
+        line_type: "straight"
+        arrow_style: "standard"
+        color: "#666666"
+    
+    - id: "decision_to_end"
+      type: "connector"
+      source: "decision"
+      target: "end"
+      style:
+        line_type: "straight"
+        arrow_style: "standard"
+        color: "#666666"
+      labels:
+        - text: "Yes"
+          position: "start"
+    
+    # Documentation using text configuration
+    - id: "flow_description"
+      type: "text"
+      position: { x: 250, y: 100 }
+      size: { width: 200, height: 100 }
+      content: |
+        This flowchart demonstrates:
+        1. Simple process flow
+        2. Decision points  
+        3. Clear start/end states
+        
+        Built using reusable configs!
+      style:
+        font_family: "Arial"
+        font_size: 12
+        color: "#495057"

@@ -1,0 +1,109 @@
+version: "1.0"
+metadata:
+  title: "Text Element Configuration"
+  description: "Standalone text element that can be used independently or as a template input"
+  author: "Hippodamus Schema"
+  created: "2025-08-06T10:00:00Z"
+  tags: ["text", "element", "standalone", "reusable"]
+
+diagram:
+  properties:
+    grid:
+      enabled: true
+      size: 10
+      color: "#E0E0E0"
+    background:
+      color: "#FFFFFF"
+    scale: 1.0
+
+  pages:
+    - id: "text-page"
+      name: "Text Element"
+      properties:
+        width: 400
+        height: 300
+        background: "#F8F9FA"
+      
+      elements:
+        # Standalone text element with comprehensive configuration
+        - type: "text"
+          id: "primary-text"
+          name: "Primary Text"
+          properties:
+            x: 50
+            y: 100
+            width: 300
+            height: 80
+            label: "Text Element Title"
+            value: "This is a comprehensive text element that demonstrates all available text properties and styling options for reusable components."
+            custom:
+              textType: "content"
+              multiline: true
+              wordWrap: true
+              editable: true
+          style:
+            # Typography properties
+            fontFamily: "Segoe UI"
+            fontSize: 16
+            fontColor: "#2E7D32"
+            fontStyle: "normal"
+            textAlign: "left"
+            verticalAlign: "top"
+            labelPosition: "center"
+            verticalLabelPosition: "top"
+            
+            # Background (if needed)
+            fillColor: "#F1F8E9"
+            fillOpacity: 0.3
+            
+            # Border (if needed)
+            strokeColor: "#689F38"
+            strokeWidth: 1
+            strokeOpacity: 0.5
+            rounded: false
+            
+            # Text-specific effects
+            shadow: false
+            glass: false
+            sketch: false
+            rotation: 0
+            
+            # Custom text properties
+            custom:
+              html: "1"
+              whiteSpace: "wrap"
+              overflow: "visible"
+              textDirection: "ltr"
+          tags: ["primary", "text", "reusable"]
+          nesting:
+            mode: "peer"
+            autoResize: true
+            spacing: 5
+
+        # Additional text element showing different styling
+        - type: "text"
+          id: "secondary-text"
+          name: "Secondary Text"
+          properties:
+            x: 50
+            y: 200
+            width: 300
+            height: 40
+            label: "Secondary Text"
+            value: "Subtitle or additional information text"
+            custom:
+              textType: "subtitle"
+              importance: "medium"
+          style:
+            fontFamily: "Arial"
+            fontSize: 12
+            fontColor: "#757575"
+            fontStyle: "italic"
+            textAlign: "center"
+            verticalAlign: "middle"
+            fillColor: "transparent"
+            strokeColor: "none"
+            custom:
+              html: "0"
+              whiteSpace: "nowrap"
+          tags: ["secondary", "text", "reusable"]

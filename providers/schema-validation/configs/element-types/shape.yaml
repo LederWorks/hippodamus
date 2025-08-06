@@ -1,0 +1,84 @@
+version: "1.0"
+metadata:
+  title: "Shape Element Configuration"
+  description: "Standalone shape element that can be used independently or as a template input"
+  author: "Hippodamus Schema"
+  created: "2025-08-06T10:00:00Z"
+  tags: ["shape", "element", "standalone", "reusable"]
+
+diagram:
+  properties:
+    grid:
+      enabled: true
+      size: 10
+      color: "#E0E0E0"
+    background:
+      color: "#FFFFFF"
+    scale: 1.0
+
+  pages:
+    - id: "shape-page"
+      name: "Shape Element"
+      properties:
+        width: 400
+        height: 300
+        background: "#F8F9FA"
+      
+      elements:
+        # Standalone shape element with comprehensive configuration
+        - type: "shape"
+          id: "primary-shape"
+          name: "Primary Shape"
+          properties:
+            x: 150
+            y: 100
+            width: 120
+            height: 80
+            z: 1
+            label: "Shape Element"
+            value: "shape-content"
+            shape: "rectangle"
+            shapeType: "rounded"
+            custom:
+              category: "basic"
+              priority: "high"
+              editable: true
+          style:
+            # Fill properties
+            fillColor: "#E3F2FD"
+            fillOpacity: 0.9
+            
+            # Stroke properties
+            strokeColor: "#1976D2"
+            strokeWidth: 2
+            strokeOpacity: 1.0
+            strokeDashArray: ""
+            
+            # Typography
+            fontFamily: "Arial"
+            fontSize: 14
+            fontColor: "#1565C0"
+            fontStyle: "bold"
+            textAlign: "center"
+            verticalAlign: "middle"
+            labelPosition: "center"
+            verticalLabelPosition: "middle"
+            
+            # Shape effects
+            rounded: true
+            shadow: true
+            glass: false
+            sketch: false
+            rotation: 0
+            
+            # Custom properties
+            custom:
+              html: "1"
+              aspect: "fixed"
+              whiteSpace: "wrap"
+          tags: ["primary", "shape", "reusable"]
+          nesting:
+            mode: "peer"
+            autoResize: false
+            spacing: 10
+            arrangement: "free"

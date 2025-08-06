@@ -1,8 +1,8 @@
 version: "1.0"
 diagram:
   pages:
-    - id: "page1"
-      name: "Test Page - azuredevops-pipeline"
+    - id: "pipeline"
+      name: "azuredevops-pipeline"
       elements:
         - id: "azuredevops-pipeline-test-id"
           name: "azuredevops-pipeline-test"

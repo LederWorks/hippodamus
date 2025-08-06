@@ -121,10 +121,8 @@ type NestingMode string
 
 // Nesting mode constants
 const (
-	NestingModeContainer NestingMode = "container" // Default container behavior
-	NestingModeGroup     NestingMode = "group"     // Group behavior (children move with parent)
-	NestingModeSwimLane  NestingMode = "swimlane"  // Swimlane behavior
-	NestingModeAutomatic NestingMode = "automatic" // Automatically determine based on element type
+	NestingModeChild NestingMode = "child" // Child elements (sub-grouping within parent)
+	NestingModePeer  NestingMode = "peer"  // Peer elements (same-level grouping that move together)
 )
 
 // Arrangement defines how children are arranged within a parent

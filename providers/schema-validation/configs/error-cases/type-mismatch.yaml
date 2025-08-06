@@ -1,0 +1,24 @@
+version: "1.0"
+metadata:
+  title: "Type Mismatch Test"
+  description: "Test case with incorrect data types - should fail validation"
+
+diagram:
+  pages:
+    - id: "type-mismatch-page"
+      name: "Type Mismatch Test"
+      properties:
+        width: "not-a-number"  # Should be int
+        height: true          # Should be int
+      elements:
+        - type: "invalid-element-type"  # Invalid element type
+          id: "type-mismatch-shape"
+          properties:
+            x: "invalid"        # Should be float64
+            y: "invalid"        # Should be float64
+            width: 100
+            height: 80
+            z: "not-a-number"   # Should be int
+          style:
+            strokeWidth: "invalid"  # Should be float64
+            fontSize: "invalid"     # Should be int

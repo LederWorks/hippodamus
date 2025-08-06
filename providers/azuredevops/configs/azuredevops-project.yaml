@@ -1,8 +1,8 @@
 version: "1.0"
 diagram:
   pages:
-    - id: "page1"
-      name: "Test Page - azuredevops-project"
+    - id: "project"
+      name: "azuredevops-project"
       elements:
         - id: "azuredevops-project-test-id"
           name: "azuredevops-project-test"

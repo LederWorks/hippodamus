@@ -1,8 +1,8 @@
 version: "1.0"
 diagram:
   pages:
-    - id: "page1"
-      name: "Test Page - azuredevops-environment"
+    - id: "environment"
+      name: "azuredevops-environment"
       elements:
         - id: "azuredevops-environment-test-id"
           name: "azuredevops-environment-test"

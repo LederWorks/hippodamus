@@ -1,0 +1,338 @@
+# Draw.io Element Type Mapping for Hippodamus Nesting Modes
+# Based on actual draw.io export analysis and nesting requirements
+
+version: "1.0"
+metadata:
+  title: "Draw.io Element Type Configuration Matrix"
+  description: "Complete mapping of draw.io element types to Hippodamus nesting modes"
+  author: "Hippodamus Schema"
+  created: "2025-08-06T15:00:00Z"
+
+# =============================================================================
+# NESTING MODE: INDIVIDUAL
+# Elements that stand alone, no children, lightweight
+# =============================================================================
+
+individual_elements:
+  # Basic shapes - standalone content display
+  shape_basic:
+    type: "shape"
+    draw_io_properties:
+      shape: "rectangle"         # Basic rectangle
+      rounded: 0                 # Sharp corners
+      vertex: 1                  # Is a vertex (not edge)
+      parent: 1                  # Has parent reference
+      connectable: 1             # Can be connected to
+    nesting:
+      mode: "individual"
+    style_variants:
+      - shape: "rectangle"
+      - shape: "ellipse" 
+      - shape: "triangle"
+      - shape: "diamond"
+      - shape: "hexagon"
+
+  # Table elements - structured data display
+  shape_table:
+    type: "shape"
+    draw_io_properties:
+      shape: "table"
+      vertex: 1
+      parent: 1
+      connectable: 1
+    style:
+      whiteSpace: "wrap"
+      html: 1
+      fillColor: "#f8f9fa"
+      strokeColor: "#dee2e6"
+
+  shape_table_row:
+    type: "shape"
+    draw_io_properties:
+      shape: "tableRow"
+      vertex: 1
+      parent: 1                  # Parent is table
+      connectable: 0             # Rows usually not connectable
+    style:
+      whiteSpace: "wrap"
+      html: 1
+
+  shape_table_cell:
+    type: "shape"
+    draw_io_properties:
+      shape: "partialRectangle"
+      vertex: 1
+      parent: 1                  # Parent is table row
+      connectable: 0
+    style:
+      whiteSpace: "wrap"
+      html: 1
+
+  # AWS/Cloud icons - individual icons
+  shape_aws_resource:
+    type: "shape"
+    draw_io_properties:
+      shape: "mxgraph.AWS4.RESOURCE"
+      vertex: 1
+      parent: 1
+      connectable: 1
+    style:
+      aspect: "fixed"
+      html: 1
+      pointerEvents: 1
+
+  # Azure icons - individual icons
+  image_azure:
+    type: "shape"
+    draw_io_properties:
+      shape: "image"
+      vertex: 1
+      parent: 1
+      connectable: 1
+    style:
+      aspect: "fixed"
+      sketch: 1                  # Azure sketch style
+      html: 1
+
+  # Text elements - standalone text
+  text_standalone:
+    type: "text"
+    draw_io_properties:
+      vertex: 1
+      parent: 1
+      connectable: 0             # Text usually not connectable
+    style:
+      whiteSpace: "wrap"
+      html: 1
+      strokeColor: "none"
+      fillColor: "none"
+
+# =============================================================================
+# NESTING MODE: PEER
+# Elements that move together, same-level grouping
+# =============================================================================
+
+peer_elements:
+  # Peer shapes - elements that should move together
+  shape_peer_group:
+    type: "shape"
+    draw_io_properties:
+      vertex: 1
+      parent: 1
+      connectable: 1
+    nesting:
+      mode: "peer"
+      spacing: 15
+      arrangement: "horizontal"
+    style:
+      rounded: 1                 # Rounded for visual consistency
+
+  # Connector peer - connectors that move with connected elements
+  connector_peer:
+    type: "connector"
+    draw_io_properties:
+      edge: 1                    # Is an edge (not vertex)
+      parent: 1
+      source: "required"         # Must have source
+      target: "required"         # Must have target
+      connectable: 1
+    nesting:
+      mode: "peer"
+    style:
+      edgeStyle: "orthogonalEdgeStyle"
+      rounded: 0
+      html: 1
+
+# =============================================================================
+# NESTING MODE: CHILD  
+# Elements that contain and manage other elements
+# =============================================================================
+
+child_elements:
+  # Container - generic layout container
+  container_basic:
+    type: "container"
+    draw_io_properties:
+      vertex: 1
+      parent: 1
+      connectable: 1
+    nesting:
+      mode: "child"
+      autoResize: true
+      arrangement: "vertical"
+      spacing: 10
+      padding:
+        top: 20
+        right: 15
+        bottom: 15
+        left: 15
+    style:
+      rounded: 1                 # Rounded container
+      whiteSpace: "wrap"
+      html: 1
+
+  # Container - sharp edges
+  container_sharp:
+    type: "container"
+    draw_io_properties:
+      vertex: 1
+      parent: 1
+      connectable: 1
+    nesting:
+      mode: "child"
+      arrangement: "grid"
+    style:
+      rounded: 0                 # Sharp container
+      whiteSpace: "wrap"
+      html: 1
+
+  # Swimlane - process flow container
+  swimlane_process:
+    type: "swimlane"
+    draw_io_properties:
+      vertex: 1
+      parent: 1
+      connectable: 1
+      swimlaneHead: 0            # No head section
+      horizontal: 1              # Horizontal layout
+    nesting:
+      mode: "child"
+      arrangement: "horizontal"  # Stack layout equivalent
+      spacing: 20
+      padding:
+        top: 30                  # Space for swimlane label
+        right: 10
+        bottom: 10
+        left: 10
+    style:
+      whiteSpace: "wrap"
+      html: 1
+      childLayout: "stackLayout" # Draw.io specific
+
+  # Group - logical grouping container
+  group_container:
+    type: "group"
+    draw_io_properties:
+      vertex: 1
+      parent: 1
+      connectable: 1
+    nesting:
+      mode: "child"
+      arrangement: "free"        # Free positioning within group
+    style:
+      rounded: 0
+      html: 1
+
+# =============================================================================
+# CONNECTOR CONFIGURATIONS
+# Special handling for connections between elements
+# =============================================================================
+
+connector_types:
+  # Orthogonal connectors
+  connector_orthogonal:
+    type: "connector"
+    draw_io_properties:
+      edge: 1
+      parent: 1
+      source: "required"
+      target: "required"
+      connectable: 0             # Connectors themselves not connectable
+    style:
+      edgeStyle: "orthogonalEdgeStyle"
+      rounded: 0
+      html: 1
+      jettySize: "auto"
+      orthogonalLoop: 1
+
+  # Straight connectors
+  connector_straight:
+    type: "connector"
+    draw_io_properties:
+      edge: 1
+      parent: 1
+      source: "required"
+      target: "required"
+      connectable: 0
+    style:
+      edgeStyle: "none"
+      rounded: 0
+      html: 1
+
+  # Curved connectors
+  connector_curved:
+    type: "connector"
+    draw_io_properties:
+      edge: 1
+      parent: 1
+      source: "required"
+      target: "required"
+      connectable: 0
+    style:
+      edgeStyle: "none"
+      rounded: 1
+      html: 1
+
+# =============================================================================
+# COMPOSITION PATTERNS
+# How to combine elements across nesting modes
+# =============================================================================
+
+composition_patterns:
+  # Pattern 1: Table with AWS resources
+  aws_infrastructure_table:
+    container:
+      type: "container"
+      nesting: { mode: "child", arrangement: "vertical" }
+      children:
+        - extends: "shape_table"
+          children:
+            - extends: "shape_table_row"
+              children:
+                - extends: "shape_aws_resource"
+                - extends: "text_standalone"
+
+  # Pattern 2: Swimlane with peer elements
+  process_flow:
+    swimlane:
+      type: "swimlane" 
+      nesting: { mode: "child", arrangement: "horizontal" }
+      children:
+        - extends: "shape_peer_group"
+          nesting: { mode: "peer" }
+          children:
+            - extends: "shape_basic"
+            - extends: "text_standalone"
+
+  # Pattern 3: Group with mixed elements
+  dashboard_section:
+    group:
+      type: "group"
+      nesting: { mode: "child", arrangement: "free" }
+      children:
+        - extends: "image_azure"
+        - extends: "container_basic"
+          children:
+            - extends: "shape_basic"
+
+# =============================================================================
+# VERTEX EXPLANATION
+# =============================================================================
+
+vertex_properties:
+  explanation: |
+    vertex=1 in draw.io means:
+    - The element is a vertex (node) in the graph, not an edge
+    - Can be a source or target for connectors
+    - Has geometric properties (x, y, width, height)
+    - Can contain other elements as children
+    - Shapes, containers, groups, swimlanes are vertices
+    - Connectors are edges (vertex=0, edge=1)
+  
+  usage:
+    shapes: "vertex=1, connectable=1"
+    containers: "vertex=1, connectable=1" 
+    groups: "vertex=1, connectable=1"
+    swimlanes: "vertex=1, connectable=1"
+    connectors: "vertex=0, edge=1, source=ID, target=ID"
+    text: "vertex=1, connectable=0 (usually)"

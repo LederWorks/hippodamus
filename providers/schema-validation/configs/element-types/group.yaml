@@ -1,0 +1,203 @@
+version: "1.0"
+metadata:
+  title: "Group Element Configuration"
+  description: "Standalone group element that can be used independently or as a template input"
+  author: "Hippodamus Schema"
+  created: "2025-08-06T10:00:00Z"
+  tags: ["group", "element", "standalone", "reusable"]
+
+diagram:
+  properties:
+    grid:
+      enabled: true
+      size: 10
+      color: "#E0E0E0"
+    background:
+      color: "#FFFFFF"
+    scale: 1.0
+
+  pages:
+    - id: "group-page"
+      name: "Group Element"
+      properties:
+        width: 500
+        height: 350
+        background: "#F8F9FA"
+      
+      elements:
+        # Standalone group element with comprehensive configuration
+        - type: "group"
+          id: "primary-group"
+          name: "Primary Group"
+          properties:
+            x: 50
+            y: 50
+            width: 400
+            height: 250
+            label: "Group Element"
+            collapsible: true
+            collapsed: false
+            custom:
+              groupType: "logical"
+              selectable: true
+              moveTogether: true
+              expandable: true
+          style:
+            # Fill properties
+            fillColor: "#FFF3E0"
+            fillOpacity: 0.6
+            
+            # Stroke properties
+            strokeColor: "#F57C00"
+            strokeWidth: 2
+            strokeOpacity: 1.0
+            strokeDashArray: "5,5"
+            
+            # Typography for group label
+            fontFamily: "Verdana"
+            fontSize: 14
+            fontColor: "#E65100"
+            fontStyle: "bold"
+            textAlign: "center"
+            verticalAlign: "top"
+            labelPosition: "center"
+            verticalLabelPosition: "top"
+            
+            # Group effects
+            rounded: true
+            shadow: false
+            glass: false
+            sketch: false
+            rotation: 0
+            
+            # Custom group properties
+            custom:
+              html: "1"
+              whiteSpace: "wrap"
+              spacingTop: "25"
+          tags: ["primary", "group", "reusable"]
+          nesting:
+            mode: "child"
+            autoResize: true
+            spacing: 15
+            arrangement: "grid"
+            padding:
+              top: 30
+              right: 15
+              bottom: 15
+              left: 15
+            childDefaults:
+              style:
+                fillColor: "#FFE0B2"
+                strokeColor: "#FF9800"
+                strokeWidth: 1
+                rounded: true
+          children:
+            # Group child elements arranged in grid
+            - type: "shape"
+              id: "group-item-1"
+              name: "Group Item 1"
+              properties:
+                x: 0
+                y: 0
+                width: 120
+                height: 60
+                label: "Item A"
+                shape: "rectangle"
+              style:
+                fillColor: "#FFCC02"
+                strokeColor: "#F57C00"
+                strokeWidth: 1
+                fontSize: 11
+                textAlign: "center"
+                verticalAlign: "middle"
+
+            - type: "shape"
+              id: "group-item-2"
+              name: "Group Item 2"
+              properties:
+                x: 140
+                y: 0
+                width: 120
+                height: 60
+                label: "Item B"
+                shape: "rectangle"
+              style:
+                fillColor: "#FFCC02"
+                strokeColor: "#F57C00"
+                strokeWidth: 1
+                fontSize: 11
+                textAlign: "center"
+                verticalAlign: "middle"
+
+            - type: "shape"
+              id: "group-item-3"
+              name: "Group Item 3"
+              properties:
+                x: 260
+                y: 0
+                width: 120
+                height: 60
+                label: "Item C"
+                shape: "rectangle"
+              style:
+                fillColor: "#FFCC02"
+                strokeColor: "#F57C00"
+                strokeWidth: 1
+                fontSize: 11
+                textAlign: "center"
+                verticalAlign: "middle"
+
+            - type: "shape"
+              id: "group-item-4"
+              name: "Group Item 4"
+              properties:
+                x: 0
+                y: 80
+                width: 120
+                height: 60
+                label: "Item D"
+                shape: "rectangle"
+              style:
+                fillColor: "#FFCC02"
+                strokeColor: "#F57C00"
+                strokeWidth: 1
+                fontSize: 11
+                textAlign: "center"
+                verticalAlign: "middle"
+
+            - type: "shape"
+              id: "group-item-5"
+              name: "Group Item 5"
+              properties:
+                x: 140
+                y: 80
+                width: 120
+                height: 60
+                label: "Item E"
+                shape: "rectangle"
+              style:
+                fillColor: "#FFCC02"
+                strokeColor: "#F57C00"
+                strokeWidth: 1
+                fontSize: 11
+                textAlign: "center"
+                verticalAlign: "middle"
+
+            - type: "shape"
+              id: "group-item-6"
+              name: "Group Item 6"
+              properties:
+                x: 260
+                y: 80
+                width: 120
+                height: 60
+                label: "Item F"
+                shape: "rectangle"
+              style:
+                fillColor: "#FFCC02"
+                strokeColor: "#F57C00"
+                strokeWidth: 1
+                fontSize: 11
+                textAlign: "center"
+                verticalAlign: "middle"

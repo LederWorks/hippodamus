@@ -1,0 +1,875 @@
+version: "1.0"
+metadata:
+  title: "Comprehensive Schema Validation Test"
+  description: "Complete test showing all possible configuration options from types.go schema"
+  author: "Hippodamus Schema Validation"
+  created: "2025-08-06T10:00:00Z"
+  modified: "2025-08-06T10:00:00Z"
+  tags: ["test", "validation", "comprehensive", "schema", "all-features"]
+
+# Template references (external template files)
+templates:
+  - name: "validation-template"
+    template: "schema-validation/templates/validation-suite.yaml"
+  - name: "test-container"
+    template: "schema-validation/templates/test-container.yaml"
+
+diagram:
+  # Global diagram properties
+  properties:
+    grid:
+      enabled: true
+      size: 10
+      color: "#E0E0E0"
+    background:
+      color: "#FFFFFF"
+      image: "background-pattern.png"
+    scale: 1.0
+
+  pages:
+    # Page 1: Basic Elements and Shapes
+    - id: "test-page-1"
+      name: "Basic Elements Test"
+      properties:
+        width: 1200
+        height: 800
+        background: "#F5F5F5"
+      
+      # Layers within the page
+      layers:
+        - id: "background-layer"
+          name: "Background Elements"
+          visible: true
+          locked: false
+          elements:
+            - type: "shape"
+              id: "background-rect"
+              name: "Background Rectangle"
+              properties:
+                x: 50
+                y: 50
+                width: 1100
+                height: 700
+                label: "Background Layer"
+                shape: "rectangle"
+              style:
+                fillColor: "#F0F0F0"
+                strokeColor: "#CCCCCC"
+                strokeWidth: 1
+                fillOpacity: 0.5
+
+        - id: "main-layer"
+          name: "Main Content"
+          visible: true
+          locked: false
+          elements:
+            # Basic shape element testing all properties
+            - type: "shape"
+              id: "basic-shape"
+              name: "Basic Shape Test"
+              properties:
+                x: 100
+                y: 100
+                width: 150
+                height: 80
+                z: 1
+                label: "Basic Shape"
+                value: "shape-value"
+                shape: "rectangle"
+                shapeType: "rounded"
+                custom:
+                  customProperty: "custom-value"
+                  iconType: "cloud"
+              style:
+                fillColor: "#E3F2FD"
+                fillOpacity: 0.8
+                strokeColor: "#1976D2"
+                strokeWidth: 2
+                strokeOpacity: 1.0
+                strokeDashArray: "5,5"
+                fontFamily: "Arial"
+                fontSize: 12
+                fontColor: "#333333"
+                fontStyle: "bold"
+                textAlign: "center"
+                verticalAlign: "middle"
+                labelPosition: "center"
+                verticalLabelPosition: "middle"
+                rounded: true
+                shadow: true
+                glass: false
+                sketch: false
+                rotation: 0
+                custom:
+                  html: "1"
+                  aspect: "fixed"
+              tags: ["test", "shape", "basic"]
+              nesting:
+                mode: "peer"
+                autoResize: true
+                padding:
+                  top: 10
+                  right: 10
+                  bottom: 10
+                  left: 10
+                spacing: 15
+                arrangement: "vertical"
+
+      # Page-level elements (not in layers)
+      elements:
+        # Text element test
+        - type: "text"
+          id: "text-element"
+          name: "Text Element Test"
+          properties:
+            x: 300
+            y: 100
+            width: 200
+            height: 40
+            label: "Sample Text Element"
+            value: "This is text content"
+          style:
+            fontFamily: "Helvetica"
+            fontSize: 14
+            fontColor: "#2E7D32"
+            fontStyle: "italic"
+            textAlign: "left"
+            verticalAlign: "top"
+
+        # Connector element test
+        - type: "connector"
+          id: "connector-1"
+          name: "Sample Connector"
+          properties:
+            source: "basic-shape"
+            target: "text-element"
+            sourcePort: "right"
+            targetPort: "left"
+            waypoints:
+              - x: 250
+                y: 140
+              - x: 275
+                y: 120
+              - x: 300
+                y: 120
+          style:
+            strokeColor: "#FF5722"
+            strokeWidth: 2
+            strokeDashArray: "10,5"
+
+        # Group element with child nesting
+        - type: "group"
+          id: "test-group"
+          name: "Group Container Test"
+          properties:
+            x: 100
+            y: 250
+            width: 400
+            height: 200
+            label: "Group Container"
+            collapsible: true
+            collapsed: false
+          style:
+            fillColor: "#FFF3E0"
+            strokeColor: "#F57C00"
+            strokeWidth: 2
+            rounded: true
+            fontSize: 16
+            fontStyle: "bold"
+            verticalAlign: "top"
+          nesting:
+            mode: "child"
+            autoResize: true
+            spacing: 20
+            arrangement: "horizontal"
+            padding:
+              top: 30
+              right: 15
+              bottom: 15
+              left: 15
+          children:
+            - type: "shape"
+              id: "child1"
+              name: "Child Shape 1"
+              properties:
+                x: 20
+                y: 50
+                width: 80
+                height: 60
+                label: "Child 1"
+                shape: "ellipse"
+              style:
+                fillColor: "#E8F5E8"
+                strokeColor: "#4CAF50"
+                strokeWidth: 1
+
+            - type: "shape"
+              id: "child2"
+              name: "Child Shape 2"
+              properties:
+                x: 120
+                y: 50
+                width: 80
+                height: 60
+                label: "Child 2"
+                shape: "triangle"
+              style:
+                fillColor: "#FFF8E1"
+                strokeColor: "#FFC107"
+                strokeWidth: 1
+
+        # Container element with child nesting
+        - type: "container"
+          id: "test-container"
+          name: "Container Test"
+          properties:
+            x: 550
+            y: 100
+            width: 300
+            height: 250
+            label: "Container Element"
+            collapsible: true
+            collapsed: false
+          style:
+            fillColor: "#F3E5F5"
+            strokeColor: "#9C27B0"
+            strokeWidth: 2
+            rounded: true
+            fontSize: 14
+            fontColor: "#4A148C"
+            verticalAlign: "top"
+          nesting:
+            mode: "child"
+            autoResize: false
+            spacing: 10
+            arrangement: "grid"
+            padding:
+              top: 25
+              right: 10
+              bottom: 10
+              left: 10
+          children:
+            - type: "shape"
+              id: "container-child1"
+              properties:
+                x: 20
+                y: 40
+                width: 60
+                height: 40
+                label: "Item 1"
+                shape: "rectangle"
+              style:
+                fillColor: "#E1BEE7"
+                strokeColor: "#7B1FA2"
+
+            - type: "shape"
+              id: "container-child2"
+              properties:
+                x: 100
+                y: 40
+                width: 60
+                height: 40
+                label: "Item 2"
+                shape: "rectangle"
+              style:
+                fillColor: "#E1BEE7"
+                strokeColor: "#7B1FA2"
+
+        # Peer elements test - elements that should move together
+        - type: "shape"
+          id: "peer-element-1"
+          name: "Peer Element 1"
+          properties:
+            x: 900
+            y: 100
+            width: 120
+            height: 80
+            label: "Peer 1"
+            shape: "rectangle"
+          style:
+            fillColor: "#E3F2FD"
+            strokeColor: "#1976D2"
+            strokeWidth: 2
+          nesting:
+            mode: "peer"
+            spacing: 15
+
+        - type: "shape"
+          id: "peer-element-2"
+          name: "Peer Element 2"
+          properties:
+            x: 900
+            y: 200
+            width: 120
+            height: 80
+            label: "Peer 2"
+            shape: "rectangle"
+          style:
+            fillColor: "#E3F2FD"
+            strokeColor: "#1976D2"
+            strokeWidth: 2
+          nesting:
+            mode: "peer"
+            spacing: 15
+
+        - type: "shape"
+          id: "peer-element-3"
+          name: "Peer Element 3"
+          properties:
+            x: 900
+            y: 300
+            width: 120
+            height: 80
+            label: "Peer 3"
+            shape: "rectangle"
+          style:
+            fillColor: "#E3F2FD"
+            strokeColor: "#1976D2"
+            strokeWidth: 2
+          nesting:
+            mode: "peer"
+            spacing: 15
+
+        # Swimlane element with child nesting
+        - type: "swimlane"
+          id: "test-swimlane"
+          name: "Swimlane Test"
+          properties:
+            x: 100
+            y: 500
+            width: 500
+            height: 150
+            label: "Process Swimlane"
+          style:
+            fillColor: "#E0F2F1"
+            strokeColor: "#00695C"
+            strokeWidth: 2
+            fontSize: 14
+            fontColor: "#004D40"
+            verticalAlign: "top"
+          nesting:
+            mode: "child"
+            arrangement: "horizontal"
+            spacing: 20
+            padding:
+              top: 30
+              right: 10
+              bottom: 10
+              left: 10
+          children:
+            - type: "shape"
+              id: "swim1"
+              properties:
+                x: 20
+                y: 40
+                width: 100
+                height: 60
+                label: "Step 1"
+                shape: "process"
+              style:
+                fillColor: "#B2DFDB"
+                strokeColor: "#00796B"
+
+            - type: "shape"
+              id: "swim2"
+              properties:
+                x: 140
+                y: 40
+                width: 100
+                height: 60
+                label: "Step 2"
+                shape: "process"
+              style:
+                fillColor: "#B2DFDB"
+                strokeColor: "#00796B"
+
+    # Page 2: Template Elements Test
+    - id: "test-page-2"
+      name: "Template Elements Test"
+      elements:
+        # Template element using external template reference
+        - type: "template"
+          id: "template-test-instance"
+          name: "Template Test Instance"
+          template: "validation-template"
+          properties:
+            x: 100
+            y: 100
+            custom:
+              testName: "Validation Test"
+              testType: "comprehensive"
+              fillColor: "#FFF3E0"
+              strokeColor: "#FF9800"
+              enableValidation: true
+              enableTesting: true
+          children:
+            - type: "template"
+              id: "nested-template-test"
+              name: "Nested Template Test"
+              template: "test-container"
+              properties:
+                x: 50
+                y: 50
+                custom:
+                  containerName: "Test Container"
+                  containerColor: "#E8F5E8"
+
+        # Complex element with all nesting options
+        - type: "container"
+          id: "complex-test-container"
+          name: "Complex Container Test"
+          properties:
+            x: 500
+            y: 100
+            width: 400
+            height: 300
+            label: "{{.containerTitle | default \"Complex Container\"}}"
+            collapsible: true
+            collapsed: false
+            custom:
+              containerTitle: "Advanced Container"
+              theme: "modern"
+              priority: "high"
+          style:
+            fillColor: "#ECEFF1"
+            strokeColor: "#37474F"
+            strokeWidth: 3
+            rounded: true
+            shadow: true
+            glass: false
+            fontSize: 16
+            fontFamily: "Segoe UI"
+            fontColor: "#263238"
+            fontStyle: "bold"
+            textAlign: "center"
+            verticalAlign: "top"
+            custom:
+              whiteSpace: "wrap"
+              html: "1"
+              spacingTop: "30"
+          nesting:
+            mode: "child"
+            autoResize: true
+            spacing: 15
+            arrangement: "vertical"
+            padding:
+              top: 35
+              right: 20
+              bottom: 20
+              left: 20
+            childDefaults:
+              style:
+                fillColor: "#F5F5F5"
+                strokeColor: "#BDBDBD"
+                strokeWidth: 1
+                rounded: true
+          children:
+            - type: "shape"
+              id: "header-section"
+              name: "Header Section"
+              properties:
+                x: 0
+                y: 0
+                width: 360
+                height: 50
+                label: "Header Section"
+                shape: "rectangle"
+              style:
+                fillColor: "#CFD8DC"
+                strokeColor: "#455A64"
+                strokeWidth: 2
+                fontSize: 14
+                fontStyle: "bold"
+                textAlign: "center"
+                verticalAlign: "middle"
+
+            - type: "group"
+              id: "content-group"
+              name: "Content Group"
+              properties:
+                x: 0
+                y: 65
+                width: 360
+                height: 100
+                label: "Content Area"
+              style:
+                fillColor: "#FFFFFF"
+                strokeColor: "#90A4AE"
+                strokeWidth: 1
+                rounded: true
+              nesting:
+                arrangement: "horizontal"
+                spacing: 10
+                padding:
+                  top: 10
+                  right: 10
+                  bottom: 10
+                  left: 10
+              children:
+                - type: "shape"
+                  id: "content-item1"
+                  properties:
+                    x: 0
+                    y: 0
+                    width: 100
+                    height: 80
+                    label: "Item 1"
+                    shape: "rectangle"
+                  style:
+                    fillColor: "#E3F2FD"
+                    strokeColor: "#1976D2"
+
+                - type: "shape"
+                  id: "content-item2"
+                  properties:
+                    x: 110
+                    y: 0
+                    width: 100
+                    height: 80
+                    label: "Item 2"
+                    shape: "rectangle"
+                  style:
+                    fillColor: "#E8F5E8"
+                    strokeColor: "#4CAF50"
+
+                - type: "shape"
+                  id: "content-item3"
+                  properties:
+                    x: 220
+                    y: 0
+                    width: 100
+                    height: 80
+                    label: "Item 3"
+                    shape: "rectangle"
+                  style:
+                    fillColor: "#FFF3E0"
+                    strokeColor: "#FF9800"
+
+            - type: "shape"
+              id: "footer-section"
+              name: "Footer Section"
+              properties:
+                x: 0
+                y: 180
+                width: 360
+                height: 40
+                label: "Footer Section"
+                shape: "rectangle"
+              style:
+                fillColor: "#CFD8DC"
+                strokeColor: "#455A64"
+                strokeWidth: 2
+                fontSize: 12
+                textAlign: "center"
+                verticalAlign: "middle"
+
+    # Page 3: Advanced Layout Tests
+    - id: "test-page-3"
+      name: "Advanced Layout Tests"
+      properties:
+        width: 1400
+        height: 1000
+        background: "#FAFAFA"
+      elements:
+        # Grid arrangement container test
+        - type: "container"
+          id: "grid-test-container"
+          name: "Grid Layout Test"
+          properties:
+            x: 50
+            y: 50
+            width: 600
+            height: 400
+            label: "Grid Layout Test (3x2)"
+          style:
+            fillColor: "#F8F9FA"
+            strokeColor: "#6C757D"
+            strokeWidth: 2
+            rounded: true
+            fontSize: 18
+            fontColor: "#495057"
+            verticalAlign: "top"
+          nesting:
+            mode: "child"
+            arrangement: "grid"
+            spacing: 20
+            padding:
+              top: 40
+              right: 20
+              bottom: 20
+              left: 20
+          children:
+            - type: "shape"
+              id: "grid-1-1"
+              properties:
+                x: 0
+                y: 0
+                width: 160
+                height: 100
+                label: "Grid 1,1"
+                shape: "rectangle"
+              style:
+                fillColor: "#FFEBEE"
+                strokeColor: "#E91E63"
+
+            - type: "shape"
+              id: "grid-1-2"
+              properties:
+                x: 180
+                y: 0
+                width: 160
+                height: 100
+                label: "Grid 1,2"
+                shape: "rectangle"
+              style:
+                fillColor: "#E8EAF6"
+                strokeColor: "#3F51B5"
+
+            - type: "shape"
+              id: "grid-1-3"
+              properties:
+                x: 360
+                y: 0
+                width: 160
+                height: 100
+                label: "Grid 1,3"
+                shape: "rectangle"
+              style:
+                fillColor: "#E0F2F1"
+                strokeColor: "#009688"
+
+            - type: "shape"
+              id: "grid-2-1"
+              properties:
+                x: 0
+                y: 120
+                width: 160
+                height: 100
+                label: "Grid 2,1"
+                shape: "rectangle"
+              style:
+                fillColor: "#FFF8E1"
+                strokeColor: "#FFC107"
+
+            - type: "shape"
+              id: "grid-2-2"
+              properties:
+                x: 180
+                y: 120
+                width: 160
+                height: 100
+                label: "Grid 2,2"
+                shape: "rectangle"
+              style:
+                fillColor: "#FCE4EC"
+                strokeColor: "#E91E63"
+
+            - type: "shape"
+              id: "grid-2-3"
+              properties:
+                x: 360
+                y: 120
+                width: 160
+                height: 100
+                label: "Grid 2,3"
+                shape: "rectangle"
+              style:
+                fillColor: "#E1F5FE"
+                strokeColor: "#03A9F4"
+
+        # Vertical arrangement test
+        - type: "container"
+          id: "vertical-test-container"
+          name: "Vertical Stack Test"
+          properties:
+            x: 700
+            y: 50
+            width: 200
+            height: 400
+            label: "Vertical Stack Test"
+          style:
+            fillColor: "#F3E5F5"
+            strokeColor: "#9C27B0"
+            strokeWidth: 2
+            rounded: true
+            fontSize: 16
+            verticalAlign: "top"
+          nesting:
+            mode: "child"
+            arrangement: "vertical"
+            spacing: 15
+            padding:
+              top: 35
+              right: 15
+              bottom: 15
+              left: 15
+          children:
+            - type: "shape"
+              id: "v-item-1"
+              properties:
+                x: 0
+                y: 0
+                width: 170
+                height: 60
+                label: "Vertical Item 1"
+                shape: "rectangle"
+              style:
+                fillColor: "#F8BBD9"
+                strokeColor: "#C2185B"
+
+            - type: "shape"
+              id: "v-item-2"
+              properties:
+                x: 0
+                y: 75
+                width: 170
+                height: 60
+                label: "Vertical Item 2"
+                shape: "rectangle"
+              style:
+                fillColor: "#F8BBD9"
+                strokeColor: "#C2185B"
+
+            - type: "shape"
+              id: "v-item-3"
+              properties:
+                x: 0
+                y: 150
+                width: 170
+                height: 60
+                label: "Vertical Item 3"
+                shape: "rectangle"
+              style:
+                fillColor: "#F8BBD9"
+                strokeColor: "#C2185B"
+
+        # Horizontal arrangement test
+        - type: "container"
+          id: "horizontal-test-container"
+          name: "Horizontal Stack Test"
+          properties:
+            x: 50
+            y: 500
+            width: 850
+            height: 150
+            label: "Horizontal Stack Test"
+          style:
+            fillColor: "#E8F5E8"
+            strokeColor: "#4CAF50"
+            strokeWidth: 2
+            rounded: true
+            fontSize: 16
+            verticalAlign: "top"
+          nesting:
+            mode: "child"
+            arrangement: "horizontal"
+            spacing: 20
+            padding:
+              top: 35
+              right: 15
+              bottom: 15
+              left: 15
+          children:
+            - type: "shape"
+              id: "h-item-1"
+              properties:
+                x: 0
+                y: 0
+                width: 150
+                height: 100
+                label: "Horizontal Item 1"
+                shape: "rectangle"
+              style:
+                fillColor: "#C8E6C9"
+                strokeColor: "#388E3C"
+
+            - type: "shape"
+              id: "h-item-2"
+              properties:
+                x: 170
+                y: 0
+                width: 150
+                height: 100
+                label: "Horizontal Item 2"
+                shape: "rectangle"
+              style:
+                fillColor: "#C8E6C9"
+                strokeColor: "#388E3C"
+
+            - type: "shape"
+              id: "h-item-3"
+              properties:
+                x: 340
+                y: 0
+                width: 150
+                height: 100
+                label: "Horizontal Item 3"
+                shape: "rectangle"
+              style:
+                fillColor: "#C8E6C9"
+                strokeColor: "#388E3C"
+
+        # Free arrangement test
+        - type: "container"
+          id: "free-test-container"
+          name: "Free Positioning Test"
+          properties:
+            x: 50
+            y: 700
+            width: 850
+            height: 250
+            label: "Free Positioning Test"
+          style:
+            fillColor: "#FFF3E0"
+            strokeColor: "#FF9800"
+            strokeWidth: 2
+            rounded: true
+            fontSize: 16
+            verticalAlign: "top"
+          nesting:
+            mode: "child"
+            arrangement: "free"
+            padding:
+              top: 35
+              right: 15
+              bottom: 15
+              left: 15
+          children:
+            - type: "shape"
+              id: "free-1"
+              properties:
+                x: 50
+                y: 30
+                width: 100
+                height: 80
+                label: "Free 1"
+                shape: "ellipse"
+              style:
+                fillColor: "#FFE0B2"
+                strokeColor: "#F57C00"
+
+            - type: "shape"
+              id: "free-2"
+              properties:
+                x: 200
+                y: 80
+                width: 120
+                height: 60
+                label: "Free 2"
+                shape: "triangle"
+              style:
+                fillColor: "#FFE0B2"
+                strokeColor: "#F57C00"
+
+            - type: "shape"
+              id: "free-3"
+              properties:
+                x: 400
+                y: 20
+                width: 80
+                height: 120
+                label: "Free 3"
+                shape: "diamond"
+              style:
+                fillColor: "#FFE0B2"
+                strokeColor: "#F57C00"

@@ -1,0 +1,150 @@
+# Simple Composition Example
+# Shows basic patterns for using individual element configurations
+
+version: "1.0"
+
+# Import element configurations
+imports:
+  shapes: "@element-types/shape.yaml"
+  connectors: "@element-types/connector.yaml"
+  text: "@element-types/text.yaml"
+
+# Simple diagram composition
+diagram:
+  metadata:
+    title: "Basic Composition Example"
+    description: "Simple flowchart using reusable element configurations"
+  
+  elements:
+    # Start node using shape configuration
+    - id: "start"
+      type: "shape"
+      extends: "shapes.basic_rectangle"
+      position: { x: 100, y: 50 }
+      content: "Start"
+      style:
+        background_color: "#c8e6c9"
+        shape: "ellipse"
+    
+    # Process node using shape configuration
+    - id: "process"
+      type: "shape"
+      extends: "shapes.basic_rectangle"
+      position: { x: 100, y: 150 }
+      content: "Process Data"
+      style:
+        background_color: "#bbdefb"
+    
+    # Decision node using shape configuration  
+    - id: "decision"
+      type: "shape"
+      extends: "shapes.basic_rectangle"
+      position: { x: 100, y: 250 }
+      content: "Valid Data?"
+      style:
+        background_color: "#fff3e0"
+        shape: "diamond"
+    
+    # End node using shape configuration
+    - id: "end"
+      type: "shape"
+      extends: "shapes.basic_rectangle"
+      position: { x: 100, y: 350 }
+      content: "End"
+      style:
+        background_color: "#ffcdd2"
+        shape: "ellipse"
+    
+    # Flow connectors using connector configuration
+    - id: "start_to_process"
+      type: "connector"
+      extends: "connectors.basic_connector"
+      source: "start"
+      target: "process"
+    
+    - id: "process_to_decision"
+      type: "connector"
+      extends: "connectors.basic_connector"
+      source: "process"
+      target: "decision"
+    
+    - id: "decision_to_end"
+      type: "connector"
+      extends: "connectors.basic_connector"
+      source: "decision"
+      target: "end"
+      labels:
+        - text: "Yes"
+          position: "start"
+    
+    # Documentation using text configuration
+    - id: "flow_description"
+      type: "text"
+      extends: "text.documentation_text"
+      position: { x: 250, y: 100 }
+      content: |
+        This flowchart demonstrates:
+        1. Simple process flow
+        2. Decision points
+        3. Clear start/end states
+        
+        Built using reusable element configs!
+
+# Demonstrate inheritance and customization
+customization_examples:
+  # Override specific properties while keeping base configuration
+  custom_shape:
+    base: "shapes.basic_rectangle"
+    overrides:
+      style:
+        background_color: "#e1f5fe"
+        border_width: 3
+        border_style: "dashed"
+  
+  # Extend connector with additional styling
+  custom_connector:
+    base: "connectors.basic_connector"
+    overrides:
+      style:
+        line_type: "curved"
+        color: "#ff5722"
+        line_width: 3
+
+# Template composition patterns
+composition_patterns:
+  # Pattern 1: Sequential composition
+  sequential_flow:
+    description: "Chain elements in sequence"
+    pattern: |
+      elements:
+        - type: "shape"
+          extends: "shapes.basic_rectangle"
+        - type: "connector"
+          extends: "connectors.basic_connector"
+        - type: "shape"
+          extends: "shapes.basic_rectangle"
+  
+  # Pattern 2: Hierarchical composition
+  hierarchical_layout:
+    description: "Nest elements within containers"
+    pattern: |
+      elements:
+        - type: "container"
+          extends: "containers.layout_container"
+          children:
+            - type: "shape"
+              extends: "shapes.basic_rectangle"
+            - type: "shape"
+              extends: "shapes.basic_rectangle"
+  
+  # Pattern 3: Grid composition
+  grid_layout:
+    description: "Arrange elements in grid pattern"
+    pattern: |
+      elements:
+        - type: "group"
+          extends: "groups.grid_group"
+          layout:
+            type: "grid"
+            columns: 3
+            spacing: 20

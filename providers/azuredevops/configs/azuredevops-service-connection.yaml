@@ -1,8 +1,8 @@
 version: "1.0"
 diagram:
   pages:
-    - id: "page1"
-      name: "Test Page - azuredevops-service-connection"
+    - id: "service-connection"
+      name: "azuredevops-service-connection"
       elements:
         - id: "azuredevops-service-connection-test-id"
           name: "azuredevops-service-connection-test"

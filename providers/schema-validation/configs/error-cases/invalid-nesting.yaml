@@ -1,0 +1,21 @@
+version: "1.0"
+metadata:
+  title: "Invalid Nesting Configuration"
+  description: "Test case with invalid nesting mode - should fail validation"
+
+diagram:
+  pages:
+    - id: "invalid-page"
+      name: "Invalid Nesting Test"
+      elements:
+        - type: "shape"
+          id: "invalid-shape"
+          properties:
+            x: 100
+            y: 100
+            width: 100
+            height: 80
+            label: "Invalid Shape"
+          nesting:
+            mode: "container"  # This should fail - only "child" and "peer" are valid
+            arrangement: "vertical"

@@ -1,0 +1,106 @@
+name: "validation-suite"
+description: "Template for comprehensive validation testing"
+version: "1.0"
+parameters:
+  - name: "testName"
+    type: "string"
+    default: "Validation Test"
+    required: true
+    description: "Name of the test being performed"
+  - name: "testType"
+    type: "string"
+    default: "basic"
+    description: "Type of test (basic, comprehensive, stress)"
+  - name: "fillColor"
+    type: "color"
+    default: "#E3F2FD"
+    description: "Fill color for test elements"
+  - name: "strokeColor"
+    type: "color"
+    default: "#1976D2"
+    description: "Stroke color for test elements"
+  - name: "enableValidation"
+    type: "boolean"
+    default: true
+    description: "Enable validation features"
+  - name: "enableTesting"
+    type: "boolean"
+    default: true
+    description: "Enable testing features"
+
+group:
+  properties:
+    x: 0
+    y: 0
+    width: 300
+    height: 200
+    label: "{{.testName}}"
+    collapsible: true
+    collapsed: false
+  style:
+    fillColor: "{{.fillColor}}"
+    strokeColor: "{{.strokeColor}}"
+    strokeWidth: 2
+    rounded: true
+    fontSize: 14
+    fontStyle: "bold"
+    verticalAlign: "top"
+  autoResize: true
+  spacing: 15
+  arrangement: "vertical"
+  padding:
+    top: 25
+    right: 15
+    bottom: 15
+    left: 15
+  children:
+    - type: "shape"
+      id: "validation-header"
+      properties:
+        x: 0
+        y: 0
+        width: 270
+        height: 40
+        label: "{{.testType | title}} Test"
+        shape: "rectangle"
+      style:
+        fillColor: "{{.fillColor}}"
+        strokeColor: "{{.strokeColor}}"
+        strokeWidth: 1
+        fontSize: 12
+        textAlign: "center"
+        verticalAlign: "middle"
+
+    - type: "shape"
+      id: "validation-status"
+      properties:
+        x: 0
+        y: 50
+        width: 270
+        height: 30
+        label: "{{if .enableValidation}}✓ Validation{{else}}✗ No Validation{{end}}"
+        shape: "rectangle"
+      style:
+        fillColor: "{{if .enableValidation}}#E8F5E8{{else}}#FFEBEE{{end}}"
+        strokeColor: "{{if .enableValidation}}#4CAF50{{else}}#F44336{{end}}"
+        strokeWidth: 1
+        fontSize: 11
+        textAlign: "center"
+        verticalAlign: "middle"
+
+    - type: "shape"
+      id: "testing-status"
+      properties:
+        x: 0
+        y: 90
+        width: 270
+        height: 30
+        label: "{{if .enableTesting}}✓ Testing{{else}}✗ No Testing{{end}}"
+        shape: "rectangle"
+      style:
+        fillColor: "{{if .enableTesting}}#E8F5E8{{else}}#FFEBEE{{end}}"
+        strokeColor: "{{if .enableTesting}}#4CAF50{{else}}#F44336{{end}}"
+        strokeWidth: 1
+        fontSize: 11
+        textAlign: "center"
+        verticalAlign: "middle"

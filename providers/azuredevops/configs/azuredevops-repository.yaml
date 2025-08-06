@@ -1,8 +1,8 @@
 version: "1.0"
 diagram:
   pages:
-    - id: "page1"
-      name: "Test Page - azuredevops-repository"
+    - id: "repository"
+      name: "azuredevops-repository"
       elements:
         - id: "azuredevops-repository-test-id"
           name: "azuredevops-repository-test"

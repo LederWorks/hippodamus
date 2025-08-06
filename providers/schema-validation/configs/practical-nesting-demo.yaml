@@ -1,0 +1,480 @@
+version: "1.0"
+metadata:
+  title: "Practical Draw.io Element Configuration"
+  description: "Working examples of the three nesting modes with actual draw.io properties"
+  author: "Hippodamus Schema"
+
+diagram:
+  properties:
+    grid: { enabled: true, size: 10, color: "#E0E0E0" }
+    background: { color: "#FFFFFF" }
+    scale: 1.0
+
+  pages:
+    - id: "nesting-modes-demo"
+      name: "Nesting Modes Demonstration"
+      properties:
+        width: 1400
+        height: 1000
+        background: "#F8F9FA"
+      
+      elements:
+        # =================================================================
+        # INDIVIDUAL ELEMENTS SECTION
+        # =================================================================
+        
+        # AWS Resource Icon (Individual)
+        - type: "shape"
+          id: "aws-ec2"
+          name: "AWS EC2 Instance"
+          properties:
+            x: 50
+            y: 50
+            width: 60
+            height: 60
+            label: "EC2"
+            shape: "mxgraph.AWS4.RESOURCE"
+          style:
+            fillColor: "#FF9900"
+            strokeColor: "#FF6600"
+            aspect: "fixed"
+            html: "1"
+            vertex: "1"
+            parent: "1"
+            connectable: "1"
+          nesting:
+            mode: "individual"
+
+        # Azure Resource Icon (Individual)
+        - type: "shape"
+          id: "azure-vm"
+          name: "Azure Virtual Machine"
+          properties:
+            x: 150
+            y: 50
+            width: 60
+            height: 60
+            label: "VM"
+            shape: "image"
+          style:
+            fillColor: "#0078D4"
+            strokeColor: "#106EBE"
+            aspect: "fixed"
+            sketch: "1"
+            html: "1"
+            vertex: "1"
+            parent: "1"
+            connectable: "1"
+          nesting:
+            mode: "individual"
+
+        # Basic Shape (Individual)
+        - type: "shape"
+          id: "basic-rect"
+          name: "Basic Rectangle"
+          properties:
+            x: 250
+            y: 50
+            width: 120
+            height: 60
+            label: "Database"
+            shape: "rectangle"
+          style:
+            fillColor: "#E1F5FE"
+            strokeColor: "#0288D1"
+            rounded: "0"
+            vertex: "1"
+            parent: "1"
+            connectable: "1"
+            html: "1"
+          nesting:
+            mode: "individual"
+
+        # Text Element (Individual)
+        - type: "text"
+          id: "standalone-text"
+          name: "Standalone Text"
+          properties:
+            x: 400
+            y: 60
+            width: 100
+            height: 30
+            label: "Description"
+          style:
+            fontFamily: "Arial"
+            fontSize: 12
+            fontColor: "#333333"
+            strokeColor: "none"
+            fillColor: "none"
+            vertex: "1"
+            parent: "1"
+            connectable: "0"
+            html: "1"
+            whiteSpace: "wrap"
+          nesting:
+            mode: "individual"
+
+        # =================================================================
+        # PEER ELEMENTS SECTION
+        # =================================================================
+
+        # Peer Group - Elements that move together
+        - type: "shape"
+          id: "peer-1"
+          name: "Peer Element 1"
+          properties:
+            x: 50
+            y: 200
+            width: 100
+            height: 60
+            label: "Service A"
+            shape: "rectangle"
+          style:
+            fillColor: "#C8E6C9"
+            strokeColor: "#4CAF50"
+            rounded: "1"
+            vertex: "1"
+            parent: "1"
+            connectable: "1"
+            html: "1"
+          nesting:
+            mode: "peer"
+            spacing: 20
+
+        - type: "shape"
+          id: "peer-2"
+          name: "Peer Element 2"
+          properties:
+            x: 170
+            y: 200
+            width: 100
+            height: 60
+            label: "Service B"
+            shape: "rectangle"
+          style:
+            fillColor: "#C8E6C9"
+            strokeColor: "#4CAF50"
+            rounded: "1"
+            vertex: "1"
+            parent: "1"
+            connectable: "1"
+            html: "1"
+          nesting:
+            mode: "peer"
+            spacing: 20
+
+        - type: "shape"
+          id: "peer-3"
+          name: "Peer Element 3"
+          properties:
+            x: 290
+            y: 200
+            width: 100
+            height: 60
+            label: "Service C"
+            shape: "rectangle"
+          style:
+            fillColor: "#C8E6C9"
+            strokeColor: "#4CAF50"
+            rounded: "1"
+            vertex: "1"
+            parent: "1"
+            connectable: "1"
+            html: "1"
+          nesting:
+            mode: "peer"
+            spacing: 20
+
+        # =================================================================
+        # CHILD ELEMENTS SECTION
+        # =================================================================
+
+        # Container with child elements
+        - type: "container"
+          id: "main-container"
+          name: "Main Container"
+          properties:
+            x: 50
+            y: 350
+            width: 500
+            height: 300
+            label: "Application Architecture"
+            collapsible: true
+            collapsed: false
+          style:
+            fillColor: "#F3E5F5"
+            strokeColor: "#9C27B0"
+            strokeWidth: 2
+            rounded: "1"
+            fontSize: 16
+            fontColor: "#4A148C"
+            verticalAlign: "top"
+            vertex: "1"
+            parent: "1"
+            connectable: "1"
+            html: "1"
+            whiteSpace: "wrap"
+          nesting:
+            mode: "child"
+            autoResize: false
+            spacing: 15
+            arrangement: "vertical"
+            padding:
+              top: 35
+              right: 20
+              bottom: 20
+              left: 20
+          children:
+            # Table structure within container
+            - type: "shape"
+              id: "services-table"
+              name: "Services Table"
+              properties:
+                x: 0
+                y: 0
+                width: 460
+                height: 120
+                label: "Microservices"
+                shape: "table"
+              style:
+                fillColor: "#FFFFFF"
+                strokeColor: "#BDBDBD"
+                vertex: "1"
+                parent: "main-container"
+                connectable: "1"
+                html: "1"
+                whiteSpace: "wrap"
+              children:
+                - type: "shape"
+                  id: "table-row-1"
+                  properties:
+                    x: 0
+                    y: 0
+                    width: 460
+                    height: 40
+                    shape: "tableRow"
+                  style:
+                    vertex: "1"
+                    parent: "services-table"
+                    connectable: "0"
+                    html: "1"
+                  children:
+                    - type: "shape"
+                      id: "cell-service"
+                      properties:
+                        x: 0
+                        y: 0
+                        width: 150
+                        height: 40
+                        label: "Service"
+                        shape: "partialRectangle"
+                      style:
+                        vertex: "1"
+                        parent: "table-row-1"
+                        connectable: "0"
+                        html: "1"
+                        fontStyle: "bold"
+                    
+                    - type: "shape"
+                      id: "cell-status"
+                      properties:
+                        x: 150
+                        y: 0
+                        width: 100
+                        height: 40
+                        label: "Status"
+                        shape: "partialRectangle"
+                      style:
+                        vertex: "1"
+                        parent: "table-row-1"
+                        connectable: "0"
+                        html: "1"
+                        fontStyle: "bold"
+
+            # Swimlane within container
+            - type: "swimlane"
+              id: "process-flow"
+              name: "Process Flow"
+              properties:
+                x: 0
+                y: 140
+                width: 460
+                height: 100
+                label: "Data Processing Pipeline"
+              style:
+                fillColor: "#E0F2F1"
+                strokeColor: "#00695C"
+                strokeWidth: 2
+                fontSize: 14
+                fontColor: "#004D40"
+                verticalAlign: "top"
+                vertex: "1"
+                parent: "main-container"
+                connectable: "1"
+                html: "1"
+                whiteSpace: "wrap"
+                swimlaneHead: "0"
+                horizontal: "1"
+                childLayout: "stackLayout"
+              nesting:
+                mode: "child"
+                arrangement: "horizontal"
+                spacing: 20
+                padding:
+                  top: 30
+                  right: 10
+                  bottom: 10
+                  left: 10
+              children:
+                - type: "shape"
+                  id: "step-1"
+                  properties:
+                    x: 0
+                    y: 0
+                    width: 100
+                    height: 60
+                    label: "Ingest"
+                    shape: "process"
+                  style:
+                    fillColor: "#B2DFDB"
+                    strokeColor: "#00796B"
+                    vertex: "1"
+                    parent: "process-flow"
+                    connectable: "1"
+
+                - type: "shape"
+                  id: "step-2"
+                  properties:
+                    x: 120
+                    y: 0
+                    width: 100
+                    height: 60
+                    label: "Transform"
+                    shape: "process"
+                  style:
+                    fillColor: "#B2DFDB"
+                    strokeColor: "#00796B"
+                    vertex: "1"
+                    parent: "process-flow"
+                    connectable: "1"
+
+        # Group container
+        - type: "group"
+          id: "monitoring-group"
+          name: "Monitoring Group"
+          properties:
+            x: 600
+            y: 350
+            width: 300
+            height: 200
+            label: "Monitoring Dashboard"
+          style:
+            fillColor: "#FFF3E0"
+            strokeColor: "#FF9800"
+            strokeWidth: 2
+            rounded: "0"
+            vertex: "1"
+            parent: "1"
+            connectable: "1"
+            html: "1"
+          nesting:
+            mode: "child"
+            arrangement: "free"
+            padding:
+              top: 25
+              right: 15
+              bottom: 15
+              left: 15
+          children:
+            - type: "shape"
+              id: "metric-cpu"
+              properties:
+                x: 20
+                y: 20
+                width: 80
+                height: 50
+                label: "CPU"
+                shape: "rectangle"
+              style:
+                fillColor: "#FFE0B2"
+                strokeColor: "#F57C00"
+                vertex: "1"
+                parent: "monitoring-group"
+                connectable: "1"
+
+            - type: "shape"
+              id: "metric-memory"
+              properties:
+                x: 120
+                y: 20
+                width: 80
+                height: 50
+                label: "Memory"
+                shape: "rectangle"
+              style:
+                fillColor: "#FFE0B2"
+                strokeColor: "#F57C00"
+                vertex: "1"
+                parent: "monitoring-group"
+                connectable: "1"
+
+        # =================================================================
+        # CONNECTORS SECTION
+        # =================================================================
+
+        # Orthogonal connector
+        - type: "connector"
+          id: "conn-aws-db"
+          name: "AWS to Database"
+          properties:
+            source: "aws-ec2"
+            target: "basic-rect"
+            sourcePort: "right"
+            targetPort: "left"
+          style:
+            strokeColor: "#666666"
+            strokeWidth: 2
+            edgeStyle: "orthogonalEdgeStyle"
+            rounded: "0"
+            html: "1"
+            jettySize: "auto"
+            orthogonalLoop: "1"
+            edge: "1"
+            parent: "1"
+            connectable: "0"
+
+        # Straight connector
+        - type: "connector"
+          id: "conn-azure-container"
+          name: "Azure to Container"
+          properties:
+            source: "azure-vm"
+            target: "main-container"
+          style:
+            strokeColor: "#0078D4"
+            strokeWidth: 2
+            edgeStyle: "none"
+            rounded: "0"
+            html: "1"
+            edge: "1"
+            parent: "1"
+            connectable: "0"
+
+        # Peer connector - connects peer elements
+        - type: "connector"
+          id: "conn-peer-flow"
+          name: "Peer Flow"
+          properties:
+            source: "peer-1"
+            target: "peer-2"
+          style:
+            strokeColor: "#4CAF50"
+            strokeWidth: 2
+            edgeStyle: "orthogonalEdgeStyle"
+            rounded: "0"
+            html: "1"
+            edge: "1"
+            parent: "1"
+            connectable: "0"
+          nesting:
+            mode: "peer"

@@ -1,0 +1,58 @@
+name: "test-container"
+description: "Simple test container template"
+version: "1.0"
+parameters:
+  - name: "containerName"
+    type: "string"
+    default: "Test Container"
+    required: true
+    description: "Name of the test container"
+  - name: "containerColor"
+    type: "color"
+    default: "#F5F5F5"
+    description: "Background color for the container"
+
+group:
+  properties:
+    x: 0
+    y: 0
+    width: 200
+    height: 100
+    label: "{{.containerName}}"
+    collapsible: false
+    collapsed: false
+  style:
+    fillColor: "{{.containerColor}}"
+    strokeColor: "#BDBDBD"
+    strokeWidth: 1
+    rounded: true
+    fontSize: 12
+    textAlign: "center"
+    verticalAlign: "middle"
+  autoResize: false
+  spacing: 10
+  arrangement: "free"
+  padding:
+    top: 10
+    right: 10
+    bottom: 10
+    left: 10
+  children:
+    - type: "shape"
+      id: "test-indicator"
+      properties:
+        x: 10
+        y: 10
+        width: 20
+        height: 20
+        label: "T"
+        shape: "ellipse"
+      style:
+        fillColor: "#4CAF50"
+        strokeColor: "#2E7D32"
+        strokeWidth: 1
+        fontSize: 10
+        fontColor: "#FFFFFF"
+        fontStyle: "bold"
+        textAlign: "center"
+        verticalAlign: "middle"
