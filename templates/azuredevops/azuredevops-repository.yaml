@@ -3,6 +3,11 @@ description: "Azure DevOps Repository with pipelines and service connections"
 version: "1.0"
 
 dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
   - name: "project"
     type: "azuredevops-project"
     required: true
@@ -35,89 +40,7 @@ parameters:
     default: "#DD344C"
     description: "Repository border color"
 
-elements:
-  # Repository icon (Azure Repos SVG) - positioned inside the main container
-  - type: "shape"
-    id: "repo-icon"
-    properties:
-      x: 10.65
-      y: 11
-      width: 31
-      height: 34
-      label: ""
-    style:
-      custom:
-        style: "image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Azure_Repos.svg;"
-  
-  # Main repository container
-  - type: "shape"
-    id: "repo-container"
-    properties:
-      x: 0
-      y: 0
-      width: 319.35
-      height: 80
-      label: "{{.repoName}}"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 1
-      fontFamily: "Segoe UI"
-      fontSize: 10
-      fontColor: "#000000"
-      textAlign: "center"
-      rounded: true
-      custom:
-        style: "rounded=1;strokeColor={{.strokeColor}};strokeWidth=1;fillColor={{.fillColor}};verticalAlign=top;align=center;spacingLeft=10;spacingTop=10;fontSize=10;fontStyle=0;fontColor=#000000;"
-  
-  # Pipeline (positioned to the right of repository)
-  - type: "shape"
-    id: "pipeline"
-    properties:
-      x: 393.87
-      y: 10
-      width: 60
-      height: 60
-      label: ""
-    style:
-      custom:
-        style: "image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Azure_Pipelines.svg;"
-  
-  # Service Connection (positioned to the right of pipeline)
-  - type: "shape"
-    id: "service-connection"
-    properties:
-      x: 534.39
-      y: 20
-      width: 108
-      height: 40
-      label: ""
-    style:
-      fillColor: "{{.strokeColor}}"
-      strokeColor: "none"
-      custom:
-        style: "sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor={{.strokeColor}};strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.connector;"
-  
-  # Arrow from repository to pipeline
-  - type: "connector"
-    id: "pipeline-arrow"
-    properties:
-      source: "repo-container"
-      target: "pipeline"
-      label: ""
-    style:
-      strokeColor: "{{.strokeColor}}"
-      custom:
-        style: "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor={{.strokeColor}};"
-  
-  # Arrow from pipeline to service connection
-  - type: "connector"
-    id: "service-connection-arrow"
-    properties:
-      source: "pipeline"
-      target: "service-connection"
-      label: ""
-    style:
-      strokeColor: "{{.strokeColor}}"
-      custom:
-        style: "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor={{.strokeColor}};startArrow=classic;startFill=1;"
+group:
+  autoResize: false
+  arrangement: "free"
+

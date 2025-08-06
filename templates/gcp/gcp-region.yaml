@@ -32,35 +32,5 @@ parameters:
     default: "#4CAF50"
     description: "Border color"
 
-elements:
-  - type: "container"
-    properties:
-      width: 700
-      height: 400
-      label: "{{.regionDisplayName}} ({{.regionName}})"
-      custom:
-        regionName: "{{.regionName}}"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 2.0
-      strokeDashArray: "5,5"
-      dashed: true
-      fontFamily: "Segoe UI"
-      fontSize: 14
-      fontColor: "#000000"
-      fontStyle: "bold"
-      textAlign: "center"
-      verticalAlign: "top"
-      rounded: true
-      shadow: true
-    nesting:
-      mode: "container"
-      autoResize: true
-      padding:
-        top: 40
-        right: 20
-        bottom: 20
-        left: 20
-      spacing: 25
-      arrangement: "vertical"
+group:
+

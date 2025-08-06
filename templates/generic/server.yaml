@@ -2,6 +2,13 @@ name: "server"
 description: "A generic server template with customizable properties"
 version: "1.0"
 
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+
 parameters:
   - name: "serverType"
     type: "string"
@@ -20,20 +27,7 @@ parameters:
     default: "#1976D2"
     description: "Border color of the server shape"
 
-elements:
-  - type: "shape"
-    properties:
-      width: 120
-      height: 80
-      shape: "rounded=1;whiteSpace=wrap;html=1;"
-      label: "{{.label}}"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 2
-      fontFamily: "Arial"
-      fontSize: 12
-      fontColor: "#333333"
-      textAlign: "center"
-      rounded: true
-      shadow: true
+group:
+  autoResize: false
+  arrangement: "free"
+

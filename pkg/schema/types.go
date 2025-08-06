@@ -217,14 +217,43 @@ type Style struct {
 	Custom map[string]string `yaml:"custom,omitempty" json:"custom,omitempty"`
 }
 
-// Template represents a reusable template
+// IconConfig defines icon properties for elements
+type IconConfig struct {
+	Type        string  `yaml:"type,omitempty" json:"type,omitempty"`               // "shape" or "image"
+	Shape       string  `yaml:"shape,omitempty" json:"shape,omitempty"`             // Shape name or image path
+	FillColor   string  `yaml:"fillColor,omitempty" json:"fillColor,omitempty"`     // Fill color
+	StrokeColor string  `yaml:"strokeColor,omitempty" json:"strokeColor,omitempty"` // Stroke color
+	Position    string  `yaml:"position,omitempty" json:"position,omitempty"`       // Position relative to element
+	Size        float64 `yaml:"size,omitempty" json:"size,omitempty"`               // Icon size
+}
+
+// GroupConfig defines the visual and behavioral properties of a template group
+type GroupConfig struct {
+	// Visual properties
+	Properties ElementProperties `yaml:"properties,omitempty" json:"properties,omitempty"`
+	Style      Style             `yaml:"style,omitempty" json:"style,omitempty"`
+
+	// Container behavior
+	AutoResize  bool        `yaml:"autoResize,omitempty" json:"autoResize,omitempty"`   // Auto-resize to fit children
+	Padding     Padding     `yaml:"padding,omitempty" json:"padding,omitempty"`         // Padding around children
+	Spacing     float64     `yaml:"spacing,omitempty" json:"spacing,omitempty"`         // Spacing between children
+	Arrangement Arrangement `yaml:"arrangement,omitempty" json:"arrangement,omitempty"` // How children are arranged
+
+	// Optional icon
+	Icon *IconConfig `yaml:"icon,omitempty" json:"icon,omitempty"`
+
+	// Optional child elements (like current templates)
+	Children []Element `yaml:"children,omitempty" json:"children,omitempty"`
+}
+
+// Template represents a reusable template - now always a group that can contain other elements
 type Template struct {
 	Name         string       `yaml:"name" json:"name"`
 	Description  string       `yaml:"description,omitempty" json:"description,omitempty"`
 	Version      string       `yaml:"version,omitempty" json:"version,omitempty"`
 	Dependencies []Dependency `yaml:"dependencies,omitempty" json:"dependencies,omitempty"`
 	Parameters   []Parameter  `yaml:"parameters,omitempty" json:"parameters,omitempty"`
-	Elements     []Element    `yaml:"elements" json:"elements"`
+	Group        GroupConfig  `yaml:"group" json:"group"` // Every template defines a group
 }
 
 // Dependency defines a template dependency relationship

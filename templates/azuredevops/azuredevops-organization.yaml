@@ -24,36 +24,5 @@ parameters:
     default: "img/lib/mscae/Azure_DevOps.svg"
     description: "Icon image path or URL"
 
-elements:
-  - type: "container"
-    properties:
-      width: 800
-      height: 1420
-      label: "{{.orgName}}"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 4
-      strokeDashArray: "8,8"
-      fontFamily: "Segoe UI"
-      fontSize: 14
-      fontStyle: "bold"
-      fontColor: "#000000"
-      textAlign: "center"
-      verticalAlign: "top"
-      rounded: false
-      shadow: false
-      glass: false
-      custom:
-        image: "{{if .showIcon}}{{.iconImage}}{{end}}"
-        sketch: "0"
-        aspect: "fixed"
-        html: "1"
-        points: "[]"
-        imageAlign: "right"
-        imageVerticalAlign: "top"
-        imageWidth: "40"
-        imageHeight: "40"
-        spacingLeft: "10"
-        spacingTop: "10"
-        spacingRight: "50"
+group:
+

@@ -44,37 +44,5 @@ parameters:
     default: "#1976D2"
     description: "Border color"
 
-elements:
-  - type: "container"
-    properties:
-      width: 600
-      height: 300
-      label: "GKE: {{.clusterName}} ({{.version}})"
-      custom:
-        clusterName: "{{.clusterName}}"
-        version: "{{.version}}"
-        nodePoolName: "{{.nodePoolName}}"
-        machineType: "{{.machineType}}"
-        nodeCount: "{{.nodeCount}}"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 2.0
-      fontFamily: "Segoe UI"
-      fontSize: 13
-      fontColor: "#000000"
-      fontStyle: "bold"
-      textAlign: "center"
-      verticalAlign: "top"
-      rounded: true
-      shadow: true
-    nesting:
-      mode: "container"
-      autoResize: true
-      padding:
-        top: 35
-        right: 15
-        bottom: 15
-        left: 15
-      spacing: 20
-      arrangement: "free"
+group:
+

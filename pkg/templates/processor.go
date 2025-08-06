@@ -209,12 +209,8 @@ func (tp *TemplateProcessor) processElementWithContext(element *schema.Element, 
 			return fmt.Errorf("dependency validation failed for element %s: %w", tp.getElementDisplayName(element), err)
 		}
 
-		// Inherit the type from the template's first element
-		if len(template.Elements) > 0 {
-			element.Type = template.Elements[0].Type
-		} else {
-			return fmt.Errorf("template %s has no elements to inherit type from", element.Template)
-		}
+		// All templates now create container elements (groups)
+		element.Type = schema.ElementTypeContainer
 	}
 
 	if element.Template == "" {
@@ -238,7 +234,7 @@ func (tp *TemplateProcessor) processElementWithContext(element *schema.Element, 
 	return nil
 }
 
-// applyTemplate applies a template to an element
+// applyTemplate applies a template to an element using the new unified group approach
 func (tp *TemplateProcessor) applyTemplate(element *schema.Element, tmpl *schema.Template) error {
 	// Prepare template variables
 	vars := make(map[string]interface{})
@@ -281,52 +277,139 @@ func (tp *TemplateProcessor) applyTemplate(element *schema.Element, tmpl *schema
 		}
 	}
 
-	// Apply template elements
-	if len(tmpl.Elements) > 0 {
-		// If template has multiple elements, create them as children
-		if len(tmpl.Elements) > 1 {
-			element.Children = make([]schema.Element, 0, len(tmpl.Elements))
-		}
+	// Convert element to container type (every template creates a group)
+	element.Type = schema.ElementTypeContainer
 
-		for i, templateElement := range tmpl.Elements {
-			var targetElement *schema.Element
-
-			if i == 0 && len(tmpl.Elements) == 1 {
-				// Single template element: merge with current element
-				targetElement = element
-			} else {
-				// Multiple template elements: create as children
-				childElement := templateElement
-				childElement.ID = fmt.Sprintf("%s-%d", element.ID, i)
-				element.Children = append(element.Children, childElement)
-				targetElement = &element.Children[len(element.Children)-1]
-			}
-
-			// Merge template element properties first
-			tp.mergeElementProperties(targetElement, &templateElement)
-
-			// Then apply template variables to element
-			if err := tp.applyTemplateVariables(targetElement, vars); err != nil {
-				return fmt.Errorf("failed to apply template variables: %w", err)
-			}
-
-			// Process children that were merged from template for this specific element
-			if len(targetElement.Children) > 0 {
-				// Create a copy of vars to avoid modification issues
-				childVars := make(map[string]interface{})
-				for k, v := range vars {
-					childVars[k] = v
-				}
-				for i := range targetElement.Children {
-					if err := tp.applyTemplateVariables(&targetElement.Children[i], childVars); err != nil {
-						return fmt.Errorf("failed to apply template variables to child %d: %w", i, err)
-					}
-				}
-			}
-		}
+	// Apply group configuration to element
+	if err := tp.applyGroupConfig(element, &tmpl.Group, vars); err != nil {
+		return fmt.Errorf("failed to apply group configuration: %w", err)
 	}
 
 	return nil
+}
+
+// applyGroupConfig applies a GroupConfig to an element
+func (tp *TemplateProcessor) applyGroupConfig(element *schema.Element, groupConfig *schema.GroupConfig, vars map[string]interface{}) error {
+	// Apply group properties to element (merge with existing)
+	if groupConfig.Properties.Width > 0 && element.Properties.Width == 0 {
+		element.Properties.Width = groupConfig.Properties.Width
+	}
+	if groupConfig.Properties.Height > 0 && element.Properties.Height == 0 {
+		element.Properties.Height = groupConfig.Properties.Height
+	}
+	if groupConfig.Properties.Label != "" && element.Properties.Label == "" {
+		element.Properties.Label = groupConfig.Properties.Label
+	}
+	if groupConfig.Properties.Shape != "" && element.Properties.Shape == "" {
+		element.Properties.Shape = groupConfig.Properties.Shape
+	}
+
+	// Merge custom properties
+	if element.Properties.Custom == nil {
+		element.Properties.Custom = make(map[string]interface{})
+	}
+	for key, value := range groupConfig.Properties.Custom {
+		if _, exists := element.Properties.Custom[key]; !exists {
+			element.Properties.Custom[key] = value
+		}
+	}
+
+	// Apply group style to element (merge with existing)
+	tp.mergeStyles(&element.Style, &groupConfig.Style)
+
+	// Set up nesting configuration
+	element.Nesting.AutoResize = groupConfig.AutoResize
+	element.Nesting.Padding = groupConfig.Padding
+	element.Nesting.Spacing = groupConfig.Spacing
+	element.Nesting.Arrangement = groupConfig.Arrangement
+	element.Nesting.Mode = schema.NestingModeContainer
+
+	// Add group children to element
+	if len(groupConfig.Children) > 0 {
+		if element.Children == nil {
+			element.Children = make([]schema.Element, 0, len(groupConfig.Children))
+		}
+
+		for i, child := range groupConfig.Children {
+			childElement := child
+			if childElement.ID == "" {
+				childElement.ID = fmt.Sprintf("%s-%d", element.ID, i)
+			}
+
+			// Apply template variables to child element
+			if err := tp.applyTemplateVariables(&childElement, vars); err != nil {
+				return fmt.Errorf("failed to apply template variables to child %d: %w", i, err)
+			}
+
+			element.Children = append(element.Children, childElement)
+		}
+	}
+
+	// Apply template variables to the main element
+	if err := tp.applyTemplateVariables(element, vars); err != nil {
+		return fmt.Errorf("failed to apply template variables to element: %w", err)
+	}
+
+	return nil
+}
+
+// mergeStyles merges style properties from source to target (target takes precedence if set)
+func (tp *TemplateProcessor) mergeStyles(target *schema.Style, source *schema.Style) {
+	if target.FillColor == "" {
+		target.FillColor = source.FillColor
+	}
+	if target.StrokeColor == "" {
+		target.StrokeColor = source.StrokeColor
+	}
+	if target.StrokeWidth == 0 && source.StrokeWidth > 0 {
+		target.StrokeWidth = source.StrokeWidth
+	}
+	if target.StrokeDashArray == "" {
+		target.StrokeDashArray = source.StrokeDashArray
+	}
+	if target.FontFamily == "" {
+		target.FontFamily = source.FontFamily
+	}
+	if target.FontSize == 0 && source.FontSize > 0 {
+		target.FontSize = source.FontSize
+	}
+	if target.FontColor == "" {
+		target.FontColor = source.FontColor
+	}
+	if target.FontStyle == "" {
+		target.FontStyle = source.FontStyle
+	}
+	if target.TextAlign == "" {
+		target.TextAlign = source.TextAlign
+	}
+	if target.VerticalAlign == "" {
+		target.VerticalAlign = source.VerticalAlign
+	}
+	if target.LabelPosition == "" {
+		target.LabelPosition = source.LabelPosition
+	}
+	if target.VerticalLabelPosition == "" {
+		target.VerticalLabelPosition = source.VerticalLabelPosition
+	}
+	if !target.Rounded && source.Rounded {
+		target.Rounded = source.Rounded
+	}
+	if !target.Shadow && source.Shadow {
+		target.Shadow = source.Shadow
+	}
+	if !target.Glass && source.Glass {
+		target.Glass = source.Glass
+	}
+
+	// Merge custom style properties
+	if target.Custom == nil {
+		target.Custom = make(map[string]string)
+	}
+	for key, value := range source.Custom {
+		if _, exists := target.Custom[key]; !exists {
+			target.Custom[key] = value
+		}
+	}
 }
 
 // applyTemplateVariables applies template variables to an element using Go's template engine
@@ -727,7 +810,9 @@ func (tp *TemplateProcessor) resolveTemplateReference(templateRef string, curren
 
 	// Return original reference for error handling
 	return templateRef
-} // ListHives returns all available template hives
+}
+
+// ListHives returns all available template hives
 func (tp *TemplateProcessor) ListHives() []string {
 	hives := make([]string, 0, len(tp.hives))
 	for hive := range tp.hives {

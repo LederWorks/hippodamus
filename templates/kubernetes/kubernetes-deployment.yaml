@@ -3,6 +3,11 @@ description: "Kubernetes Deployment resource"
 version: "1.0"
 
 dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
   - name: "cluster"
     type: "kubernetes-cluster"
     required: false
@@ -35,33 +40,7 @@ parameters:
     default: "#4CAF50"
     description: "Border color"
 
-elements:
-  - type: "shape"
-    properties:
-      width: 200
-      height: 120
-      label: "{{.deploymentName}}\n({{.replicas}} replicas)"
-      shape: "rectangle"
-      custom:
-        deploymentName: "{{.deploymentName}}"
-        replicas: "{{.replicas}}"
-        image: "{{.image}}"
-        clusterType: "{{.clusterType}}"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 2.0
-      fontFamily: "Segoe UI"
-      fontSize: 12
-      fontColor: "#000000"
-      textAlign: "center"
-      verticalAlign: "middle"
-      rounded: true
-      shadow: true
-    icon:
-      type: "shape"
-      shape: "cylinder"
-      fillColor: "#4CAF50"
-      strokeColor: "#2E7D32"
-      position: "top-right"
-      size: 20
+group:
+  autoResize: false
+  arrangement: "free"
+

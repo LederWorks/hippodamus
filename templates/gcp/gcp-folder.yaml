@@ -41,35 +41,5 @@ parameters:
     default: "#2196F3"
     description: "Border color"
 
-elements:
-  - type: "container"
-    properties:
-      width: 720
-      height: 420
-      label: "Folder: {{.folderName}}"
-      custom:
-        folderName: "{{.folderName}}"
-        folderId: "{{.folderId}}"
-        displayName: "{{.displayName}}"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 2.0
-      fontFamily: "Segoe UI"
-      fontSize: 14
-      fontColor: "#000000"
-      fontStyle: "bold"
-      textAlign: "center"
-      verticalAlign: "top"
-      rounded: true
-      shadow: true
-    nesting:
-      mode: "container"
-      autoResize: true
-      padding:
-        top: 40
-        right: 20
-        bottom: 20
-        left: 20
-      spacing: 25
-      arrangement: "vertical"
+group:
+

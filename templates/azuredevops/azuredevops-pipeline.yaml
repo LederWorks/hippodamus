@@ -3,6 +3,11 @@ description: "Azure DevOps Pipeline"
 version: "1.0"
 
 dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
   - name: "repository"
     type: "azuredevops-repository"
     required: true
@@ -32,19 +37,7 @@ parameters:
     default: "#7B1FA2"
     description: "Border color"
 
-elements:
-  - type: "shape"
-    properties:
-      width: 140
-      height: 60
-      label: "⚙️ {{.pipelineName}}"
-      shape: "rounded=1;whiteSpace=wrap;html=1;"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 2
-      fontFamily: "Segoe UI"
-      fontSize: 11
-      fontColor: "#4A148C"
-      textAlign: "center"
-      rounded: true
+group:
+  autoResize: false
+  arrangement: "free"
+

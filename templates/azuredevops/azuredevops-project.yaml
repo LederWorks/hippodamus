@@ -3,6 +3,11 @@ description: "Azure DevOps Project container"
 version: "1.0"
 
 dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
   - name: "organization"
     type: "azuredevops-organization"
     required: true
@@ -31,68 +36,65 @@ parameters:
     default: "#759C3E"
     description: "Border color"
 
-elements:
-  - type: "container"
-    properties:
-      width: 700
-      height: 400
-      label: "{{.projectName}} ({{.projectType}})"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 2
-      fontFamily: "Segoe UI"
-      fontSize: 14
-      fontStyle: "bold"
-      fontColor: "#000000"
-      textAlign: "center"
-      verticalAlign: "top"
-      rounded: true
-      shadow: true
-      custom:
-        html: "1"
-        whiteSpace: "wrap"
-        spacingLeft: "15"
-        spacingTop: "15"
-        spacingRight: "55"
-        spacingBottom: "15"
-    nesting:
-      mode: "container"
-      autoResize: true
-      padding:
-        top: 30
-        right: 15
-        bottom: 15
-        left: 15
-      spacing: 15
-      arrangement: "free"
-    children:
-      - type: "shape"
-        id: "icon"
-        properties:
-          x: 650
-          y: 10
-          width: 40
-          height: 40
-          label: " "
-        style:
-          custom:
-            html: "1"
-            sketch: "0"
-            aspect: "fixed"
-            points: "[]"
-            align: "center"
-            fontSize: "12"
-            fontStyle: "0"
-            pointerEvents: "1"
-            shape: "{{.iconShape}}"
-            outlineConnect: "0"
-            fontColor: "#232F3E"
-            gradientColor: "none"
-            fillColor: "#DD344C"
-            strokeColor: "none"
-            dashed: "0"
-            verticalLabelPosition: "bottom"
-            verticalAlign: "top"
-            labelBackgroundColor: "none"
-            noLabel: "1"
+group:
+  properties:
+    width: 700
+    height: 400
+    label: "{{.projectName}} ({{.projectType}})"
+  style:
+    fillColor: "{{.fillColor}}"
+    strokeColor: "{{.strokeColor}}"
+    strokeWidth: 2
+    fontFamily: "Segoe UI"
+    fontSize: 14
+    fontStyle: "bold"
+    fontColor: "#000000"
+    textAlign: "center"
+    verticalAlign: "top"
+    rounded: true
+    shadow: true
+    custom:
+      html: "1"
+      whiteSpace: "wrap"
+      spacingLeft: "15"
+      spacingTop: "15"
+      spacingRight: "55"
+      spacingBottom: "15"
+  autoResize: true
+  padding:
+    top: 30
+    right: 15
+    bottom: 15
+    left: 15
+  spacing: 15
+  arrangement: "free"
+  children:
+    - type: "shape"
+      id: "icon"
+      properties:
+        x: 650
+        y: 10
+        width: 40
+        height: 40
+        label: " "
+      style:
+        custom:
+          html: "1"
+          sketch: "0"
+          aspect: "fixed"
+          points: "[]"
+          align: "center"
+          fontSize: "12"
+          fontStyle: "0"
+          pointerEvents: "1"
+          shape: "{{.iconShape}}"
+          outlineConnect: "0"
+          fontColor: "#232F3E"
+          gradientColor: "none"
+          fillColor: "#DD344C"
+          strokeColor: "none"
+          dashed: "0"
+          verticalLabelPosition: "bottom"
+          verticalAlign: "top"
+          labelBackgroundColor: "none"
+          noLabel: "1"

@@ -45,7 +45,7 @@ Thumbs.db
 # Generated diagram files (optional - remove if you want to track examples)
 output/
 # *.xml
-# *.drawio
+*.drawio
 
 # Log files
 *.log

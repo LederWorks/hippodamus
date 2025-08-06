@@ -3,6 +3,11 @@ description: "Kubernetes Namespace container"
 version: "1.0"
 
 dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
   - name: "cluster"
     type: "kubernetes-cluster"
     required: false
@@ -27,33 +32,5 @@ parameters:
     default: "#689F38"
     description: "Border color"
 
-elements:
-  - type: "container"
-    properties:
-      width: 700
-      height: 400
-      label: "{{.namespaceName}}"
-      custom:
-        environment: "{{.environment}}"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 2.0
-      fontFamily: "Segoe UI"
-      fontSize: 14
-      fontColor: "#000000"
-      fontStyle: "bold"
-      textAlign: "center"
-      verticalAlign: "top"
-      rounded: true
-      shadow: true
-    nesting:
-      mode: "container"
-      autoResize: true
-      padding:
-        top: 40
-        right: 20
-        bottom: 20
-        left: 20
-      spacing: 30
-      arrangement: "horizontal"
+group:
+

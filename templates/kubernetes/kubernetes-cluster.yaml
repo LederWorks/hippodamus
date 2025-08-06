@@ -3,6 +3,11 @@ description: "Kubernetes Cluster container"
 version: "1.0"
 
 dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
   - name: "infrastructure"
     type: "cluster-infrastructure"
     required: false
@@ -35,35 +40,5 @@ parameters:
     default: "#1976D2"
     description: "Border color"
 
-elements:
-  - type: "container"
-    properties:
-      width: 800
-      height: 600
-      label: "{{.clusterName}}"
-      custom:
-        region: "{{.region}}"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 3.0
-      strokeDashArray: "8,8"
-      dashed: true
-      fontFamily: "Segoe UI"
-      fontSize: 16
-      fontColor: "#000000"
-      fontStyle: "bold"
-      textAlign: "center"
-      verticalAlign: "top"
-      rounded: true
-      shadow: true
-    nesting:
-      mode: "container"
-      autoResize: true
-      padding:
-        top: 60
-        right: 30
-        bottom: 30
-        left: 30
-      spacing: 40
-      arrangement: "vertical"
+group:
+

@@ -41,34 +41,5 @@ parameters:
     default: "#7B1FA2"
     description: "Border color"
 
-elements:
-  - type: "container"
-    properties:
-      width: 800
-      height: 500
-      label: "{{.subscriptionName}}"
-      custom:
-        subscriptionId: "{{.subscriptionId}}"
-        subscriptionType: "{{.subscriptionType}}"
-    style:
-      fillColor: "{{.fillColor}}"
-      strokeColor: "{{.strokeColor}}"
-      strokeWidth: 3.0
-      fontFamily: "Segoe UI"
-      fontSize: 16
-      fontColor: "#000000"
-      fontStyle: "bold"
-      textAlign: "center"
-      verticalAlign: "top"
-      rounded: true
-      shadow: true
-    nesting:
-      mode: "container"
-      autoResize: true
-      padding:
-        top: 50
-        right: 25
-        bottom: 25
-        left: 25
-      spacing: 30
-      arrangement: "vertical"
+group:
+
