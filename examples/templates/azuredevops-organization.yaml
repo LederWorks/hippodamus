@@ -5,7 +5,7 @@ version: "1.0"
 parameters:
   - name: "orgName"
     type: "string"
-    required: true
+    default: "Azure DevOps Organization"
     description: "Organization name"
   - name: "fillColor"
     type: "color"

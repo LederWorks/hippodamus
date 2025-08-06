@@ -5,7 +5,7 @@ version: "1.0"
 parameters:
   - name: "projectName"
     type: "string"
-    required: true
+    default: "Project"
     description: "Project name"
   - name: "projectType"
     type: "string"
