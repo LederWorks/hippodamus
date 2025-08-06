@@ -38,8 +38,6 @@ diagram:
             y: 20
             custom:
               orgName: "ado-org"
-              showIcon: true
-              iconImage: "mxgraph.aws3.organization"
           nesting:
             mode: "container"
             autoResize: true
@@ -61,8 +59,7 @@ diagram:
                 custom:
                   projectName: "aws-lz"
                   projectType: "Agile"
-                  iconImage: "img/lib/mscae/Azure_Repos.svg"
-                  iconShape: ""
+                  iconShape: "mxgraph.aws4.organizations"
 
             # Project 2: AWS Security
             - type: "template"
@@ -74,5 +71,4 @@ diagram:
                 custom:
                   projectName: "aws-sec"
                   projectType: "Scrum"
-                  iconImage: ""
-                  iconShape: "mxgraph.aws4.connector"
+                  iconShape: "mxgraph.aws4.security_identity_and_compliance"

@@ -11,14 +11,10 @@ parameters:
     type: "string"
     default: "Agile"
     description: "Project template (Agile, Scrum, CMMI, Basic)"
-  - name: "iconImage"
-    type: "string"
-    default: ""
-    description: "Icon image (SVG path)"
   - name: "iconShape"
     type: "string"
-    default: ""
-    description: "Icon shape (draw.io shape)"
+    default: "img/lib/azure2/devops/Azure_DevOps.svg"
+    description: "Icon shape"
   - name: "fillColor"
     type: "color"
     default: "#F1F8E9"
@@ -42,16 +38,16 @@ elements:
       fontSize: 14
       fontStyle: "bold"
       fontColor: "#000000"
-      textAlign: "left"
+      textAlign: "center"
       verticalAlign: "top"
       rounded: true
       shadow: true
       custom:
         html: "1"
         whiteSpace: "wrap"
-        spacingLeft: "55"
+        spacingLeft: "15"
         spacingTop: "15"
-        spacingRight: "15"
+        spacingRight: "55"
         spacingBottom: "15"
     nesting:
       mode: "container"
@@ -62,15 +58,16 @@ elements:
         bottom: 15
         left: 15
       spacing: 15
-      arrangement: "grid"
+      arrangement: "free"
     children:
       - type: "shape"
+        id: "icon"
         properties:
-          x: 10
+          x: 650
           y: 10
           width: 40
           height: 40
-          label: ""
+          label: " "
         style:
           custom:
             html: "1"
@@ -81,7 +78,6 @@ elements:
             fontSize: "12"
             fontStyle: "0"
             pointerEvents: "1"
-            image: "{{.iconImage}}"
             shape: "{{.iconShape}}"
             outlineConnect: "0"
             fontColor: "#232F3E"
@@ -91,3 +87,5 @@ elements:
             dashed: "0"
             verticalLabelPosition: "bottom"
             verticalAlign: "top"
+            labelBackgroundColor: "none"
+            noLabel: "1"

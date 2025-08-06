@@ -264,6 +264,20 @@ func (tp *TemplateProcessor) applyTemplate(element *schema.Element, tmpl *schema
 			if err := tp.applyTemplateVariables(targetElement, vars); err != nil {
 				return fmt.Errorf("failed to apply template variables: %w", err)
 			}
+
+			// Process children that were merged from template for this specific element
+			if len(targetElement.Children) > 0 {
+				// Create a copy of vars to avoid modification issues
+				childVars := make(map[string]interface{})
+				for k, v := range vars {
+					childVars[k] = v
+				}
+				for i := range targetElement.Children {
+					if err := tp.applyTemplateVariables(&targetElement.Children[i], childVars); err != nil {
+						return fmt.Errorf("failed to apply template variables to child %d: %w", i, err)
+					}
+				}
+			}
 		}
 	}
 
@@ -507,6 +521,20 @@ func (tp *TemplateProcessor) mergeElementProperties(target *schema.Element, temp
 	// Merge tags
 	if len(target.Tags) == 0 {
 		target.Tags = template.Tags
+	}
+
+	// Merge children if target has none and template has children
+	if len(target.Children) == 0 && len(template.Children) > 0 {
+		target.Children = make([]schema.Element, len(template.Children))
+		// Deep copy children to avoid sharing references
+		for i, child := range template.Children {
+			target.Children[i] = child // This creates a copy of the struct
+		}
+	}
+
+	// Merge nesting configuration
+	if target.Nesting.Mode == "" {
+		target.Nesting = template.Nesting
 	}
 }
 
