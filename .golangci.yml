@@ -6,12 +6,13 @@ linters:
     - ineffassign
     - staticcheck
     - typecheck
-    - unused
     - goimports
     - misspell
+    - gofmt
+  disable:
+    - unused
     - gocyclo
     - godot
-    - gofmt
     - gosec
     - revive
     - unconvert

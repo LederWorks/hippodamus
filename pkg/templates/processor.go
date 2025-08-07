@@ -807,9 +807,7 @@ func (tp *TemplateProcessor) mergeElementProperties(target *schema.Element, temp
 	if len(target.Children) == 0 && len(template.Children) > 0 {
 		target.Children = make([]schema.Element, len(template.Children))
 		// Deep copy children to avoid sharing references
-		for i, child := range template.Children {
-			target.Children[i] = child // This creates a copy of the struct
-		}
+		copy(target.Children, template.Children)
 	}
 
 	// Merge nesting configuration
