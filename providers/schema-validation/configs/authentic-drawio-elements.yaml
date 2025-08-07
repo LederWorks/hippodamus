@@ -1,0 +1,355 @@
+# True Draw.io Element Types Configuration
+# Based on actual draw.io XML export structure - no artificial "container" type
+
+version: "1.0"
+metadata:
+  title: "Authentic Draw.io Element Configuration"
+  description: "Element types that match actual draw.io XML structure"
+  author: "Hippodamus Schema"
+  created: "2025-08-07T10:00:00Z"
+
+# =============================================================================
+# AUTHENTIC DRAW.IO ELEMENT TYPES
+# Only types that actually exist in draw.io XML exports
+# =============================================================================
+
+authentic_elements:
+  # SHAPE - The primary element type in draw.io
+  # Can have any nesting mode based on behavior needed
+  shape_basic:
+    type: "shape"
+    properties:
+      shape: "rectangle"
+    style:
+      vertex: 1                # All shapes are vertices
+      parent: 1               # All elements have parents
+      connectable: 1          # Most shapes are connectable
+      rounded: 0              # Sharp corners (default)
+    nesting:
+      mode: "individual"      # Standalone element
+
+  shape_container_like:
+    type: "shape"
+    properties:
+      shape: "rectangle"
+    style:
+      vertex: 1
+      parent: 1
+      connectable: 1
+      rounded: 1              # Rounded for container appearance
+      whiteSpace: "wrap"
+      html: 1
+    nesting:
+      mode: "child"           # Acts like container through nesting mode
+      arrangement: "vertical"
+      spacing: 15
+      padding:
+        top: 20
+        right: 15
+        bottom: 15
+        left: 15
+
+  shape_peer_element:
+    type: "shape"
+    properties:
+      shape: "rectangle"
+    style:
+      vertex: 1
+      parent: 1
+      connectable: 1
+    nesting:
+      mode: "peer"            # Moves with peer group
+      spacing: 20
+
+  # TEXT - Standalone text elements
+  text_element:
+    type: "text"
+    style:
+      vertex: 1
+      parent: 1
+      connectable: 0          # Text usually not connectable
+      whiteSpace: "wrap"
+      html: 1
+      strokeColor: "none"
+      fillColor: "none"
+    nesting:
+      mode: "individual"
+
+  # GROUP - Logical grouping of elements
+  group_element:
+    type: "group"
+    style:
+      vertex: 1
+      parent: 1
+      connectable: 1
+      rounded: 0
+      html: 1
+    nesting:
+      mode: "child"           # Groups contain children
+      arrangement: "free"     # Free positioning within group
+
+  # SWIMLANE - Process lanes with header
+  swimlane_element:
+    type: "swimlane"
+    style:
+      vertex: 1
+      parent: 1
+      connectable: 1
+      swimlaneHead: 0         # No header section
+      horizontal: 1           # Horizontal layout
+      childLayout: "stackLayout"
+      whiteSpace: "wrap"
+      html: 1
+    nesting:
+      mode: "child"
+      arrangement: "horizontal"
+      spacing: 20
+      padding:
+        top: 30             # Space for swimlane label
+        right: 10
+        bottom: 10
+        left: 10
+
+  # CONNECTOR - Connections between elements
+  connector_element:
+    type: "connector"
+    properties:
+      source: "required"      # Must specify source element
+      target: "required"      # Must specify target element
+    style:
+      edge: 1                 # Connectors are edges, not vertices
+      vertex: 0
+      parent: 1
+      connectable: 0          # Connectors themselves not connectable
+      edgeStyle: "orthogonalEdgeStyle"
+      rounded: 0
+      html: 1
+
+  # TEMPLATE - Template instances
+  template_element:
+    type: "template"
+    properties:
+      template: "template-reference"
+    style:
+      vertex: 1
+      parent: 1
+      connectable: 1
+    nesting:
+      mode: "child"           # Templates usually contain generated content
+
+# =============================================================================
+# DRAW.IO SHAPE VARIANTS
+# Different shape types within the "shape" element type
+# =============================================================================
+
+shape_variants:
+  # Basic geometric shapes
+  rectangle:
+    shape: "rectangle"
+    rounded: 0
+
+  rounded_rectangle:
+    shape: "rectangle"
+    rounded: 1
+
+  ellipse:
+    shape: "ellipse"
+
+  triangle:
+    shape: "triangle"
+
+  diamond:
+    shape: "diamond"
+
+  hexagon:
+    shape: "hexagon"
+
+  # Process shapes
+  process:
+    shape: "process"
+
+  # Table elements (all are shape type with different shape values)
+  table:
+    shape: "table"
+    whiteSpace: "wrap"
+    html: 1
+
+  table_row:
+    shape: "tableRow"
+    whiteSpace: "wrap"
+    html: 1
+
+  table_cell:
+    shape: "partialRectangle"
+    whiteSpace: "wrap"
+    html: 1
+
+  # Cloud/Icon shapes
+  aws_resource:
+    shape: "mxgraph.AWS4.RESOURCE"
+    aspect: "fixed"
+    html: 1
+
+  azure_icon:
+    shape: "image"
+    aspect: "fixed"
+    sketch: 1
+    html: 1
+
+# =============================================================================
+# NESTING MODE EXAMPLES
+# How the three nesting modes work with authentic element types
+# =============================================================================
+
+nesting_examples:
+  # Individual mode - standalone elements
+  individual_dashboard_metrics:
+    elements:
+      - type: "shape"
+        shape: "rectangle"
+        nesting: { mode: "individual" }
+        content: "CPU: 45%"
+
+      - type: "shape"
+        shape: "rectangle"
+        nesting: { mode: "individual" }
+        content: "Memory: 67%"
+
+      - type: "text"
+        nesting: { mode: "individual" }
+        content: "System Metrics"
+
+  # Peer mode - elements that move together
+  peer_microservices:
+    elements:
+      - type: "shape"
+        shape: "rectangle"
+        nesting: { mode: "peer", spacing: 20 }
+        content: "Auth Service"
+
+      - type: "shape"
+        shape: "rectangle"
+        nesting: { mode: "peer", spacing: 20 }
+        content: "User Service"
+
+      - type: "shape"
+        shape: "rectangle"
+        nesting: { mode: "peer", spacing: 20 }
+        content: "Order Service"
+
+  # Child mode - parent contains and arranges children
+  child_application_architecture:
+    parent:
+      type: "shape"
+      shape: "rectangle"
+      rounded: 1
+      nesting:
+        mode: "child"
+        arrangement: "vertical"
+        spacing: 15
+      children:
+        - type: "shape"
+          shape: "rectangle"
+          content: "API Gateway"
+
+        - type: "group"
+          nesting: { mode: "child", arrangement: "horizontal" }
+          children:
+            - type: "shape"
+              shape: "rectangle"
+              content: "Service A"
+            - type: "shape"
+              shape: "rectangle"
+              content: "Service B"
+
+        - type: "shape"
+          shape: "rectangle"
+          content: "Database"
+
+# =============================================================================
+# PRACTICAL USAGE PATTERNS
+# Real-world combinations using only authentic element types
+# =============================================================================
+
+usage_patterns:
+  # Pattern 1: Infrastructure diagram using only shapes
+  aws_infrastructure:
+    - type: "shape"
+      shape: "rectangle"
+      rounded: 1
+      content: "VPC"
+      nesting:
+        mode: "child"
+        arrangement: "grid"
+      children:
+        - type: "shape"
+          shape: "mxgraph.AWS4.RESOURCE"
+          content: "EC2"
+        - type: "shape"
+          shape: "mxgraph.AWS4.RESOURCE"
+          content: "RDS"
+        - type: "shape"
+          shape: "mxgraph.AWS4.RESOURCE"
+          content: "S3"
+
+  # Pattern 2: Process flow using swimlane
+  business_process:
+    - type: "swimlane"
+      content: "Order Processing"
+      nesting:
+        mode: "child"
+        arrangement: "horizontal"
+      children:
+        - type: "shape"
+          shape: "process"
+          content: "Receive Order"
+        - type: "shape"
+          shape: "process"
+          content: "Validate Payment"
+        - type: "shape"
+          shape: "process"
+          content: "Ship Product"
+
+  # Pattern 3: Data table using shape table elements
+  data_table:
+    - type: "shape"
+      shape: "table"
+      nesting:
+        mode: "child"
+        arrangement: "vertical"
+      children:
+        - type: "shape"
+          shape: "tableRow"
+          children:
+            - type: "shape"
+              shape: "partialRectangle"
+              content: "Service"
+            - type: "shape"
+              shape: "partialRectangle"
+              content: "Status"
+        - type: "shape"
+          shape: "tableRow"
+          children:
+            - type: "shape"
+              shape: "partialRectangle"
+              content: "API Gateway"
+            - type: "shape"
+              shape: "partialRectangle"
+              content: "Running"
+
+# =============================================================================
+# SUMMARY
+# =============================================================================
+
+summary:
+  authentic_types: ["shape", "connector", "text", "group", "swimlane", "template"]
+  removed_artificial_types: ["container"]
+  
+  key_insight: |
+    Container behavior is achieved through:
+    1. type: "shape" with rounded: 1 for visual container appearance
+    2. nesting.mode: "child" for container behavior
+    3. nesting.arrangement: "vertical/horizontal/grid/free" for layout
+    
+    This matches actual draw.io XML structure where containers are just
+    shapes with specific styling and child arrangement properties.

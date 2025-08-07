@@ -61,7 +61,7 @@ group:
         y: 0
         width: 270
         height: 40
-        label: "{{.testType | title}} Test"
+        label: "{{.testType}} Test"
         shape: "rectangle"
       style:
         fillColor: "{{.fillColor}}"

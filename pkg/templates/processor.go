@@ -209,8 +209,8 @@ func (tp *TemplateProcessor) processElementWithContext(element *schema.Element, 
 			return fmt.Errorf("dependency validation failed for element %s: %w", tp.getElementDisplayName(element), err)
 		}
 
-		// All templates now create container elements (groups)
-		element.Type = schema.ElementTypeContainer
+		// All templates now create shape elements (groups)
+		element.Type = schema.ElementTypeShape
 	}
 
 	if element.Template == "" {
@@ -277,8 +277,8 @@ func (tp *TemplateProcessor) applyTemplate(element *schema.Element, tmpl *schema
 		}
 	}
 
-	// Convert element to container type (every template creates a group)
-	element.Type = schema.ElementTypeContainer
+	// Convert element to shape type (every template creates a group)
+	element.Type = schema.ElementTypeShape
 
 	// Apply group configuration to element
 	if err := tp.applyGroupConfig(element, &tmpl.Group, vars); err != nil {
@@ -322,7 +322,7 @@ func (tp *TemplateProcessor) applyGroupConfig(element *schema.Element, groupConf
 	element.Nesting.Padding = groupConfig.Padding
 	element.Nesting.Spacing = groupConfig.Spacing
 	element.Nesting.Arrangement = groupConfig.Arrangement
-	element.Nesting.Mode = schema.NestingModeContainer
+	element.Nesting.Mode = schema.NestingModeChild
 
 	// Add group children to element
 	if len(groupConfig.Children) > 0 {

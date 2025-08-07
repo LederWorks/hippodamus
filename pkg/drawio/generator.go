@@ -284,7 +284,7 @@ func (g *Generator) generateElement(element *schema.Element, parentID string) ([
 	}
 
 	switch element.Type {
-	case schema.ElementTypeShape, schema.ElementTypeContainer:
+	case schema.ElementTypeShape:
 		cell := g.generateShapeCell(element, parentID)
 		cells = append(cells, cell)
 
@@ -355,7 +355,7 @@ func (g *Generator) generateElementWithPath(element *schema.Element, parentID st
 	}
 
 	switch element.Type {
-	case schema.ElementTypeShape, schema.ElementTypeContainer:
+	case schema.ElementTypeShape:
 		cell := g.generateShapeCell(element, parentID)
 		cells = append(cells, cell)
 
@@ -687,14 +687,12 @@ func (g *Generator) applyAutomaticNesting(element *schema.Element) {
 	// Set default nesting mode based on element type if not specified
 	if nesting.Mode == "" {
 		switch element.Type {
-		case schema.ElementTypeContainer:
-			nesting.Mode = schema.NestingModeContainer
 		case schema.ElementTypeGroup:
-			nesting.Mode = schema.NestingModeGroup
+			nesting.Mode = schema.NestingModeChild
 		case schema.ElementTypeSwimLane:
-			nesting.Mode = schema.NestingModeSwimLane
+			nesting.Mode = schema.NestingModeChild
 		default:
-			nesting.Mode = schema.NestingModeAutomatic
+			nesting.Mode = schema.NestingModePeer
 		}
 	}
 

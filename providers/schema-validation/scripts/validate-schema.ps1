@@ -56,7 +56,7 @@ function Test-YamlStructure {
         }
         
         # Check for invalid element types (more specific matching to avoid false positives)
-        $ValidTypes = @("shape", "connector", "text", "group", "container", "swimlane", "template")
+        $ValidTypes = @("shape", "connector", "text", "group", "swimlane", "template")
         # Only match 'type:' that appears as a direct property of list items (elements)
         $typeMatches = [regex]::Matches($content, '(?:^|\n)\s*-[^\r\n]*\n(?:\s+[^\r\n]*\n)*\s+type:\s*"?([^""\s\r\n]+)"?', 'Multiline')
         foreach ($match in $typeMatches) {

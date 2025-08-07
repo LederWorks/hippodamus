@@ -101,7 +101,6 @@ const (
 	ElementTypeConnector ElementType = "connector"
 	ElementTypeText      ElementType = "text"
 	ElementTypeGroup     ElementType = "group"
-	ElementTypeContainer ElementType = "container"
 	ElementTypeSwimLane  ElementType = "swimlane"
 	ElementTypeTemplate  ElementType = "template"
 )
