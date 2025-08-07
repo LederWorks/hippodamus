@@ -1,0 +1,18 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - azure-subscription"
+      elements:
+        - id: "azure-subscription-test-id"
+          name: "azure-subscription-test"
+          template: "azure-subscription"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          subscriptionName: "Production Subscription"
+          subscriptionId: "00000000-0000-0000-0000-000000000000"
+          subscriptionType: "Pay-As-You-Go"
+          fillColor: "#F3E5F5"
+          strokeColor: "#7B1FA2"

@@ -1,0 +1,21 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - azure-aks-cluster"
+      elements:
+        - id: "azure-aks-cluster-test-id"
+          name: "azure-aks-cluster-test"
+          template: "azure-aks-cluster"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          clusterName: "aks-cluster"
+          version: "1.28"
+          nodePoolName: "default"
+          vmSize: "Standard_DS2_v2"
+          nodeCount: "3
+    description: "
+          fillColor: "#E3F2FD"
+          strokeColor: "#1976D2"

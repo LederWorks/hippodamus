@@ -1,0 +1,19 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - aws-eks-cluster"
+      elements:
+        - id: "aws-eks-cluster-test-id"
+          name: "aws-eks-cluster-test"
+          template: "aws-eks-cluster"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          clusterName: "eks-cluster"
+          version: "1.28"
+          nodeGroupName: "worker-nodes"
+          instanceType: "t3.medium"
+          fillColor: "#E3F2FD"
+          strokeColor: "#1976D2"

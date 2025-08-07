@@ -1,0 +1,60 @@
+name: "azuredevops-pipeline"
+description: "Azure DevOps Pipeline"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+  - name: "repository"
+    type: "azuredevops-repository"
+    required: true
+    relationship: "parent"
+    description: "Parent repository that contains this pipeline"
+  - name: "project"
+    type: "azuredevops-project"
+    required: false
+    relationship: "ancestor"
+    description: "Ancestor project (resolved automatically through repository->project chain)"
+
+parameters:
+  - name: "pipelineName"
+    type: "string"
+    default: "Pipeline"
+    description: "Pipeline name"
+  - name: "pipelineType"
+    type: "string"
+    default: "Build"
+    description: "Pipeline type (Build, Release, YAML)"
+  - name: "fillColor"
+    type: "color"
+    default: "#F3E5F5"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#7B1FA2"
+    description: "Border color"
+
+group:
+  properties:
+    width: 200
+    height: 80
+    label: "{{.pipelineName}}"
+  style:
+    fillColor: "{{.fillColor}}"
+    strokeColor: "{{.strokeColor}}"
+    strokeWidth: 2
+    fontFamily: "Segoe UI"
+    fontSize: 12
+    fontColor: "#000000"
+    textAlign: "center"
+    verticalAlign: "middle"
+    rounded: true
+    custom:
+      html: "1"
+      whiteSpace: "wrap"
+  autoResize: false
+  arrangement: "free"
+

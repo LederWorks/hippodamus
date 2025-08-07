@@ -1,0 +1,29 @@
+version: "1.0"
+metadata:
+  title: "Invalid Dependency - Repository without Project"
+  description: "Repository directly under organization should fail"
+  author: "Dependency Test"
+  tags: ["test", "invalid", "dependency-validation"]
+
+templates:
+  - name: "azuredevops-organization"
+    template: "azuredevops/azuredevops-organization.yaml"
+  - name: "azuredevops-repository"
+    template: "azuredevops/azuredevops-repository.yaml"
+
+diagram:
+  pages:
+    - id: "INVALID"
+      name: "Invalid Repository Parent"
+
+      elements:
+        - type: "template"
+          id: "org"
+          name: "Test Organization"
+          template: "azuredevops-organization"
+          children:
+            # This should FAIL - repository directly under organization
+            - type: "template"
+              id: "repo"
+              name: "Invalid Repository"
+              template: "azuredevops-repository"

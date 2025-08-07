@@ -1,0 +1,18 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - aws-account"
+      elements:
+        - id: "aws-account-test-id"
+          name: "aws-account-test"
+          template: "aws-account"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          accountName: "Production Account"
+          accountId: "123456789012"
+          accountType: "Production"
+          fillColor: "#F3E5F5"
+          strokeColor: "#7B1FA2"
