@@ -16,34 +16,38 @@ version: "1.0"
 
 # Declare providers once at the top level
 providers:
-  # Registry providers (default) - will use upstream GitHub sources when available
-  - name: "core"                    # → Defaults to type: "registry"
-    source: "LederWorks/hippodamus-provider-core"
-  
-  - name: "aws"
-    source: "LederWorks/hippodamus-provider-aws"
-    # type: "registry" is implicit (default)
-  
-  # Builtin providers - explicitly use local/builtin versions
-  - name: "core"                    # ← Same name, different type
+  # Builtin providers - local providers from providers folder
+  - name: "core"                    # → Uses builtin core provider
     type: "builtin"                 # ← Forces builtin provider
   
-  # Alternative upstream sources - different names for different sources
-  - name: "custom-core"             # ← Different name
-    source: "MyOrg/hippodamus-provider-core"
-    # type: "registry" is implicit
+  # Registry providers - LederWorks GitHub organization (default)
+  - name: "aws"                     # → Auto-resolves to LederWorks/hippodamus-provider-aws
+    # type: "registry" is implicit default
   
-  - name: "enterprise-aws"
-    source: "Enterprise/hippodamus-provider-aws"
-    version: "^1.2.0"              # Optional version constraint
+  - name: "azure"
+    type: "registry"                # ← Explicit registry (same as default)
+  
+  # Custom providers - filesystem or non-LederWorks git sources
+  - name: "community-core"
+    source: "https://github.com/SomeOrg/hippodamus-provider-core.git"
+    type: "custom"                  # ← Required for non-LederWorks sources
+  
+  - name: "dev-provider"
+    path: "/path/to/compiled/provider.so"  # ← Local filesystem
+    type: "custom"                  # ← Required for filesystem sources
 ```
 
 ## 🎛️ **Provider Type System**
 
-- **`type: "registry"`** (default) - Prefers upstream GitHub providers
-- **`type: "builtin"`** - Forces local builtin providers only
+- **`type: "builtin"`** - Local providers from providers folder (exact name match required)
+- **`type: "registry"`** (default) - LederWorks GitHub organization providers
+- **`type: "custom"`** - Filesystem or non-LederWorks git sources
 
-You only need to specify `type: "builtin"` when you want to override the default registry behavior.
+## 📂 **Source Types**
+
+- **Registry (auto-resolve)**: Just provider name → auto-resolves to LederWorks GitHub
+- **HTTPS Git**: `source: "https://github.com/org/repo.git"` (requires `type: "custom"` for non-LederWorks)
+- **Filesystem**: `path: "/path/to/provider.so"` (requires `type: "custom"`)
 
 ## 🔧 **Element Syntax**
 

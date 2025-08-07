@@ -4,11 +4,12 @@ import "time"
 
 // DiagramConfig represents the root YAML configuration for a draw.io diagram
 type DiagramConfig struct {
-	Version   string        `yaml:"version" json:"version"`
-	Metadata  Metadata      `yaml:"metadata" json:"metadata"`
-	Providers []ProviderRef `yaml:"providers,omitempty" json:"providers,omitempty"` // Provider declarations
-	Templates []TemplateRef `yaml:"templates,omitempty" json:"templates,omitempty"`
-	Diagram   Diagram       `yaml:"diagram" json:"diagram"`
+	Version       string            `yaml:"version" json:"version"`
+	Metadata      Metadata          `yaml:"metadata" json:"metadata"`
+	Providers     []ProviderRef     `yaml:"providers,omitempty" json:"providers,omitempty"`         // Provider declarations
+	Templates     []TemplateRef     `yaml:"templates,omitempty" json:"templates,omitempty"`         // Individual template declarations
+	TemplateHives []TemplateHiveRef `yaml:"templateHives,omitempty" json:"templateHives,omitempty"` // Template hive declarations
+	Diagram       Diagram           `yaml:"diagram" json:"diagram"`
 }
 
 // Metadata contains information about the diagram
@@ -21,17 +22,30 @@ type Metadata struct {
 	Tags        []string  `yaml:"tags,omitempty" json:"tags,omitempty"`
 }
 
-// TemplateRef references an external template file
+// TemplateRef declares a template for use in the diagram
 type TemplateRef struct {
-	Name     string `yaml:"name" json:"name"`
-	Template string `yaml:"template" json:"template"`
+	Name    string `yaml:"name" json:"name"`                           // Local name (e.g., "aws-vpc", "custom-template")
+	Source  string `yaml:"source,omitempty" json:"source,omitempty"`   // Source location (GitHub, git server, or filesystem)
+	Version string `yaml:"version,omitempty" json:"version,omitempty"` // Template version constraint
+	Path    string `yaml:"path,omitempty" json:"path,omitempty"`       // Specific file path within source
+}
+
+// TemplateHiveRef declares a collection of templates from a source
+type TemplateHiveRef struct {
+	Name    string `yaml:"name" json:"name"`                           // Local hive name (e.g., "aws-templates", "enterprise-hive")
+	Source  string `yaml:"source,omitempty" json:"source,omitempty"`   // Source location (GitHub, git server, or filesystem directory)
+	Path    string `yaml:"path,omitempty" json:"path,omitempty"`       // Base path within source (for filesystem or subdirectory)
+	Version string `yaml:"version,omitempty" json:"version,omitempty"` // Template version constraint
+	Include string `yaml:"include,omitempty" json:"include,omitempty"` // File pattern to include (e.g., "*.yaml", "aws/*.yaml")
+	Exclude string `yaml:"exclude,omitempty" json:"exclude,omitempty"` // File pattern to exclude
 }
 
 // ProviderRef declares a provider for use in the diagram
 type ProviderRef struct {
 	Name    string `yaml:"name" json:"name"`                           // Local name (e.g., "core", "custom-aws")
-	Source  string `yaml:"source,omitempty" json:"source,omitempty"`   // Full source (e.g., "MyOrg/hippodamus-provider-core")
-	Type    string `yaml:"type,omitempty" json:"type,omitempty"`       // "registry" (default) or "builtin"
+	Source  string `yaml:"source,omitempty" json:"source,omitempty"`   // HTTP/HTTPS URL for git or web sources
+	Path    string `yaml:"path,omitempty" json:"path,omitempty"`       // Filesystem path for local providers
+	Type    string `yaml:"type,omitempty" json:"type,omitempty"`       // "builtin", "registry" (default), or "custom"
 	Version string `yaml:"version,omitempty" json:"version,omitempty"` // Provider version constraint
 }
 
@@ -117,8 +131,9 @@ const (
 
 // Provider type constants define how providers are resolved
 const (
-	ProviderTypeRegistry = "registry" // Default: prefer upstream/GitHub providers
-	ProviderTypeBuiltin  = "builtin"  // Force use of builtin providers
+	ProviderTypeBuiltin  = "builtin"  // Local providers from providers folder
+	ProviderTypeRegistry = "registry" // LederWorks GitHub organization (future: actual registry)
+	ProviderTypeCustom   = "custom"   // Filesystem or git sources
 )
 
 // NestingConfig defines how children should be nested within a parent element

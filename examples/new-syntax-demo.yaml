@@ -10,20 +10,72 @@ providers:
   # Builtin provider - uses local builtin version
   - name: "core"                    # → Uses builtin core provider (exact name from providers folder)
     type: "builtin"                 # ← Explicitly requests builtin provider
-  
+
+  # Registry providers - auto-resolve from LederWorks GitHub org (default type)
   - name: "aws"                     # → Will auto-resolve to LederWorks/hippodamus-provider-aws
-  
-  # Registry version using different name
-  - name: "core2"                   # ← Use core2 name for registry version  
-    source: "LederWorks/hippodamus-provider-core"  # ← Registry version
-  
-  # Alternative upstream provider - different org
-  - name: "core3"                   # ← Different name for alternative provider
-    source: "SomeOtherOrg/hippodamus-provider-core"  # ← Different org version
-    
-  # Custom org example
+  - name: "azure"                   # → Will auto-resolve to LederWorks/hippodamus-provider-azure
+
+  # Registry version with explicit source (still registry type since it's from LederWorks)
+  - name: "core2"                   # ← Different name for registry version
+    type: "custom"
+    source: "https://github.com/LederWorks/hippodamus-provider-core.git"
+
+  # Custom providers - non-registry sources require type: "custom"
+  - name: "community-core"          # ← Different name for alternative provider
+    source: "https://github.com/SomeOtherOrg/hippodamus-provider-core.git"
+    type: "custom"
+
   - name: "enterprise-core"
-    source: "MyOrg/hippodamus-provider-core"  # ← Custom organization provider
+    source: "https://internal-git.company.com/devops/hippodamus-provider-internal.git"
+    type: "custom"                  # ← Required for custom git servers
+    version: "^2.1.0"
+
+  # Local filesystem provider (for development)
+  - name: "dev-provider"
+    path: "/C/dev/my-provider/dist/hippodamus-provider-custom.so"  # ← Local filesystem path
+    type: "custom"                  # ← Required for filesystem sources
+
+# Declare templates at the top level  
+templates:
+  # Individual template declarations
+  - name: "aws-vpc"                 # ← Individual template from builtin templates/ folder
+    path: "aws/vpc.yaml"           # ← Relative path in templates folder
+
+  - name: "custom-shape"
+    source: "https://github.com/MyOrg/diagram-patterns.git"
+    path: "patterns/special-shape.yaml"    # ← Specific individual template
+
+# Declare template hives (collections of templates)
+templateHives:
+  # Builtin template hive - loads all templates from local templates folder
+  - name: "builtin"                 # ← Makes all templates/ folder available
+    path: "."                      # ← Root of templates folder
+    include: "**/*.yaml"           # ← Include all YAML files recursively
+    
+  # Cloud provider template hive from GitHub
+  - name: "aws-official"
+    source: "https://github.com/LederWorks/hippodamus-templates-aws.git"
+    include: "**/*.yaml"           # ← All templates from this repo
+    version: "^2.0.0"
+    
+  # Enterprise template hive from internal git server
+  - name: "enterprise"
+    source: "https://internal-git.company.com/devops/diagram-templates.git"
+    path: "approved"               # ← Only templates from 'approved' folder
+    include: "**/*.yaml"
+    
+  # Development template hive from local filesystem
+  - name: "dev-hive"
+    path: "/C/dev/my-templates"    # ← Local filesystem directory
+    include: "*.yaml"              # ← Only direct YAML files (not recursive)
+    exclude: "**/draft-*"          # ← Exclude draft templates
+    
+  # Specific cloud provider hive with filtering
+  - name: "azure-filtered"
+    source: "https://github.com/SomeOrg/cloud-templates.git"
+    path: "azure"                  # ← Only azure subfolder
+    include: "networking/*.yaml"   # ← Only networking templates
+    exclude: "**/*-deprecated.yaml" # ← Exclude deprecated templates
 
 diagram:
   pages:
@@ -53,9 +105,9 @@ diagram:
 
         - id: "alternative-text"
           name: "Alternative Text"
-          resource: "core3-text"          # ← Uses "core3" provider (different org)
+          resource: "community-core-text"    # ← Uses "community-core" provider (custom type)
           parameters:
-            label: "Alternative Org Provider"
+            label: "Community Provider"
             fontSize: 12
             fontStyle: "normal"
             fillColor: "#E8F5E8"
@@ -95,12 +147,69 @@ diagram:
             fillColor: "#F3E5F5"
             strokeColor: "#9C27B0"
 
-        # YAML template - existing syntax (for filesystem templates)
-        # - id: "custom-shape"
-        #   name: "Custom Template"
-        #   template: "my-yaml-template"  # ← YAML template from filesystem
-        #   parameters:
-        #     customParam: "value"
+        # Local development provider example
+        - id: "dev-resource"
+          name: "Development Resource"
+          resource: "dev-provider-custom"    # ← Uses local compiled provider
+          parameters:
+            label: "Local Development"
+            customParam: "test-value"
+
+        # Internal git provider example  
+        - id: "internal-tool"
+          name: "Internal Tool"
+          resource: "enterprise-core-workflow" # ← Uses enterprise provider (custom type)
+          parameters:
+            workflowType: "deployment"
+            environment: "staging"
+
+        # YAML template examples - individual templates and hives
+        - id: "vpc-individual"
+          name: "VPC Individual"
+          template: "aws-vpc"             # ← Uses individual declared template
+          parameters:
+            cidr: "10.0.0.0/16"
+            region: "us-east-1"
+
+        - id: "shape-individual"
+          name: "Custom Shape"
+          template: "custom-shape"        # ← Uses individual template from git
+          parameters:
+            width: 200
+            height: 100
+
+        # Templates from hives - using hive-name/template-path format
+        - id: "builtin-azure-rg"
+          name: "Azure RG from Builtin Hive"
+          template: "builtin/azure/resource-group" # ← Template from builtin hive
+          parameters:
+            name: "my-resource-group"
+            location: "East US"
+
+        - id: "aws-official-vpc"
+          name: "AWS Official VPC"
+          template: "aws-official/vpc/advanced-vpc" # ← Template from AWS official hive
+          parameters:
+            cidr: "172.16.0.0/16"
+            region: "eu-west-1"
+            
+        - id: "enterprise-approved"
+          name: "Enterprise Template"
+          template: "enterprise/infrastructure/standard-setup" # ← Template from enterprise hive
+          parameters:
+            environment: "production"
+            
+        - id: "dev-experimental"
+          name: "Development Template"
+          template: "dev-hive/experimental-design" # ← Template from dev hive
+          parameters:
+            testMode: true
+            
+        - id: "azure-networking"
+          name: "Azure Networking"
+          template: "azure-filtered/networking/vnet" # ← Template from filtered Azure hive
+          parameters:
+            addressSpace: "10.1.0.0/16"
 
         # Direct element - no template/provider
         - id: "direct-shape"

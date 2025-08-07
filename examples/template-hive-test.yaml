@@ -1,0 +1,65 @@
+version: "1.0"
+
+metadata:
+  title: "Template Hive Test"
+  description: "Testing template hive functionality with builtin templates"
+  author: "Hippodamus"
+
+# Declare providers
+providers:
+  - name: "core"
+    type: "builtin"
+
+# Individual template
+templates:
+  - name: "custom-shape"
+    path: "aws/templates/aws-organization.yaml"  # Individual template from builtin
+
+# Template hives
+templateHives:
+  # Builtin template hive - loads all templates from local templates folder
+  - name: "builtin"
+    path: "."
+    include: "**/*.yaml"
+    
+  # AWS templates hive - only AWS templates
+  - name: "aws"
+    path: "aws/templates"
+    include: "*.yaml"
+
+diagram:
+  pages:
+    - id: "test-page"
+      name: "Template Hive Test"
+      elements:
+        # Provider resource
+        - id: "title"
+          name: "Title"
+          resource: "core-text"
+          parameters:
+            label: "Template Hive Demo"
+            fontSize: 18
+
+        # Individual template
+        - id: "individual"
+          name: "Individual Template"
+          template: "custom-shape"
+          parameters:
+            cidr: "10.0.0.0/16"
+            region: "us-east-1"
+
+        # Template from builtin hive
+        - id: "from-builtin-hive"
+          name: "From Builtin Hive"
+          template: "builtin/aws/templates/aws-organization"
+          parameters:
+            name: "test-org"
+            masterAccountEmail: "admin@example.com"
+
+        # Template from AWS hive
+        - id: "from-aws-hive"
+          name: "From AWS Hive"
+          template: "aws/aws-region"
+          parameters:
+            name: "us-east-1"
+            displayName: "US East 1"

@@ -13,8 +13,6 @@ import (
 	"github.com/LederWorks/hippodamus/pkg/providers"
 	"github.com/LederWorks/hippodamus/pkg/schema"
 	"github.com/LederWorks/hippodamus/pkg/templates"
-	"github.com/LederWorks/hippodamus/providers/aws"
-	"github.com/LederWorks/hippodamus/providers/core"
 )
 
 const (
@@ -34,8 +32,8 @@ type Config struct {
 func main() {
 	config := parseFlags()
 
-	// Initialize providers
-	initializeProviders()
+	// Note: Providers are now loaded dynamically from configuration
+	// No hardcoded provider initialization to avoid race conditions
 
 	if config.ShowVersion {
 		fmt.Printf("Hippodamus v%s - YAML to Draw.io XML Converter\n", version)
@@ -231,21 +229,6 @@ func writeDrawioXML(document *drawio.DrawioDocument, filename string) error {
 	}
 
 	return nil
-}
-
-// initializeProviders registers all built-in providers
-func initializeProviders() {
-	// Register AWS provider
-	awsProvider := aws.NewAWSProvider()
-	if err := providers.DefaultRegistry.Register(awsProvider); err != nil {
-		fmt.Fprintf(os.Stderr, "Warning: Failed to register AWS provider: %v\n", err)
-	}
-
-	// Register Core provider
-	coreProvider := core.NewCoreProvider()
-	if err := providers.DefaultRegistry.Register(coreProvider); err != nil {
-		fmt.Fprintf(os.Stderr, "Warning: Failed to register Core provider: %v\n", err)
-	}
 }
 
 // listProviders displays all available providers and their resources

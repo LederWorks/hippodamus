@@ -80,34 +80,157 @@ func (tp *TemplateProcessor) LoadTemplates() error {
 // LoadTemplateRefs loads templates from template references
 func (tp *TemplateProcessor) LoadTemplateRefs(refs []schema.TemplateRef) error {
 	for _, ref := range refs {
-		templatePath := ref.Template
+		if err := tp.loadIndividualTemplate(ref); err != nil {
+			return err
+		}
+	}
+	return nil
+}
 
-		// Handle relative paths
-		if !filepath.IsAbs(templatePath) {
-			if tp.templateDir != "" {
-				// If template path already contains "templates/", don't double it
-				if strings.HasPrefix(templatePath, "templates/") || strings.HasPrefix(templatePath, "templates\\") {
-					templatePath = filepath.Join(tp.templateDir, "..", templatePath)
-				} else {
-					templatePath = filepath.Join(tp.templateDir, templatePath)
+// LoadTemplateHiveRefs loads template hives from hive references
+func (tp *TemplateProcessor) LoadTemplateHiveRefs(hiveRefs []schema.TemplateHiveRef) error {
+	for _, hiveRef := range hiveRefs {
+		if err := tp.loadTemplateHive(hiveRef); err != nil {
+			return fmt.Errorf("failed to load template hive %s: %w", hiveRef.Name, err)
+		}
+	}
+	return nil
+}
+
+// loadIndividualTemplate loads a single template from a template reference
+func (tp *TemplateProcessor) loadIndividualTemplate(ref schema.TemplateRef) error {
+	var templatePath string
+
+	// Determine source
+	if ref.Source != "" {
+		// External source (HTTPS git or web)
+		return fmt.Errorf("external template sources not yet implemented for individual templates: %s", ref.Source)
+	} else if ref.Path != "" {
+		// Local filesystem path
+		if filepath.IsAbs(ref.Path) {
+			templatePath = ref.Path
+		} else {
+			// Relative to templates directory
+			templatePath = filepath.Join(tp.templateDir, ref.Path)
+		}
+	} else {
+		return fmt.Errorf("template %s must specify either source or path", ref.Name)
+	}
+
+	template, err := tp.loadTemplate(templatePath)
+	if err != nil {
+		return fmt.Errorf("failed to load template %s from %s: %w", ref.Name, templatePath, err)
+	}
+
+	// Override the template name with the reference name if different
+	if ref.Name != template.Name {
+		template.Name = ref.Name
+	}
+
+	tp.templates[template.Name] = template
+	return nil
+}
+
+// loadTemplateHive loads all templates from a template hive
+func (tp *TemplateProcessor) loadTemplateHive(hiveRef schema.TemplateHiveRef) error {
+	var basePath string
+
+	// Determine source
+	if hiveRef.Source != "" {
+		// External source (HTTPS git or web)
+		return fmt.Errorf("external template hive sources not yet implemented: %s", hiveRef.Source)
+	} else if hiveRef.Path != "" {
+		// Local filesystem path
+		if filepath.IsAbs(hiveRef.Path) {
+			basePath = hiveRef.Path
+		} else {
+			// Relative to templates directory
+			basePath = filepath.Join(tp.templateDir, hiveRef.Path)
+		}
+	} else {
+		// Default to templates directory
+		basePath = tp.templateDir
+	}
+
+	// Walk the directory and load templates
+	return filepath.Walk(basePath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		// Skip directories
+		if info.IsDir() {
+			return nil
+		}
+
+		// Check if file matches include pattern
+		if hiveRef.Include != "" {
+			matched, err := filepath.Match(hiveRef.Include, filepath.Base(path))
+			if err != nil {
+				return fmt.Errorf("invalid include pattern %s: %w", hiveRef.Include, err)
+			}
+			if !matched {
+				// Also try matching the relative path for patterns like "aws/*.yaml"
+				relPath, err := filepath.Rel(basePath, path)
+				if err == nil {
+					matched, _ = filepath.Match(hiveRef.Include, filepath.ToSlash(relPath))
+				}
+				if !matched {
+					return nil // Skip this file
+				}
+			}
+		} else {
+			// Default include pattern for YAML files
+			if !strings.HasSuffix(path, ".yaml") && !strings.HasSuffix(path, ".yml") {
+				return nil
+			}
+		}
+
+		// Check if file matches exclude pattern
+		if hiveRef.Exclude != "" {
+			matched, err := filepath.Match(hiveRef.Exclude, filepath.Base(path))
+			if err != nil {
+				return fmt.Errorf("invalid exclude pattern %s: %w", hiveRef.Exclude, err)
+			}
+			if matched {
+				return nil // Skip this file
+			}
+			// Also try matching the relative path
+			relPath, err := filepath.Rel(basePath, path)
+			if err == nil {
+				matched, _ = filepath.Match(hiveRef.Exclude, filepath.ToSlash(relPath))
+				if matched {
+					return nil // Skip this file
 				}
 			}
 		}
 
-		template, err := tp.loadTemplate(templatePath)
+		// Load the template
+		template, err := tp.loadTemplate(path)
 		if err != nil {
-			return fmt.Errorf("failed to load template %s from %s: %w", ref.Name, templatePath, err)
+			return fmt.Errorf("failed to load template %s: %w", path, err)
 		}
 
-		// Override the template name with the reference name if different
-		if ref.Name != template.Name {
-			template.Name = ref.Name
+		// Create template key with hive namespace
+		relPath, err := filepath.Rel(basePath, path)
+		if err != nil {
+			return fmt.Errorf("failed to get relative path for %s: %w", path, err)
 		}
 
-		tp.templates[template.Name] = template
-	}
+		// Remove file extension and convert to forward slashes for consistent keys
+		templatePath := strings.TrimSuffix(filepath.ToSlash(relPath), filepath.Ext(relPath))
+		templateKey := fmt.Sprintf("%s/%s", hiveRef.Name, templatePath)
 
-	return nil
+		tp.templates[templateKey] = template
+
+		// Register template in hive
+		if tp.hives[hiveRef.Name] == nil {
+			tp.hives[hiveRef.Name] = make([]string, 0)
+		}
+		tp.hives[hiveRef.Name] = append(tp.hives[hiveRef.Name], templatePath)
+
+		return nil
+	})
 }
 
 // loadTemplate loads a single template from a file
@@ -132,7 +255,12 @@ func (tp *TemplateProcessor) ProcessDiagram(config *schema.DiagramConfig) error 
 		return err
 	}
 
-	// Load template references
+	// Load template hive references
+	if err := tp.LoadTemplateHiveRefs(config.TemplateHives); err != nil {
+		return err
+	}
+
+	// Load individual template references
 	if err := tp.LoadTemplateRefs(config.Templates); err != nil {
 		return err
 	}
