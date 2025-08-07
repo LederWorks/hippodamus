@@ -12,8 +12,7 @@ diagram:
             y: 100
           parameters:
           deploymentName: "my-deployment"
-          replicas: "3
-    description: "
+          replicas: "3"
           image: "nginx:latest"
           clusterType: "native"
           fillColor: "#E8F5E8"

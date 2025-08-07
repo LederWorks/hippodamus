@@ -13,5 +13,4 @@ diagram:
           parameters:
           serviceType: "api"
           technology: "generic"
-          port: "8080
-    description: "
+          port: "8080"

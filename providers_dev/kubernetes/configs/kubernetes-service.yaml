@@ -13,10 +13,8 @@ diagram:
           parameters:
           serviceName: "my-service"
           serviceType: "ClusterIP"
-          port: "80
-    description: "
-          targetPort: "8080
-    description: "
+          port: "80"
+          targetPort: "8080"
           clusterType: "native"
           fillColor: "#E3F2FD"
           strokeColor: "#2196F3"

@@ -13,7 +13,6 @@ diagram:
           parameters:
           podName: "pod"
           image: "nginx:latest"
-          replicas: "1
-    description: "
+          replicas: "1"
           fillColor: "#FFF3E0"
           strokeColor: "#F57C00"
