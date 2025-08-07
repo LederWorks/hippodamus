@@ -6,6 +6,7 @@ import "time"
 type DiagramConfig struct {
 	Version   string        `yaml:"version" json:"version"`
 	Metadata  Metadata      `yaml:"metadata" json:"metadata"`
+	Providers []ProviderRef `yaml:"providers,omitempty" json:"providers,omitempty"` // Provider declarations
 	Templates []TemplateRef `yaml:"templates,omitempty" json:"templates,omitempty"`
 	Diagram   Diagram       `yaml:"diagram" json:"diagram"`
 }
@@ -24,6 +25,14 @@ type Metadata struct {
 type TemplateRef struct {
 	Name     string `yaml:"name" json:"name"`
 	Template string `yaml:"template" json:"template"`
+}
+
+// ProviderRef declares a provider for use in the diagram
+type ProviderRef struct {
+	Name    string `yaml:"name" json:"name"`                           // Local name (e.g., "core", "custom-aws")
+	Source  string `yaml:"source,omitempty" json:"source,omitempty"`   // Full source (e.g., "MyOrg/hippodamus-provider-core")
+	Type    string `yaml:"type,omitempty" json:"type,omitempty"`       // "registry" (default) or "builtin"
+	Version string `yaml:"version,omitempty" json:"version,omitempty"` // Provider version constraint
 }
 
 // Diagram represents the main diagram structure
@@ -79,14 +88,16 @@ type Layer struct {
 
 // Element represents any drawable element (shape, connector, text, etc.)
 type Element struct {
-	Type       ElementType       `yaml:"type" json:"type"`
-	ID         string            `yaml:"id,omitempty" json:"id,omitempty"`
-	Name       string            `yaml:"name,omitempty" json:"name,omitempty"`
-	Template   string            `yaml:"template,omitempty" json:"template,omitempty"`
-	Properties ElementProperties `yaml:"properties" json:"properties"`
-	Style      Style             `yaml:"style,omitempty" json:"style,omitempty"`
-	Children   []Element         `yaml:"children,omitempty" json:"children,omitempty"`
-	Tags       []string          `yaml:"tags,omitempty" json:"tags,omitempty"`
+	Type       ElementType            `yaml:"type,omitempty" json:"type,omitempty"` // Direct element type (shape, connector, etc.)
+	ID         string                 `yaml:"id,omitempty" json:"id,omitempty"`
+	Name       string                 `yaml:"name,omitempty" json:"name,omitempty"`
+	Template   string                 `yaml:"template,omitempty" json:"template,omitempty"`     // YAML template reference
+	Resource   string                 `yaml:"resource,omitempty" json:"resource,omitempty"`     // Provider resource (e.g., "core-text")
+	Parameters map[string]interface{} `yaml:"parameters,omitempty" json:"parameters,omitempty"` // Parameters for templates or resources
+	Properties ElementProperties      `yaml:"properties" json:"properties"`
+	Style      Style                  `yaml:"style,omitempty" json:"style,omitempty"`
+	Children   []Element              `yaml:"children,omitempty" json:"children,omitempty"`
+	Tags       []string               `yaml:"tags,omitempty" json:"tags,omitempty"`
 
 	// Nesting configuration
 	Nesting NestingConfig `yaml:"nesting,omitempty" json:"nesting,omitempty"`
@@ -102,7 +113,12 @@ const (
 	ElementTypeText      ElementType = "text"
 	ElementTypeGroup     ElementType = "group"
 	ElementTypeSwimLane  ElementType = "swimlane"
-	ElementTypeTemplate  ElementType = "template"
+)
+
+// Provider type constants define how providers are resolved
+const (
+	ProviderTypeRegistry = "registry" // Default: prefer upstream/GitHub providers
+	ProviderTypeBuiltin  = "builtin"  // Force use of builtin providers
 )
 
 // NestingConfig defines how children should be nested within a parent element

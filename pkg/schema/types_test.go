@@ -88,7 +88,6 @@ func TestElementType_Constants(t *testing.T) {
 		{"text", ElementTypeText, "text"},
 		{"group", ElementTypeGroup, "group"},
 		{"swimlane", ElementTypeSwimLane, "swimlane"},
-		{"template", ElementTypeTemplate, "template"},
 	}
 
 	for _, tt := range tests {

@@ -1,0 +1,117 @@
+version: "1.0"
+title: "Provider System Demo"
+description: "Demonstrating AWS and Core providers in a mixed diagram"
+
+pages:
+  - name: "Architecture Overview"
+    elements:
+      # Core provider elements
+      web_server:
+        template: "core-shape"
+        properties:
+          label: "Web Server"
+          shape: "rectangle"
+          fillColor: "#E3F2FD"
+          strokeColor: "#1976D2"
+          width: 120
+          height: 80
+          
+      database:
+        template: "core-shape"
+        properties:
+          label: "Database"
+          shape: "cylinder"
+          fillColor: "#F3E5F5"
+          strokeColor: "#7B1FA2"
+          width: 100
+          height: 100
+          
+      connection:
+        template: "core-connector"
+        properties:
+          source: "web_server"
+          target: "database"
+          label: "queries"
+          strokeColor: "#424242"
+          strokeWidth: 2
+          
+      architecture_group:
+        template: "core-group"
+        properties:
+          label: "Application Architecture"
+          fillColor: "#F5F5F5"
+          strokeColor: "#757575"
+          arrangement: "horizontal"
+          spacing: 30
+          collapsible: false
+          padding:
+            top: 25
+            right: 15
+            bottom: 15
+            left: 15
+            
+      title_text:
+        template: "core-text"
+        properties:
+          label: "System Architecture Overview"
+          fontSize: 18
+          fontFamily: "Arial"
+          fontColor: "#212121"
+          fontWeight: "bold"
+          
+      # AWS provider elements  
+      aws_org:
+        template: "aws-organization"
+        properties:
+          orgName: "Example Corp"
+          managementAccountId: "123456789012"
+          enableConsolidatedBilling: true
+          enableCloudTrail: true
+          
+      prod_vpc:
+        template: "aws-vpc"
+        properties:
+          vpcName: "production-vpc"
+          cidrBlock: "10.0.0.0/16"
+          region: "us-east-1"
+          enableDnsHostnames: true
+          enableDnsSupport: true
+          tags:
+            Environment: "production"
+            Team: "infrastructure"
+            
+      # Mixed architecture using swimlanes
+      cloud_swimlane:
+        template: "core-swimlane"
+        properties:
+          label: "AWS Cloud Infrastructure"
+          orientation: "horizontal"
+          headerSize: 50
+          fillColor: "#E8F5E8"
+          strokeColor: "#4CAF50"
+          arrangement: "horizontal"
+          spacing: 40
+
+    nesting:
+      architecture_group:
+        children:
+          - web_server
+          - database
+          
+      cloud_swimlane:
+        children:
+          - aws_org
+          - prod_vpc
+
+    positions:
+      title_text:
+        x: 50
+        y: 20
+        
+      architecture_group:
+        x: 50
+        y: 80
+        
+      cloud_swimlane:
+        x: 50
+        y: 300

@@ -1,0 +1,128 @@
+version: "1.0"
+
+metadata:
+  title: "Clean Syntax Demo"
+  description: "New clean syntax separating providers and templates"
+  author: "Hippodamus"
+
+# Declare providers at the top level
+providers:
+  # Builtin provider - uses local builtin version
+  - name: "core"                    # → Uses builtin core provider (exact name from providers folder)
+    type: "builtin"                 # ← Explicitly requests builtin provider
+  
+  - name: "aws"                     # → Will auto-resolve to LederWorks/hippodamus-provider-aws
+  
+  # Registry version using different name
+  - name: "core2"                   # ← Use core2 name for registry version  
+    source: "LederWorks/hippodamus-provider-core"  # ← Registry version
+  
+  # Alternative upstream provider - different org
+  - name: "core3"                   # ← Different name for alternative provider
+    source: "SomeOtherOrg/hippodamus-provider-core"  # ← Different org version
+    
+  # Custom org example
+  - name: "enterprise-core"
+    source: "MyOrg/hippodamus-provider-core"  # ← Custom organization provider
+
+diagram:
+  pages:
+    - id: "demo-page"
+      name: "Clean Syntax Demo"
+      elements:
+        # Provider resources - demonstrating different provider types
+        - id: "title-text"
+          name: "Page Title"
+          resource: "core-text"           # ← Uses "core" provider (builtin version)
+          parameters:
+            label: "Clean Syntax Demo"
+            fontSize: 18
+            fontStyle: "bold"
+            fillColor: "#E3F2FD"
+            fontColor: "#1976D2"
+
+        - id: "registry-text"
+          name: "Registry Text"
+          resource: "core2-text"          # ← Uses "core2" provider (registry version)
+          parameters:
+            label: "Registry Core Provider"
+            fontSize: 14
+            fontStyle: "italic"
+            fillColor: "#FFF3E0"
+            fontColor: "#E65100"
+
+        - id: "alternative-text"
+          name: "Alternative Text"
+          resource: "core3-text"          # ← Uses "core3" provider (different org)
+          parameters:
+            label: "Alternative Org Provider"
+            fontSize: 12
+            fontStyle: "normal"
+            fillColor: "#E8F5E8"
+            fontColor: "#2E7D32"
+
+        - id: "container-group"
+          name: "Container"
+          resource: "core-group"          # ← Standard core provider usage
+          parameters:
+            label: "Container Group"
+            width: 300
+            height: 200
+            fillColor: "#F5F5F5"
+            strokeColor: "#757575"
+            collapsible: true
+
+        - id: "process-lane"
+          name: "Process Lane"
+          resource: "core-swimlane"       # ← Clean syntax
+          parameters:
+            label: "Process Flow"
+            width: 400
+            height: 150
+            orientation: "horizontal"
+            startSize: 40
+            fillColor: "#FFF3E0"
+            strokeColor: "#FF9800"
+
+        # Custom org provider example
+        - id: "enterprise-shape"
+          name: "Enterprise Shape"
+          resource: "enterprise-core-shape"  # ← Uses custom org provider
+          parameters:
+            label: "Enterprise Provider"
+            width: 150
+            height: 100
+            fillColor: "#F3E5F5"
+            strokeColor: "#9C27B0"
+
+        # YAML template - existing syntax (for filesystem templates)
+        # - id: "custom-shape"
+        #   name: "Custom Template"
+        #   template: "my-yaml-template"  # ← YAML template from filesystem
+        #   parameters:
+        #     customParam: "value"
+
+        # Direct element - no template/provider
+        - id: "direct-shape"
+          name: "Direct Shape"
+          type: "shape"                   # ← Direct element definition
+          properties:
+            width: 120
+            height: 80
+            label: "Direct Shape"
+            shape: "rectangle"
+          style:
+            fillColor: "#E8F5E8"
+            strokeColor: "#4CAF50"
+            strokeWidth: 2
+
+        # Connector between elements
+        - id: "connection"
+          name: "Connection"
+          resource: "core-connector"      # ← Provider resource for connector
+          parameters:
+            source: "container-group"
+            target: "process-lane"
+            strokeColor: "#666666"
+            strokeWidth: 2
+            arrowStyle: "target"

@@ -13,6 +13,8 @@ import (
 	"github.com/LederWorks/hippodamus/pkg/providers"
 	"github.com/LederWorks/hippodamus/pkg/schema"
 	"github.com/LederWorks/hippodamus/pkg/templates"
+	"github.com/LederWorks/hippodamus/providers/aws"
+	"github.com/LederWorks/hippodamus/providers/core"
 )
 
 const (
@@ -233,12 +235,17 @@ func writeDrawioXML(document *drawio.DrawioDocument, filename string) error {
 
 // initializeProviders registers all built-in providers
 func initializeProviders() {
-	// TODO: Fix provider interface implementation
 	// Register AWS provider
-	// awsProvider := aws.NewAWSProvider()
-	// if err := providers.DefaultRegistry.Register(awsProvider); err != nil {
-	// 	fmt.Fprintf(os.Stderr, "Warning: Failed to register AWS provider: %v\n", err)
-	// }
+	awsProvider := aws.NewAWSProvider()
+	if err := providers.DefaultRegistry.Register(awsProvider); err != nil {
+		fmt.Fprintf(os.Stderr, "Warning: Failed to register AWS provider: %v\n", err)
+	}
+
+	// Register Core provider
+	coreProvider := core.NewCoreProvider()
+	if err := providers.DefaultRegistry.Register(coreProvider); err != nil {
+		fmt.Fprintf(os.Stderr, "Warning: Failed to register Core provider: %v\n", err)
+	}
 }
 
 // listProviders displays all available providers and their resources

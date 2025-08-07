@@ -9,22 +9,27 @@ import (
 
 	"gopkg.in/yaml.v3"
 
+	"github.com/LederWorks/hippodamus/pkg/providers"
 	"github.com/LederWorks/hippodamus/pkg/schema"
 )
 
 // TemplateProcessor handles template loading and processing with hive support
 type TemplateProcessor struct {
-	templates   map[string]*schema.Template
-	templateDir string
-	hives       map[string][]string // Maps hive name to list of templates
+	templates    map[string]*schema.Template
+	templateDir  string
+	hives        map[string][]string            // Maps hive name to list of templates
+	registry     *providers.Registry            // Provider registry for dynamic templates
+	providerRefs map[string]*schema.ProviderRef // Declared providers from config
 }
 
 // NewTemplateProcessor creates a new template processor with hive support
 func NewTemplateProcessor(templateDir string) *TemplateProcessor {
 	return &TemplateProcessor{
-		templates:   make(map[string]*schema.Template),
-		templateDir: templateDir,
-		hives:       make(map[string][]string),
+		templates:    make(map[string]*schema.Template),
+		templateDir:  templateDir,
+		hives:        make(map[string][]string),
+		registry:     providers.DefaultRegistry,
+		providerRefs: make(map[string]*schema.ProviderRef),
 	}
 }
 
@@ -122,7 +127,12 @@ func (tp *TemplateProcessor) loadTemplate(path string) (*schema.Template, error)
 
 // ProcessDiagram processes a diagram configuration and applies templates
 func (tp *TemplateProcessor) ProcessDiagram(config *schema.DiagramConfig) error {
-	// Load template references first
+	// Load provider references first
+	if err := tp.LoadProviderRefs(config.Providers); err != nil {
+		return err
+	}
+
+	// Load template references
 	if err := tp.LoadTemplateRefs(config.Templates); err != nil {
 		return err
 	}
@@ -189,19 +199,43 @@ func (tp *TemplateProcessor) processElement(element *schema.Element) error {
 
 // processElementWithContext processes a single element with parent template context
 func (tp *TemplateProcessor) processElementWithContext(element *schema.Element, parentTemplates []string) error {
-	// Handle template type - inherit type from template
-	if element.Type == schema.ElementTypeTemplate {
-		if element.Template == "" {
-			return fmt.Errorf("element %s has type 'template' but no template specified", tp.getElementDisplayName(element))
+	// Handle provider resource - clean syntax: resource: "core-text"
+	if element.Resource != "" {
+		// Parse provider-resource format with smart matching
+		providerName, resourceType := tp.parseProviderResource(element.Resource)
+		if providerName == "" || resourceType == "" {
+			return fmt.Errorf("invalid resource format '%s' for element %s, expected 'provider-resource'", element.Resource, tp.getElementDisplayName(element))
 		}
 
+		// Validate provider is declared (optional for backward compatibility)
+		tp.resolveProviderSource(providerName)
+
+		// Generate provider resource
+		if providedElement := tp.tryProviderResource(providerName, resourceType, element.Parameters); providedElement != nil {
+			// Preserve original ID and Name, then apply provider resource
+			originalID := element.ID
+			originalName := element.Name
+			element.Type = providedElement.Type
+			element.Properties = providedElement.Properties
+			element.Style = providedElement.Style
+			element.Nesting = providedElement.Nesting
+			// Restore original identification
+			element.ID = originalID
+			element.Name = originalName
+			return nil
+		}
+		return fmt.Errorf("failed to generate provider resource %s for element %s", element.Resource, tp.getElementDisplayName(element))
+	}
+
+	// Handle YAML template - filesystem templates: template: "my-template"
+	if element.Template != "" {
 		// Resolve template reference using hive-aware resolution
 		currentHive := tp.getCurrentHive(parentTemplates)
 		resolvedTemplate := tp.resolveTemplateReference(element.Template, currentHive)
 
 		template, exists := tp.templates[resolvedTemplate]
 		if !exists {
-			return fmt.Errorf("template %s not found for element %s (resolved to: %s)", element.Template, tp.getElementDisplayName(element), resolvedTemplate)
+			return fmt.Errorf("YAML template %s not found for element %s (resolved to: %s)", element.Template, tp.getElementDisplayName(element), resolvedTemplate)
 		}
 
 		// Validate template dependencies
@@ -211,26 +245,16 @@ func (tp *TemplateProcessor) processElementWithContext(element *schema.Element, 
 
 		// All templates now create shape elements (groups)
 		element.Type = schema.ElementTypeShape
+
+		// Apply template to element
+		if err := tp.applyTemplate(element, template); err != nil {
+			return fmt.Errorf("failed to apply template %s to element %s: %w", element.Template, tp.getElementDisplayName(element), err)
+		}
+
+		return nil
 	}
 
-	if element.Template == "" {
-		return nil // No template to apply
-	}
-
-	// Resolve template reference for non-template type elements too
-	currentHive := tp.getCurrentHive(parentTemplates)
-	resolvedTemplate := tp.resolveTemplateReference(element.Template, currentHive)
-
-	template, exists := tp.templates[resolvedTemplate]
-	if !exists {
-		return fmt.Errorf("template %s not found (resolved to: %s)", element.Template, resolvedTemplate)
-	}
-
-	// Apply template to element
-	if err := tp.applyTemplate(element, template); err != nil {
-		return fmt.Errorf("failed to apply template %s to element %s: %w", element.Template, tp.getElementDisplayName(element), err)
-	}
-
+	// No template or resource specified - element is used as-is
 	return nil
 }
 
@@ -836,4 +860,149 @@ func (tp *TemplateProcessor) ListAllTemplateKeys() []string {
 		keys = append(keys, key)
 	}
 	return keys
+}
+
+// tryProviderResource attempts to resolve a resource using the provider system (new explicit syntax)
+func (tp *TemplateProcessor) tryProviderResource(providerName, resourceType string, parameters map[string]interface{}) *schema.Element {
+	// Resolve provider based on declarations and type preference
+	provider := tp.resolveProvider(providerName)
+	if provider == nil {
+		return nil // Provider not found
+	}
+
+	// Validate parameters
+	if err := provider.Validate(resourceType, parameters); err != nil {
+		return nil // Validation failed
+	}
+
+	// Generate resource
+	element, err := provider.GenerateTemplate(resourceType, parameters)
+	if err != nil {
+		return nil // Resource generation failed
+	}
+
+	return element
+}
+
+// tryProviderTemplate attempts to resolve a template using the provider system (legacy format: "provider-resource")
+func (tp *TemplateProcessor) tryProviderTemplate(templateName string, parameters map[string]interface{}) *schema.Element {
+	// Parse provider template format: "provider-resource"
+	parts := strings.SplitN(templateName, "-", 2)
+	if len(parts) != 2 {
+		return nil // Not a provider template format
+	}
+
+	providerName, resourceType := parts[0], parts[1]
+	return tp.tryProviderResource(providerName, resourceType, parameters)
+}
+
+// LoadProviderRefs loads provider references from the diagram config
+func (tp *TemplateProcessor) LoadProviderRefs(providers []schema.ProviderRef) error {
+	for _, provider := range providers {
+		tp.providerRefs[provider.Name] = &provider
+	}
+	return nil
+}
+
+// resolveProviderSource resolves a provider name to its full source path
+func (tp *TemplateProcessor) resolveProviderSource(providerName string) string {
+	// Check if provider is declared in config
+	if providerRef, exists := tp.providerRefs[providerName]; exists {
+		if providerRef.Source != "" {
+			return providerRef.Source // Custom source like "MyOrg/hippodamus-provider-core"
+		}
+		// Default to LederWorks org
+		return fmt.Sprintf("LederWorks/hippodamus-provider-%s", providerName)
+	}
+
+	// Provider not declared - for backward compatibility, assume it's a local provider
+	return providerName
+}
+
+// resolveProvider resolves a provider name to an actual provider instance
+// Implements the priority system: registry > builtin, with explicit type override
+func (tp *TemplateProcessor) resolveProvider(providerName string) providers.Provider {
+	providerRef, isDeclared := tp.providerRefs[providerName]
+
+	// Determine the actual provider name to use from registry
+	// For now, map custom names back to base provider names
+	actualProviderName := tp.getActualProviderName(providerName, providerRef)
+
+	// Determine provider type preference
+	var preferredType string
+	if isDeclared && providerRef.Type != "" {
+		preferredType = providerRef.Type
+	} else {
+		preferredType = schema.ProviderTypeRegistry // Default to registry
+	}
+
+	// If explicitly requesting builtin, use builtin only
+	if preferredType == schema.ProviderTypeBuiltin {
+		if provider, err := tp.registry.Get(actualProviderName); err == nil && provider != nil {
+			return provider
+		}
+		return nil
+	}
+
+	// Default behavior: registry > builtin
+	// TODO: In the future, try to load from GitHub registry first
+	// For now, we only have builtin providers, so use registry
+	if provider, err := tp.registry.Get(actualProviderName); err == nil && provider != nil {
+		return provider
+	}
+
+	return nil
+}
+
+// getActualProviderName maps declared provider names to actual registry names
+func (tp *TemplateProcessor) getActualProviderName(declaredName string, providerRef *schema.ProviderRef) string {
+	if providerRef != nil && providerRef.Source != "" {
+		// Extract base name from source like "LederWorks/hippodamus-provider-core" -> "core"
+		if strings.Contains(providerRef.Source, "hippodamus-provider-") {
+			parts := strings.Split(providerRef.Source, "hippodamus-provider-")
+			if len(parts) > 1 {
+				return parts[1] // Return "core" from "LederWorks/hippodamus-provider-core"
+			}
+		}
+	}
+
+	// Since we use clean provider names (just "core", "aws", etc.),
+	// the declared name IS the actual provider name
+	return declaredName
+}
+
+// parseProviderResource parses a resource string into provider and resource parts
+// For clean syntax like "core-text", "aws-vpc", "custom-core-shape"
+func (tp *TemplateProcessor) parseProviderResource(resourceString string) (string, string) {
+	parts := strings.Split(resourceString, "-")
+	if len(parts) < 2 {
+		return "", "" // Invalid format
+	}
+
+	// Known resource types (from our providers)
+	knownResourceTypes := map[string]bool{
+		"text":         true,
+		"shape":        true,
+		"group":        true,
+		"swimlane":     true,
+		"connector":    true,
+		"vpc":          true, // AWS
+		"organization": true, // AWS
+	}
+
+	// Try different combinations, starting from the end
+	for i := len(parts) - 1; i >= 1; i-- {
+		potentialResource := parts[i]
+		if knownResourceTypes[potentialResource] {
+			// Found a known resource type
+			providerName := strings.Join(parts[:i], "-")
+			return providerName, potentialResource
+		}
+	}
+
+	// Fallback: assume last part is resource, everything else is provider
+	providerName := strings.Join(parts[:len(parts)-1], "-")
+	resourceType := parts[len(parts)-1]
+
+	return providerName, resourceType
 }

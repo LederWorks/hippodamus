@@ -1,0 +1,62 @@
+version: "1.0"
+
+metadata:
+  title: "Provider System Test"
+  description: "Testing AWS and Core providers"
+
+diagram:
+  pages:
+    - id: "main"
+      name: "Provider Test"
+      elements:
+        # Core provider - shape
+        - id: "web-server"
+          name: "Web Server Element"
+          type: "template"
+          template: "core-shape"
+          position: { x: 100, y: 100 }
+          parameters:
+            label: "Web Server"
+            shape: "rectangle"
+            fillColor: "#E3F2FD"
+            strokeColor: "#1976D2"
+            width: 120
+            height: 80
+            
+        # Core provider - database shape
+        - id: "database"
+          name: "Database Element"
+          type: "template"
+          template: "core-shape"
+          position: { x: 300, y: 100 }
+          parameters:
+            label: "Database"
+            shape: "cylinder"
+            fillColor: "#F3E5F5"
+            strokeColor: "#7B1FA2"
+            width: 100
+            height: 100
+            
+        # Core provider - connector
+        - id: "connection"
+          name: "Database Connection"
+          type: "template"
+          template: "core-connector"
+          parameters:
+            source: "web-server"
+            target: "database"
+            label: "queries"
+            strokeColor: "#424242"
+            strokeWidth: 2
+            
+        # AWS provider - organization
+        - id: "aws-org"
+          name: "AWS Organization"
+          type: "template"
+          template: "aws-organization"
+          position: { x: 100, y: 300 }
+          parameters:
+            orgName: "Example Corp"
+            managementAccountId: "123456789012"
+            enableConsolidatedBilling: true
+            enableCloudTrail: true
