@@ -15,8 +15,11 @@ import (
 	"github.com/LederWorks/hippodamus/pkg/templates"
 )
 
-const (
-	version = "1.0.0"
+// Version information injected at build time
+var (
+	version = "dev"
+	commit  = "unknown"
+	date    = "unknown"
 )
 
 type Config struct {
@@ -36,7 +39,9 @@ func main() {
 	// No hardcoded provider initialization to avoid race conditions
 
 	if config.ShowVersion {
-		fmt.Printf("Hippodamus v%s - YAML to Draw.io XML Converter\n", version)
+		fmt.Printf("Hippodamus v%s\n", version)
+		fmt.Printf("Commit: %s\n", commit)
+		fmt.Printf("Build Date: %s\n", date)
 		return
 	}
 

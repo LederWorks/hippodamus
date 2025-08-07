@@ -1,52 +1,273 @@
-# Hippodamus - YAML to D# Use templates
-./hippodamus -input diagram.yaml -templates templates/ -output diagram.drawio
+# Hippodamus
 
-# Auto-detect output format based on input filename
-./hippodamus -input diagram.yaml
+[![CI](https://github.com/LederWorks/hippodamus/actions/workflows/ci.yml/badge.svg)](https://github.com/LederWorks/hippodamus/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/LederWorks/hippodamus)](https://github.com/LederWorks/hippodamus/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/LederWorks/hippodamus)](https://goreportcard.com/report/github.com/LederWorks/hippodamus)
+[![License](https://img.shields.io/github/license/LederWorks/hippodamus)](LICENSE)
+
+> 🎯 **Hippodamus** - A powerful YAML to Draw.io XML converter that simplifies diagram creation through templates and providers.
+
+Hippodamus transforms your YAML configuration files into Draw.io compatible XML diagrams using a flexible template and provider system. Perfect for automating diagram generation in CI/CD pipelines, documentation workflows, and infrastructure-as-code projects.
+
+## ✨ Features
+
+- **🎨 Clean Syntax**: Simple `resource: 'template-name'` format
+- **🔌 Provider System**: Support for builtin, registry, and custom providers
+- **📦 Template Hives**: Bulk template loading with pattern matching
+- **🌍 Cross-Platform**: Works on Linux, Windows, and macOS
+- **🚀 CI/CD Ready**: Perfect for automated documentation workflows
+- **📊 Flexible Templates**: Extensible template system for any diagram type
+
+## 🚀 Quick Start
+
+### Installation
+
+Download the latest release for your platform from the [releases page](https://github.com/LederWorks/hippodamus/releases).
+
+### Basic Usage
+
+1. Create a YAML configuration file:
+
+```yaml
+version: "1.0"
+metadata:
+  title: "My Infrastructure Diagram"
+  description: "AWS infrastructure overview"
+
+providers:
+  aws:
+    type: registry
+    source: LederWorks/aws-templates
+
+resources:
+  - resource: 'vpc'
+    name: 'main-vpc'
+    cidr: '10.0.0.0/16'
+  
+  - resource: 'ec2-instance'
+    name: 'web-server'
+    instance_type: 't3.micro'
 ```
 
-## Documentation
-
-- **[Development Guide](docs/DEVELOPMENT.md)** - Development setup, building, and contributing
-- **[Template Dependencies](docs/TEMPLATE_DEPENDENCIES.md)** - Understanding template dependency system
-- **[Dependency Implementation](docs/DEPENDENCY_IMPLEMENTATION.md)** - Technical details of dependency validation
-- **[Template Hives](docs/TEMPLATE_HIVES.md)** - Template organization by technology platform
-- **[Configuration Comparison](docs/CONFIG_COMPARISON.md)** - Simple vs. explicit configuration approaches
-- **[Reorganization Summary](docs/REORGANIZATION_SUMMARY.md)** - Recent project structure improvements XML Converter
-
-Hippodamus is a Go application that transforms YAML configuration files into draw.io XML syntax, allowing you to programmatically create diagrams from structured configuration files.
-
-## Features
-
-- Transform YAML configurations to draw.io XML format
-- Support for nested diagrams with parents, layers, and tags
-- Template system for reusable diagram components
-- Customizable YAML schema for different diagram types
-- Support for complex diagram structures including shapes, connectors, and styling
-
-## Usage
+2. Convert to Draw.io XML:
 
 ```bash
-# Build the application
-go build -o hippodamus ./cmd/hippodamus
-
-# Convert YAML to draw.io format (default .drawio extension)
-./hippodamus -input diagram.yaml -output diagram.drawio
-
-# Convert to XML format
-./hippodamus -input diagram.yaml -output diagram.xml
-
-# Use templates
-./hippodamus -input diagram.yaml -templates templates/ -output diagram.drawio
-
-# Auto-detect output format based on input filename
-./hippodamus -input diagram.yaml
+hippodamus config.yaml diagram.xml
 ```
 
-## Supported Output Formats
+3. Open `diagram.xml` in Draw.io
 
-- `.drawio` - Draw.io native format (default)
-- `.xml` - Standard XML format
+## 📖 Documentation
+
+### Provider Types
+
+Hippodamus supports three types of providers:
+
+#### 1. Builtin Providers
+Local provider folders with exact name matching:
+```yaml
+providers:
+  core:
+    type: builtin
+```
+
+#### 2. Registry Providers (Default)
+Templates from the LederWorks GitHub organization:
+```yaml
+providers:
+  aws:
+    type: registry
+    source: LederWorks/aws-templates
+```
+
+#### 3. Custom Providers
+Filesystem or HTTPS Git repository providers:
+```yaml
+providers:
+  custom:
+    type: custom
+    source: "https://github.com/company/templates.git"
+```
+
+### Template Hives
+
+Load multiple templates at once with pattern matching:
+
+```yaml
+template_hives:
+  - name: "aws-core"
+    source: "templates/aws"
+    include:
+      - "*.yaml"
+      - "networking/**"
+    exclude:
+      - "*test*"
+      - "deprecated/**"
+```
+
+### Configuration Reference
+
+#### Top-Level Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `version` | string | ✅ | Configuration version |
+| `metadata` | object | ✅ | Diagram metadata |
+| `providers` | object | ❌ | Provider definitions |
+| `template_hives` | array | ❌ | Template hive definitions |
+| `resources` | array | ✅ | Resource definitions |
+
+#### Provider Configuration
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `type` | string | ✅ | Provider type: `builtin`, `registry`, `custom` |
+| `source` | string | ❌ | Source location (for registry/custom types) |
+
+#### Resource Configuration
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `resource` | string | ✅ | Template name to use |
+| `name` | string | ❌ | Resource instance name |
+| Additional fields depend on the specific template |
+
+## 🏗️ Examples
+
+### AWS Infrastructure
+
+```yaml
+version: "1.0"
+metadata:
+  title: "AWS Three-Tier Architecture"
+  description: "Web application infrastructure"
+
+providers:
+  aws:
+    type: registry
+    source: LederWorks/aws-templates
+
+resources:
+  - resource: 'vpc'
+    name: 'production-vpc'
+    cidr: '10.0.0.0/16'
+    
+  - resource: 'subnet'
+    name: 'public-subnet-1'
+    vpc: 'production-vpc'
+    cidr: '10.0.1.0/24'
+    availability_zone: 'us-east-1a'
+    
+  - resource: 'application-load-balancer'
+    name: 'web-alb'
+    scheme: 'internet-facing'
+    
+  - resource: 'ec2-instance'
+    name: 'web-server-1'
+    instance_type: 't3.medium'
+    subnet: 'public-subnet-1'
+```
+
+### Kubernetes Deployment
+
+```yaml
+version: "1.0"
+metadata:
+  title: "Kubernetes Application"
+  description: "Microservices deployment"
+
+providers:
+  k8s:
+    type: registry
+    source: LederWorks/kubernetes-templates
+
+resources:
+  - resource: 'namespace'
+    name: 'production'
+    
+  - resource: 'deployment'
+    name: 'api-server'
+    namespace: 'production'
+    replicas: 3
+    image: 'myapp/api:v1.2.0'
+    
+  - resource: 'service'
+    name: 'api-service'
+    namespace: 'production'
+    type: 'ClusterIP'
+    selector:
+      app: 'api-server'
+```
+
+## 🛠️ Development
+
+### Prerequisites
+
+- Go 1.21 or later
+- Git
+
+### Building from Source
+
+```bash
+git clone https://github.com/LederWorks/hippodamus.git
+cd hippodamus
+go build -o hippodamus cmd/hippodamus/main.go
+```
+
+### Running Tests
+
+```bash
+go test ./...
+```
+
+### Development Workflow
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes
+4. Run tests: `go test ./...`
+5. Run linting: `golangci-lint run`
+6. Commit your changes: `git commit -m 'Add amazing feature'`
+7. Push to the branch: `git push origin feature/amazing-feature`
+8. Open a Pull Request
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Code of Conduct
+
+This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🎯 Roadmap
+
+- [ ] GUI application for visual diagram editing
+- [ ] More built-in template providers
+- [ ] Plugin system for custom renderers
+- [ ] Integration with popular diagramming tools
+- [ ] Template marketplace
+- [ ] Real-time collaboration features
+
+## 💬 Support
+
+- 📖 [Documentation](https://github.com/LederWorks/hippodamus/wiki)
+- 🐛 [Issue Tracker](https://github.com/LederWorks/hippodamus/issues)
+- 💡 [Feature Requests](https://github.com/LederWorks/hippodamus/issues/new?template=feature_request.md)
+- 📧 [Contact](mailto:support@lederworks.com)
+
+## 🙏 Acknowledgments
+
+- [Draw.io](https://www.draw.io/) for the excellent diagramming platform
+- [GitVersion](https://gitversion.net/) for semantic versioning
+- The Go community for amazing tools and libraries
+
+---
+
+**Made with ❤️ by [LederWorks](https://github.com/LederWorks)**
 
 Both formats contain the same XML structure and are fully compatible with draw.io/diagrams.net.
 

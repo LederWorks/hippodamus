@@ -1,0 +1,22 @@
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+    - goimports
+    - misspell
+    - gocyclo
+    - godot
+    - gofmt
+    - gosec
+    - revive
+    - unconvert
+    - unparam
+
+run:
+  timeout: 5m
+  tests: true
