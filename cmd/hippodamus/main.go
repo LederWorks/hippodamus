@@ -10,6 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/LederWorks/hippodamus/pkg/drawio"
+	"github.com/LederWorks/hippodamus/pkg/providers"
 	"github.com/LederWorks/hippodamus/pkg/schema"
 	"github.com/LederWorks/hippodamus/pkg/templates"
 )
@@ -19,19 +20,28 @@ const (
 )
 
 type Config struct {
-	InputFile    string
-	OutputFile   string
-	TemplatesDir string
-	ValidateOnly bool
-	ShowVersion  bool
-	Verbose      bool
+	InputFile     string
+	OutputFile    string
+	TemplatesDir  string
+	ValidateOnly  bool
+	ShowVersion   bool
+	ListProviders bool
+	Verbose       bool
 }
 
 func main() {
 	config := parseFlags()
 
+	// Initialize providers
+	initializeProviders()
+
 	if config.ShowVersion {
 		fmt.Printf("Hippodamus v%s - YAML to Draw.io XML Converter\n", version)
+		return
+	}
+
+	if config.ListProviders {
+		listProviders()
 		return
 	}
 
@@ -59,6 +69,7 @@ func parseFlags() *Config {
 	flag.BoolVar(&config.ValidateOnly, "validate", false, "Validate YAML only, don't generate output")
 	flag.BoolVar(&config.ValidateOnly, "v", false, "Validate YAML only (short form)")
 	flag.BoolVar(&config.ShowVersion, "version", false, "Show version information")
+	flag.BoolVar(&config.ListProviders, "list-providers", false, "List available providers and their resources")
 	flag.BoolVar(&config.Verbose, "verbose", false, "Enable verbose output")
 
 	flag.Usage = func() {
@@ -218,4 +229,58 @@ func writeDrawioXML(document *drawio.DrawioDocument, filename string) error {
 	}
 
 	return nil
+}
+
+// initializeProviders registers all built-in providers
+func initializeProviders() {
+	// TODO: Fix provider interface implementation
+	// Register AWS provider
+	// awsProvider := aws.NewAWSProvider()
+	// if err := providers.DefaultRegistry.Register(awsProvider); err != nil {
+	// 	fmt.Fprintf(os.Stderr, "Warning: Failed to register AWS provider: %v\n", err)
+	// }
+}
+
+// listProviders displays all available providers and their resources
+func listProviders() {
+	fmt.Println("🔧 Available Providers")
+	fmt.Println("======================")
+
+	registry := providers.DefaultRegistry
+	providerNames := registry.List()
+
+	if len(providerNames) == 0 {
+		fmt.Println("No providers registered.")
+		return
+	}
+
+	for _, name := range providerNames {
+		provider, err := registry.Get(name)
+		if err != nil {
+			fmt.Printf("❌ Error getting provider %s: %v\n", name, err)
+			continue
+		}
+
+		fmt.Printf("\n📦 %s (v%s)\n", provider.Name(), provider.Version())
+
+		resources := provider.Resources()
+		if len(resources) == 0 {
+			fmt.Println("  No resources available")
+			continue
+		}
+
+		fmt.Println("  Resources:")
+		for _, resource := range resources {
+			fmt.Printf("    - %s: %s (%s)\n", resource.Type, resource.Name, resource.Category)
+			fmt.Printf("      %s\n", resource.Description)
+
+			if len(resource.Examples) > 0 {
+				fmt.Printf("      Example: %s\n", resource.Examples[0].Name)
+			}
+		}
+	}
+
+	fmt.Println("\n💡 Use these resource types in your YAML configuration:")
+	fmt.Println("   template: \"<provider>-<resource-type>\"")
+	fmt.Println("   Example: template: \"aws-organization\"")
 }
