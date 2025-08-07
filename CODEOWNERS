@@ -1,0 +1,32 @@
+# Code Owners for Hippodamus
+# This file defines who must review changes to specific parts of the codebase
+
+# Global owners - require review for all changes
+* @LederWorks/Hippodamus
+
+# Core application code - require core team review
+<!-- /cmd/ @LederWorks/hippodamus-core-team
+/pkg/ @LederWorks/hippodamus-core-team -->
+
+# Provider system - require provider specialists
+<!-- /providers/ @LederWorks/hippodamus-providers-team
+/pkg/providers/ @LederWorks/hippodamus-providers-team -->
+
+# CI/CD and infrastructure - require DevOps team review
+<!-- /.github/ @LederWorks/hippodamus-devops-team
+/Dockerfile @LederWorks/hippodamus-devops-team
+/docker-compose*.yml @LederWorks/hippodamus-devops-team -->
+
+# Documentation - require documentation team review
+<!-- /docs/ @LederWorks/hippodamus-docs-team
+/*.md @LederWorks/hippodamus-docs-team -->
+
+# Configuration files - require senior team review
+/go.mod @LederWorks/Hippodamus
+/go.sum @LederWorks/Hippodamus
+/.golangci.yml @LederWorks/Hippodamus
+/GitVersion.yml @LederWorks/Hippodamus
+
+# Security-sensitive files - require security team review
+<!-- /SECURITY.md @LederWorks/hippodamus-security-team
+/.github/workflows/ @LederWorks/hippodamus-security-team -->

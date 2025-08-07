@@ -9,9 +9,9 @@ updates:
       time: "06:00"
     open-pull-requests-limit: 10
     reviewers:
-      - "LederWorks/hippodamus-maintainers"
+      - "LederWorks/Hippodamus"
     assignees:
-      - "LederWorks/hippodamus-maintainers"
+      - "LederWorks/Hippodamus"
     commit-message:
       prefix: "deps"
       prefix-development: "deps-dev"
@@ -26,9 +26,9 @@ updates:
       time: "06:00"
     open-pull-requests-limit: 5
     reviewers:
-      - "LederWorks/hippodamus-maintainers"
+      - "LederWorks/Hippodamus"
     assignees:
-      - "LederWorks/hippodamus-maintainers"
+      - "LederWorks/Hippodamus"
     commit-message:
       prefix: "ci"
       include: "scope"
