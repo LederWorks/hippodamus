@@ -71,7 +71,7 @@ try {
 }
 
 # Get short commit hash (first 8 characters)
-if ($commit -ne "unknown") {
+if ($commit -ne "unknown" -and $commit.Length -ge 8) {
     $commitShort = $commit.Substring(0, 8)
 } else {
     $commitShort = "unknown"
