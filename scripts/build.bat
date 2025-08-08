@@ -19,7 +19,17 @@ echo 📍 Current branch: %BRANCH%
 REM Clean branch name for filename (replace special characters)
 set CLEAN_BRANCH=%BRANCH%
 set CLEAN_BRANCH=%CLEAN_BRANCH:/=-%
+REM Clean branch name for filename (replace special characters: / \ : * ? " < > |)
+set CLEAN_BRANCH=%BRANCH%
+set CLEAN_BRANCH=%CLEAN_BRANCH:/=-%
 set CLEAN_BRANCH=%CLEAN_BRANCH:\=-%
+set CLEAN_BRANCH=%CLEAN_BRANCH::=-%
+set CLEAN_BRANCH=%CLEAN_BRANCH:*=-%
+set CLEAN_BRANCH=%CLEAN_BRANCH:?=-%
+set CLEAN_BRANCH=%CLEAN_BRANCH:"=-%
+set CLEAN_BRANCH=%CLEAN_BRANCH:<-=%
+set CLEAN_BRANCH=%CLEAN_BRANCH:>=-%
+set CLEAN_BRANCH=%CLEAN_BRANCH:|=-%
 
 REM Try to get version from GitVersion
 gitversion >nul 2>&1
