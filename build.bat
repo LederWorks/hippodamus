@@ -40,14 +40,28 @@ if %errorlevel% equ 0 (
     echo 📦 Using fallback version: !VERSION!
 )
 
+REM Get build timestamp and commit hash
+for /f "tokens=*" %%i in ('powershell -command "Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ'"') do set BUILD_DATE=%%i
+for /f "tokens=*" %%i in ('git rev-parse --short HEAD 2^>nul') do set COMMIT_SHORT=%%i
+if errorlevel 1 (
+    set COMMIT_SHORT=unknown
+) else (
+    REM Also get full commit for ldflags
+    for /f "tokens=*" %%i in ('git rev-parse HEAD 2^>nul') do set COMMIT=%%i
+    if errorlevel 1 set COMMIT=unknown
+)
+
+if "%COMMIT_SHORT%"=="unknown" set COMMIT=unknown
+
 REM Build information
-set OUTPUT_NAME=hippodamus-v%CLEAN_BRANCH%
+set OUTPUT_NAME=hippodamus-%CLEAN_BRANCH%-%COMMIT_SHORT%
 set OUTPUT_DIR=build
 set OUTPUT_PATH=%OUTPUT_DIR%\%OUTPUT_NAME%.exe
 
 echo 🔧 Build Configuration:
 echo    Branch: %BRANCH%
 echo    Version: !VERSION!
+echo    Commit: %COMMIT_SHORT%
 echo    Output: %OUTPUT_PATH%
 
 REM Create build directory
@@ -55,11 +69,6 @@ if not exist "%OUTPUT_DIR%" (
     mkdir "%OUTPUT_DIR%"
     echo 📁 Created build directory: %OUTPUT_DIR%
 )
-
-REM Get build timestamp and commit hash
-for /f "tokens=*" %%i in ('powershell -command "Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ'"') do set BUILD_DATE=%%i
-for /f "tokens=*" %%i in ('git rev-parse HEAD 2^>nul') do set COMMIT=%%i
-if errorlevel 1 set COMMIT=unknown
 
 REM Build ldflags
 set LDFLAGS=-X main.version=!VERSION! -X main.commit=%COMMIT% -X main.date=%BUILD_DATE%

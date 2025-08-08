@@ -59,8 +59,26 @@ if ($Version -eq "") {
     Write-Host "📦 Using provided version: $Version" -ForegroundColor Green
 }
 
+# Get build timestamp and commit hash
+$buildDate = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"
+try {
+    $commit = git rev-parse HEAD
+    if ($LASTEXITCODE -ne 0) {
+        $commit = "unknown"
+    }
+} catch {
+    $commit = "unknown"
+}
+
+# Get short commit hash (first 8 characters)
+if ($commit -ne "unknown") {
+    $commitShort = $commit.Substring(0, 8)
+} else {
+    $commitShort = "unknown"
+}
+
 # Build filename
-$outputName = "hippodamus-v$cleanBranch"
+$outputName = "hippodamus-$cleanBranch-$commitShort"
 $outputPath = Join-Path $OutputDir $outputName
 
 # Clean build directory if requested
@@ -79,18 +97,8 @@ if (-not (Test-Path $OutputDir)) {
 Write-Host "🔧 Build Configuration:" -ForegroundColor Cyan
 Write-Host "   Branch: $branch" -ForegroundColor White
 Write-Host "   Version: $Version" -ForegroundColor White
+Write-Host "   Commit: $commitShort" -ForegroundColor White
 Write-Host "   Output: $outputPath.exe" -ForegroundColor White
-
-# Get build timestamp and commit hash
-$buildDate = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"
-try {
-    $commit = git rev-parse HEAD
-    if ($LASTEXITCODE -ne 0) {
-        $commit = "unknown"
-    }
-} catch {
-    $commit = "unknown"
-}
 
 # Build ldflags
 $ldflags = "-X main.version=$Version -X main.commit=$commit -X main.date=$buildDate"

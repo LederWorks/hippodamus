@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Built-in provider registry with automatic initialization
 - Cross-platform build scripts (`build.ps1` and `build.bat`)
 - Branch-based build naming for development builds
+- Build artifacts now include commit ID in filename format: `hippodamus-{branch}-{commit8}`
 - Comprehensive branch protection documentation (`docs/BRANCH_PROTECTION.md`)
 - Team permission matrices for repository governance
 - Skip-release mechanism for development commits
@@ -56,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added License section referencing MIT License file
   - Removed references to non-existent AWS templates and unrealistic configuration examples
   - Updated all configuration examples to use current builtin provider system
+- Build scripts updated to include commit ID in output filename format: `hippodamus-{branch}-{commit8}`
 
 ### Fixed
 - GitHub Actions deprecation warnings in CI/CD pipeline
