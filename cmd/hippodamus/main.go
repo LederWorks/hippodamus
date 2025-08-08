@@ -289,13 +289,13 @@ func initializeProviders() error {
 	// Register core provider with the application version
 	coreProvider := core.NewCoreProviderWithVersion(version)
 	if err := providers.DefaultRegistry.Register(coreProvider); err != nil {
-		return fmt.Errorf("failed to register core provider: %w", err)
+		return fmt.Errorf("failed to register core provider '%s': %w", coreProvider.Name(), err)
 	}
 
 	// TODO: Register other built-in providers when implemented
 	// awsProvider := aws.NewAWSProviderWithVersion(version)
 	// if err := providers.DefaultRegistry.Register(awsProvider); err != nil {
-	//     return fmt.Errorf("failed to register aws provider: %w", err)
+	//     return fmt.Errorf("failed to register aws provider '%s': %w", awsProvider.Name(), err)
 	// }
 
 	return nil

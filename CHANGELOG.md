@@ -67,6 +67,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Duplicate CI pipeline runs caused by overlapping push and pull_request triggers
 - golangci-lint configuration compatibility with version 1.64.8 (removed deprecated 'version' field)
 - Code formatting issues across all Go files to meet linting standards
+- Provider registration error messages now include provider name for better debugging context
+- Removed unused `InitializeBuiltinProviders()` function to eliminate dead code
 
 ### Security
 - Updated all GitHub Actions to latest secure versions
