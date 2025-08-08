@@ -54,7 +54,7 @@ if errorlevel 1 (
 if "%COMMIT_SHORT%"=="unknown" set COMMIT=unknown
 
 REM Build information
-set OUTPUT_NAME=hippodamus-%CLEAN_BRANCH%-%COMMIT_SHORT%
+set OUTPUT_NAME=hippodamus-%CLEAN_BRANCH%
 set OUTPUT_DIR=build
 set OUTPUT_PATH=%OUTPUT_DIR%\%OUTPUT_NAME%.exe
 
