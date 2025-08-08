@@ -62,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Provider version synchronization with GitVersion releases
 - Core provider registration in global registry
 - Branch protection configuration for team-based workflows
+- Duplicate CI pipeline runs caused by overlapping push and pull_request triggers
 
 ### Security
 - Updated all GitHub Actions to latest secure versions
