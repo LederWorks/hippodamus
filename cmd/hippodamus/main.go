@@ -13,6 +13,7 @@ import (
 	"github.com/LederWorks/hippodamus/pkg/providers"
 	"github.com/LederWorks/hippodamus/pkg/schema"
 	"github.com/LederWorks/hippodamus/pkg/templates"
+	"github.com/LederWorks/hippodamus/providers/core"
 )
 
 // Version information injected at build time
@@ -35,8 +36,11 @@ type Config struct {
 func main() {
 	config := parseFlags()
 
-	// Note: Providers are now loaded dynamically from configuration
-	// No hardcoded provider initialization to avoid race conditions
+	// Initialize built-in providers with the current application version
+	if err := initializeProviders(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error initializing providers: %v\n", err)
+		os.Exit(1)
+	}
 
 	if config.ShowVersion {
 		fmt.Printf("Hippodamus v%s\n", version)
@@ -278,4 +282,21 @@ func listProviders() {
 	fmt.Println("\n💡 Use these resource types in your YAML configuration:")
 	fmt.Println("   template: \"<provider>-<resource-type>\"")
 	fmt.Println("   Example: template: \"aws-organization\"")
+}
+
+// initializeProviders registers all built-in providers with the current application version
+func initializeProviders() error {
+	// Register core provider with the application version
+	coreProvider := core.NewCoreProviderWithVersion(version)
+	if err := providers.DefaultRegistry.Register(coreProvider); err != nil {
+		return fmt.Errorf("failed to register core provider '%s': %w", coreProvider.Name(), err)
+	}
+
+	// TODO: Register other built-in providers when implemented
+	// awsProvider := aws.NewAWSProviderWithVersion(version)
+	// if err := providers.DefaultRegistry.Register(awsProvider); err != nil {
+	//     return fmt.Errorf("failed to register aws provider '%s': %w", awsProvider.Name(), err)
+	// }
+
+	return nil
 }

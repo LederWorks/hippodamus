@@ -22,7 +22,22 @@ Hippodamus transforms your YAML configuration files into Draw.io compatible XML 
 
 ### Installation
 
+**Option 1: Download Release**
 Download the latest release for your platform from the [releases page](https://github.com/LederWorks/hippodamus/releases).
+
+**Option 2: Build from Source**
+```bash
+git clone https://github.com/LederWorks/hippodamus.git
+cd hippodamus
+
+# Build with our automated scripts
+.\build.ps1                    # PowerShell (recommended)
+# or
+.\build.bat                    # Windows Batch
+
+# Manual build
+go build -o hippodamus ./cmd/hippodamus
+```
 
 ### Basic Usage
 
@@ -32,27 +47,61 @@ Download the latest release for your platform from the [releases page](https://g
 version: "1.0"
 metadata:
   title: "My Infrastructure Diagram"
-  description: "AWS infrastructure overview"
+  description: "Core shapes and connectors"
 
 providers:
-  aws:
-    type: registry
-    source: LederWorks/aws-templates
+  - name: "core"
+    type: "builtin"
 
-resources:
-  - resource: 'vpc'
-    name: 'main-vpc'
-    cidr: '10.0.0.0/16'
-  
-  - resource: 'ec2-instance'
-    name: 'web-server'
-    instance_type: 't3.micro'
+diagram:
+  pages:
+    - id: "page1"
+      name: "Main Page"
+      elements:
+        - id: "server1"
+          name: "Web Server"
+          type: "template"
+          template: "core-shape"
+          parameters:
+            label: "Web Server"
+            shape: "rectangle"
+            fillColor: "#E3F2FD"
+            strokeColor: "#1976D2"
+            
+        - id: "db1"
+          name: "Database"
+          type: "template" 
+          template: "core-shape"
+          parameters:
+            label: "Database"
+            shape: "cylinder"
+            fillColor: "#FFF3E0"
+            strokeColor: "#F57C00"
+            
+        - id: "connection1"
+          name: "DB Connection"
+          type: "template"
+          template: "core-connector"
+          parameters:
+            source: "server1"
+            target: "db1"
+            label: "queries"
 ```
 
 2. Convert to Draw.io XML:
 
 ```bash
-hippodamus config.yaml diagram.xml
+# Using the built executable
+hippodamus -input config.yaml -output diagram.xml
+
+# Or using the development build
+.\build\hippodamus-vfeature-branch-protection.exe -input config.yaml -output diagram.xml
+
+# View available options
+hippodamus --help
+
+# List available providers and resources
+hippodamus --list-providers
 ```
 
 3. Open `diagram.xml` in Draw.io
@@ -64,45 +113,61 @@ hippodamus config.yaml diagram.xml
 Hippodamus supports three types of providers:
 
 #### 1. Builtin Providers
-Local provider folders with exact name matching:
+Local provider packages with built-in resources:
 ```yaml
 providers:
-  core:
-    type: builtin
+  - name: "core"
+    type: "builtin"
 ```
 
-#### 2. Registry Providers (Default)
+**Available Builtin Providers:**
+- **core**: Basic diagram elements (shapes, connectors, text, groups, swimlanes)
+
+#### 2. Registry Providers (Planned)
 Templates from the LederWorks GitHub organization:
 ```yaml
 providers:
-  aws:
-    type: registry
-    source: LederWorks/aws-templates
+  - name: "aws"
+    type: "registry" 
+    source: "LederWorks/hippodamus-provider-aws"
 ```
 
-#### 3. Custom Providers
-Filesystem or HTTPS Git repository providers:
+#### 3. Custom Providers (Planned)
+External provider repositories:
 ```yaml
 providers:
-  custom:
-    type: custom
-    source: "https://github.com/company/templates.git"
+  - name: "custom"
+    type: "custom"
+    source: "https://github.com/company/hippodamus-provider-custom.git"
 ```
 
-### Template Hives
+### Template System
 
-Load multiple templates at once with pattern matching:
+Create reusable diagram elements with the provider template system:
 
 ```yaml
-template_hives:
-  - name: "aws-core"
-    source: "templates/aws"
-    include:
-      - "*.yaml"
-      - "networking/**"
-    exclude:
-      - "*test*"
-      - "deprecated/**"
+providers:
+  - name: "core" 
+    type: "builtin"
+
+diagram:
+  pages:
+    - elements:
+        # Shape template
+        - type: "template"
+          template: "core-shape"
+          parameters:
+            label: "Web Server"
+            shape: "rectangle"
+            fillColor: "#E3F2FD"
+            
+        # Connector template  
+        - type: "template"
+          template: "core-connector"
+          parameters:
+            source: "element1"
+            target: "element2"
+            label: "connection"
 ```
 
 ### Configuration Reference
@@ -413,3 +478,34 @@ templates:
 
 # Mix templates from different hives in the same diagram
 ```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Run tests: `go test ./...`
+4. Build locally: `.\build.ps1` (Windows) or `./build.bat` (Linux/macOS)
+5. Commit your changes: `git commit -am 'Add feature'`
+6. Push to the branch: `git push origin feature/your-feature`
+7. Create a Pull Request
+
+### Development Workflow
+
+Build the project locally with version information:
+
+```powershell
+# Windows PowerShell
+.\build.ps1
+
+# Linux/macOS with Batch
+./build.bat
+```
+
+Run tests:
+```bash
+go test ./...
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
