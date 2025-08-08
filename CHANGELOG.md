@@ -63,6 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Core provider registration in global registry
 - Branch protection configuration for team-based workflows
 - Duplicate CI pipeline runs caused by overlapping push and pull_request triggers
+- golangci-lint configuration compatibility with version 1.64.8 (removed deprecated 'version' field)
+- Code formatting issues across all Go files to meet linting standards
 
 ### Security
 - Updated all GitHub Actions to latest secure versions
