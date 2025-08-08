@@ -1,0 +1,85 @@
+name: "aws-account"
+description: "AWS Account container"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+  - name: "organization"
+    type: "aws-organization"
+    required: false
+    relationship: "parent"
+    description: "Parent AWS organization"
+  - name: "organizationUnit"
+    type: "aws-organization-unit"
+    required: false
+    relationship: "parent"
+    description: "Parent organizational unit"
+
+parameters:
+  - name: "accountName"
+    type: "string"
+    default: "Production Account"
+    description: "Account name"
+  - name: "accountId"
+    type: "string"
+    default: "123456789012"
+    description: "AWS Account ID"
+  - name: "accountType"
+    type: "string"
+    default: "Production"
+    description: "Account type (Production, Staging, Development, Security, Logging)"
+  - name: "fillColor"
+    type: "color"
+    default: "#F3E5F5"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#7B1FA2"
+    description: "Border color"
+
+group:
+  properties:
+    width: 300
+    height: 150
+    label: "{{.accountName}} ({{.accountId}})"
+  style:
+    fillColor: "{{.fillColor}}"
+    strokeColor: "{{.strokeColor}}"
+    strokeWidth: 2
+    fontFamily: "Amazon Ember, Arial, sans-serif"
+    fontSize: 14
+    fontStyle: "bold"
+    fontColor: "#232F3E"
+    textAlign: "center"
+    verticalAlign: "top"
+    rounded: true
+    custom:
+      html: "1"
+      whiteSpace: "wrap"
+      spacingTop: "15"
+      spacingLeft: "15"
+      spacingRight: "50"
+      spacingBottom: "15"
+  autoResize: true
+  arrangement: "free"
+  children:
+    - type: "shape"
+      id: "icon"
+      properties:
+        x: 250
+        y: 10
+        width: 40
+        height: 40
+        label: " "
+      style:
+        custom:
+          html: "1"
+          aspect: "fixed"
+          shape: "img/lib/aws4/General/User.svg"
+          fillColor: "#FF9900"
+          strokeColor: "none"
+

@@ -1,0 +1,44 @@
+name: "aws-eks-cluster"
+description: "Amazon EKS Cluster"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+  - name: "region"
+    type: "aws-region"
+    required: false
+    relationship: "parent"
+    description: "Parent AWS region"
+
+parameters:
+  - name: "clusterName"
+    type: "string"
+    default: "eks-cluster"
+    description: "EKS cluster name"
+  - name: "version"
+    type: "string"
+    default: "1.28"
+    description: "Kubernetes version"
+  - name: "nodeGroupName"
+    type: "string"
+    default: "worker-nodes"
+    description: "Node group name"
+  - name: "instanceType"
+    type: "string"
+    default: "t3.medium"
+    description: "EC2 instance type"
+  - name: "fillColor"
+    type: "color"
+    default: "#E3F2FD"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#1976D2"
+    description: "Border color"
+
+group:
+

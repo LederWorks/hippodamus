@@ -1,0 +1,42 @@
+name: "kubernetes-pod"
+description: "Kubernetes Pod"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+  - name: "namespace"
+    type: "kubernetes-namespace"
+    required: true
+    relationship: "parent"
+    description: "Parent Kubernetes namespace"
+
+parameters:
+  - name: "podName"
+    type: "string"
+    default: "pod"
+    description: "Pod name"
+  - name: "image"
+    type: "string"
+    default: "nginx:latest"
+    description: "Container image"
+  - name: "replicas"
+    type: "number"
+    default: 1
+    description: "Number of replicas"
+  - name: "fillColor"
+    type: "color"
+    default: "#FFF3E0"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#F57C00"
+    description: "Border color"
+
+group:
+  autoResize: false
+  arrangement: "free"
+

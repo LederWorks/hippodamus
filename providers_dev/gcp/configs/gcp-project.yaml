@@ -1,0 +1,19 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - gcp-project"
+      elements:
+        - id: "gcp-project-test-id"
+          name: "gcp-project-test"
+          template: "gcp-project"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          projectName: "production-project"
+          projectId: "my-project-123456"
+          projectNumber: "123456789012"
+          environment: "Production"
+          fillColor: "#F3E5F5"
+          strokeColor: "#7B1FA2"

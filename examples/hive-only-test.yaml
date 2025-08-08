@@ -1,0 +1,40 @@
+version: "1.0"
+
+metadata:
+  title: "Template Hive Only Test"
+  description: "Testing template hive functionality without providers"
+  author: "Hippodamus"
+
+# Template hives only
+templateHives:
+  # AWS templates hive
+  - name: "aws"
+    path: "aws/templates"
+    include: "*.yaml"
+
+diagram:
+  pages:
+    - id: "test-page"
+      name: "Template Hive Test"
+      elements:
+        # Template from AWS hive
+        - id: "from-aws-hive"
+          name: "From AWS Hive"
+          template: "aws/aws-region"
+          parameters:
+            name: "us-east-1"
+            displayName: "US East 1"
+
+        # Direct element
+        - id: "direct"
+          name: "Direct Element"
+          type: "shape"
+          properties:
+            width: 120
+            height: 80
+            label: "Direct Shape"
+            shape: "rectangle"
+          style:
+            fillColor: "#E8F5E8"
+            strokeColor: "#4CAF50"
+            strokeWidth: 2

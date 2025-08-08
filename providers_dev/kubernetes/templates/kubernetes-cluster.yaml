@@ -1,0 +1,44 @@
+name: "kubernetes-cluster"
+description: "Kubernetes Cluster container"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+  - name: "infrastructure"
+    type: "cluster-infrastructure"
+    required: false
+    relationship: "parent"
+    description: "Parent cloud infrastructure (native, aks, gke, eks, or none for standalone)"
+
+parameters:
+  - name: "clusterName"
+    type: "string"
+    default: "Kubernetes Cluster"
+    description: "Cluster name"
+  - name: "clusterType"
+    type: "string"
+    default: "native"
+    description: "Cluster type (native, aks, gke, eks, none)"
+  - name: "version"
+    type: "string"
+    default: "1.28"
+    description: "Kubernetes version"
+  - name: "region"
+    type: "string"
+    default: "us-west-2"
+    description: "Cluster region"
+  - name: "fillColor"
+    type: "color"
+    default: "#E3F2FD"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#1976D2"
+    description: "Border color"
+
+group:
+

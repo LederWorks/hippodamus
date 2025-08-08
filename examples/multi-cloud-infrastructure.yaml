@@ -1,0 +1,166 @@
+version: "1.0"
+metadata:
+  title: "Multi-Cloud Infrastructure"
+  description: "Multi-cloud infrastructure with Kubernetes clusters on AWS, Azure, and GCP"
+
+variables:
+  orgName: "Acme Corp"
+
+diagram:
+  pages:
+    - id: "main"
+      name: "Multi-Cloud Infrastructure"  
+      elements:
+        # AWS Infrastructure
+        - id: "aws-org"
+          name: "aws-org"
+          type: "template"
+          template: "aws-organization"
+          parameters:
+            organizationName: "{{.orgName}} AWS"
+            
+        - id: "aws-production"
+          name: "aws-production"
+          type: "template"
+          template: "aws-account"
+          parameters:
+            accountName: "Production"
+            accountId: "123456789012"
+          dependencies:
+            - "aws-org"
+            
+        - id: "aws-us-east"
+          name: "aws-us-east"
+          type: "template"
+          template: "aws-region"
+          parameters:
+            regionName: "us-east-1"
+          dependencies:
+            - "aws-production"
+            
+        - id: "aws-k8s-cluster"
+          name: "aws-k8s-cluster"
+          type: "template"
+          template: "aws-eks-cluster"
+          parameters:
+            clusterName: "production-eks"
+            version: "1.28"
+          dependencies:
+            - "aws-us-east"
+
+        # Azure Infrastructure  
+        - id: "azure-tenant"
+          name: "azure-tenant"
+          type: "template"
+          template: "azure-tenant"
+          parameters:
+            tenantName: "{{.orgName}} Azure AD"
+            position:
+              x: 650
+              y: 0
+              
+        - id: "azure-production-sub"
+          name: "azure-production-sub"
+          type: "template"
+          template: "azure-subscription"
+          parameters:
+            subscriptionName: "Production Subscription"
+          dependencies:
+            - "azure-tenant"
+            
+        - id: "azure-k8s-rg"
+          name: "azure-k8s-rg"
+          type: "template"
+          template: "azure-resource-group"
+          parameters:
+            resourceGroupName: "k8s-resources"
+            location: "East US"
+          dependencies:
+            - "azure-production-sub"
+            
+        - id: "azure-k8s-cluster"
+          name: "azure-k8s-cluster"
+          type: "template"
+          template: "azure-aks-cluster"
+          parameters:
+            clusterName: "production-aks"
+            version: "1.28"
+          dependencies:
+            - "azure-k8s-rg"
+
+        # GCP Infrastructure
+        - id: "gcp-org"
+          name: "gcp-org"
+          type: "template"
+          template: "gcp-organization"
+          parameters:
+            organizationName: "{{.orgName}} GCP"
+            position:
+              x: 1300
+              y: 0
+              
+        - id: "gcp-k8s-project"
+          name: "gcp-k8s-project"
+          type: "template"
+          template: "gcp-project"
+          parameters:
+            projectName: "kubernetes-production"
+            projectId: "k8s-prod-123"
+          dependencies:
+            - "gcp-org"
+            
+        - id: "gcp-us-central"
+          name: "gcp-us-central"
+          type: "template"
+          template: "gcp-region"
+          parameters:
+            regionName: "us-central1"
+          dependencies:
+            - "gcp-k8s-project"
+            
+        - id: "gcp-k8s-cluster"
+          name: "gcp-k8s-cluster"
+          type: "template"
+          template: "gcp-gke-cluster"
+          parameters:
+            clusterName: "production-gke"
+            version: "1.28"
+          dependencies:
+            - "gcp-us-central"
+
+        # Cross-cloud applications (using kubernetes templates)
+        - id: "api-gateway"
+          name: "api-gateway"
+          type: "template"
+          template: "kubernetes-service"
+          parameters:
+            serviceName: "api-gateway"
+            serviceType: "LoadBalancer"
+            clusterType: "multi-cloud"
+            position:
+              x: 150
+              y: 750
+              
+        - id: "user-service"
+          name: "user-service"
+          type: "template"
+          template: "kubernetes-deployment"
+          parameters:
+            deploymentName: "user-service"
+            replicas: 3
+            clusterType: "multi-cloud"
+            position:
+              x: 500
+              y: 750
+              
+        - id: "notification-service"
+          name: "notification-service"
+          type: "template"
+          template: "kubernetes-deployment"
+          parameters:
+            deploymentName: "notification-service"
+            replicas: 2
+            clusterType: "multi-cloud"
+            position:
+              x: 850
+              y: 750

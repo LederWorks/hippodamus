@@ -1,0 +1,17 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "library"
+      name: "azuredevops-library"
+      elements:
+        - id: "azuredevops-library-test-id"
+          name: "azuredevops-library-test"
+          template: "azuredevops-library"
+          position:
+            x: 100
+            y: 100
+          parameters:
+            libraryName: "TestlibraryName"
+            libraryType: "Variable Group"
+            fillColor: "#FFF8E1"
+            strokeColor: "#F57F17"

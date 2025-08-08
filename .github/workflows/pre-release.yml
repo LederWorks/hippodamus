@@ -1,0 +1,86 @@
+name: Create Pre-Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Pre-release version (e.g., 0.1.0-alpha.1)'
+        required: true
+        type: string
+      prerelease_type:
+        description: 'Pre-release type'
+        required: true
+        type: choice
+        options:
+          - alpha
+          - beta
+          - rc
+        default: beta
+
+env:
+  GO_VERSION: '1.22'
+
+jobs:
+  create-prerelease:
+    name: Create Pre-Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Run tests
+        run: go test ./...
+
+      - name: Build for multiple platforms
+        run: |
+          # Linux
+          GOOS=linux GOARCH=amd64 go build -ldflags "-X main.version=${{ inputs.version }}" -o build/hippodamus-linux-amd64 ./cmd/hippodamus
+          
+          # Windows
+          GOOS=windows GOARCH=amd64 go build -ldflags "-X main.version=${{ inputs.version }}" -o build/hippodamus-windows-amd64.exe ./cmd/hippodamus
+          
+          # macOS
+          GOOS=darwin GOARCH=amd64 go build -ldflags "-X main.version=${{ inputs.version }}" -o build/hippodamus-darwin-amd64 ./cmd/hippodamus
+          GOOS=darwin GOARCH=arm64 go build -ldflags "-X main.version=${{ inputs.version }}" -o build/hippodamus-darwin-arm64 ./cmd/hippodamus
+
+      - name: Create Release Tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a v${{ inputs.version }} -m "Pre-release v${{ inputs.version }}"
+          git push origin v${{ inputs.version }}
+
+      - name: Create GitHub Pre-Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ inputs.version }}
+          name: Pre-Release v${{ inputs.version }}
+          draft: false
+          prerelease: true
+          generate_release_notes: true
+          body: |
+            🚧 **This is a pre-release version** 🚧
+            
+            This is a ${{ inputs.prerelease_type }} pre-release of Hippodamus v${{ inputs.version }}.
+            
+            **⚠️ Pre-release Warning:**
+            - This version may contain bugs or incomplete features
+            - Not recommended for production use
+            - API may change before final release
+            
+            **What's included:**
+            - Multi-platform binaries (Linux, Windows, macOS)
+            - Latest features and improvements
+            - Bug fixes since last release
+            
+            **Testing and Feedback:**
+            Please test this pre-release and report any issues on our [issue tracker](https://github.com/LederWorks/hippodamus/issues).
+          files: |
+            build/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

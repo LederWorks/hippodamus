@@ -1,0 +1,13 @@
+version: "1.0"
+
+metadata:
+  title: "Minimal Test"
+  description: "Minimal test for element configurations"
+
+diagram:
+  elements:
+    - id: "test_shape"
+      type: "shape"
+      position: { x: 100, y: 100 }
+      size: { width: 120, height: 60 }
+      content: "Test Shape"

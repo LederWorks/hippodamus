@@ -1,0 +1,15 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test - test-container"
+      elements:
+        - id: "test-id"
+          name: "test-element"
+          template: "test-container"
+          position:
+            x: 100
+            y: 100
+          parameters:
+            containerName: "TestValue"
+            containerColor: "TestValue"

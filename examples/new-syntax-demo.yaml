@@ -1,0 +1,237 @@
+version: "1.0"
+
+metadata:
+  title: "Clean Syntax Demo"
+  description: "New clean syntax separating providers and templates"
+  author: "Hippodamus"
+
+# Declare providers at the top level
+providers:
+  # Builtin provider - uses local builtin version
+  - name: "core"                    # → Uses builtin core provider (exact name from providers folder)
+    type: "builtin"                 # ← Explicitly requests builtin provider
+
+  # Registry providers - auto-resolve from LederWorks GitHub org (default type)
+  - name: "aws"                     # → Will auto-resolve to LederWorks/hippodamus-provider-aws
+  - name: "azure"                   # → Will auto-resolve to LederWorks/hippodamus-provider-azure
+
+  # Registry version with explicit source (still registry type since it's from LederWorks)
+  - name: "core2"                   # ← Different name for registry version
+    type: "custom"
+    source: "https://github.com/LederWorks/hippodamus-provider-core.git"
+
+  # Custom providers - non-registry sources require type: "custom"
+  - name: "community-core"          # ← Different name for alternative provider
+    source: "https://github.com/SomeOtherOrg/hippodamus-provider-core.git"
+    type: "custom"
+
+  - name: "enterprise-core"
+    source: "https://internal-git.company.com/devops/hippodamus-provider-internal.git"
+    type: "custom"                  # ← Required for custom git servers
+    version: "^2.1.0"
+
+  # Local filesystem provider (for development)
+  - name: "dev-provider"
+    path: "/C/dev/my-provider/dist/hippodamus-provider-custom.so"  # ← Local filesystem path
+    type: "custom"                  # ← Required for filesystem sources
+
+# Declare templates at the top level  
+templates:
+  # Individual template declarations
+  - name: "aws-vpc"                 # ← Individual template from builtin templates/ folder
+    path: "aws/vpc.yaml"           # ← Relative path in templates folder
+
+  - name: "custom-shape"
+    source: "https://github.com/MyOrg/diagram-patterns.git"
+    path: "patterns/special-shape.yaml"    # ← Specific individual template
+
+# Declare template hives (collections of templates)
+templateHives:
+  # Builtin template hive - loads all templates from local templates folder
+  - name: "builtin"                 # ← Makes all templates/ folder available
+    path: "."                      # ← Root of templates folder
+    include: "**/*.yaml"           # ← Include all YAML files recursively
+    
+  # Cloud provider template hive from GitHub
+  - name: "aws-official"
+    source: "https://github.com/LederWorks/hippodamus-templates-aws.git"
+    include: "**/*.yaml"           # ← All templates from this repo
+    version: "^2.0.0"
+    
+  # Enterprise template hive from internal git server
+  - name: "enterprise"
+    source: "https://internal-git.company.com/devops/diagram-templates.git"
+    path: "approved"               # ← Only templates from 'approved' folder
+    include: "**/*.yaml"
+    
+  # Development template hive from local filesystem
+  - name: "dev-hive"
+    path: "/C/dev/my-templates"    # ← Local filesystem directory
+    include: "*.yaml"              # ← Only direct YAML files (not recursive)
+    exclude: "**/draft-*"          # ← Exclude draft templates
+    
+  # Specific cloud provider hive with filtering
+  - name: "azure-filtered"
+    source: "https://github.com/SomeOrg/cloud-templates.git"
+    path: "azure"                  # ← Only azure subfolder
+    include: "networking/*.yaml"   # ← Only networking templates
+    exclude: "**/*-deprecated.yaml" # ← Exclude deprecated templates
+
+diagram:
+  pages:
+    - id: "demo-page"
+      name: "Clean Syntax Demo"
+      elements:
+        # Provider resources - demonstrating different provider types
+        - id: "title-text"
+          name: "Page Title"
+          resource: "core-text"           # ← Uses "core" provider (builtin version)
+          parameters:
+            label: "Clean Syntax Demo"
+            fontSize: 18
+            fontStyle: "bold"
+            fillColor: "#E3F2FD"
+            fontColor: "#1976D2"
+
+        - id: "registry-text"
+          name: "Registry Text"
+          resource: "core2-text"          # ← Uses "core2" provider (registry version)
+          parameters:
+            label: "Registry Core Provider"
+            fontSize: 14
+            fontStyle: "italic"
+            fillColor: "#FFF3E0"
+            fontColor: "#E65100"
+
+        - id: "alternative-text"
+          name: "Alternative Text"
+          resource: "community-core-text"    # ← Uses "community-core" provider (custom type)
+          parameters:
+            label: "Community Provider"
+            fontSize: 12
+            fontStyle: "normal"
+            fillColor: "#E8F5E8"
+            fontColor: "#2E7D32"
+
+        - id: "container-group"
+          name: "Container"
+          resource: "core-group"          # ← Standard core provider usage
+          parameters:
+            label: "Container Group"
+            width: 300
+            height: 200
+            fillColor: "#F5F5F5"
+            strokeColor: "#757575"
+            collapsible: true
+
+        - id: "process-lane"
+          name: "Process Lane"
+          resource: "core-swimlane"       # ← Clean syntax
+          parameters:
+            label: "Process Flow"
+            width: 400
+            height: 150
+            orientation: "horizontal"
+            startSize: 40
+            fillColor: "#FFF3E0"
+            strokeColor: "#FF9800"
+
+        # Custom org provider example
+        - id: "enterprise-shape"
+          name: "Enterprise Shape"
+          resource: "enterprise-core-shape"  # ← Uses custom org provider
+          parameters:
+            label: "Enterprise Provider"
+            width: 150
+            height: 100
+            fillColor: "#F3E5F5"
+            strokeColor: "#9C27B0"
+
+        # Local development provider example
+        - id: "dev-resource"
+          name: "Development Resource"
+          resource: "dev-provider-custom"    # ← Uses local compiled provider
+          parameters:
+            label: "Local Development"
+            customParam: "test-value"
+
+        # Internal git provider example  
+        - id: "internal-tool"
+          name: "Internal Tool"
+          resource: "enterprise-core-workflow" # ← Uses enterprise provider (custom type)
+          parameters:
+            workflowType: "deployment"
+            environment: "staging"
+
+        # YAML template examples - individual templates and hives
+        - id: "vpc-individual"
+          name: "VPC Individual"
+          template: "aws-vpc"             # ← Uses individual declared template
+          parameters:
+            cidr: "10.0.0.0/16"
+            region: "us-east-1"
+
+        - id: "shape-individual"
+          name: "Custom Shape"
+          template: "custom-shape"        # ← Uses individual template from git
+          parameters:
+            width: 200
+            height: 100
+
+        # Templates from hives - using hive-name/template-path format
+        - id: "builtin-azure-rg"
+          name: "Azure RG from Builtin Hive"
+          template: "builtin/azure/resource-group" # ← Template from builtin hive
+          parameters:
+            name: "my-resource-group"
+            location: "East US"
+
+        - id: "aws-official-vpc"
+          name: "AWS Official VPC"
+          template: "aws-official/vpc/advanced-vpc" # ← Template from AWS official hive
+          parameters:
+            cidr: "172.16.0.0/16"
+            region: "eu-west-1"
+            
+        - id: "enterprise-approved"
+          name: "Enterprise Template"
+          template: "enterprise/infrastructure/standard-setup" # ← Template from enterprise hive
+          parameters:
+            environment: "production"
+            
+        - id: "dev-experimental"
+          name: "Development Template"
+          template: "dev-hive/experimental-design" # ← Template from dev hive
+          parameters:
+            testMode: true
+            
+        - id: "azure-networking"
+          name: "Azure Networking"
+          template: "azure-filtered/networking/vnet" # ← Template from filtered Azure hive
+          parameters:
+            addressSpace: "10.1.0.0/16"
+
+        # Direct element - no template/provider
+        - id: "direct-shape"
+          name: "Direct Shape"
+          type: "shape"                   # ← Direct element definition
+          properties:
+            width: 120
+            height: 80
+            label: "Direct Shape"
+            shape: "rectangle"
+          style:
+            fillColor: "#E8F5E8"
+            strokeColor: "#4CAF50"
+            strokeWidth: 2
+
+        # Connector between elements
+        - id: "connection"
+          name: "Connection"
+          resource: "core-connector"      # ← Provider resource for connector
+          parameters:
+            source: "container-group"
+            target: "process-lane"
+            strokeColor: "#666666"
+            strokeWidth: 2
+            arrowStyle: "target"

@@ -1,0 +1,19 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test - validation-suite"
+      elements:
+        - id: "test-id"
+          name: "test-element"
+          template: "validation-suite"
+          position:
+            x: 100
+            y: 100
+          parameters:
+            testName: "TestValue"
+            testType: "TestValue"
+            fillColor: "TestValue"
+            strokeColor: "TestValue"
+            enableValidation: "TestValue"
+            enableTesting: "TestValue"

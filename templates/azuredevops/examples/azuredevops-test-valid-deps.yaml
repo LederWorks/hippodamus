@@ -1,0 +1,35 @@
+version: "1.0"
+metadata:
+  title: "Valid Dependency Chain Test"
+  description: "Testing organization -> project -> repository dependency chain"
+  author: "Dependency Test"
+  tags: ["test", "valid", "dependency-validation", "hierarchy"]
+
+templates:
+  - name: "azuredevops-organization"
+    template: "azuredevops/azuredevops-organization.yaml"
+  - name: "azuredevops-project"
+    template: "azuredevops/azuredevops-project.yaml"
+  - name: "azuredevops-repository"
+    template: "azuredevops/azuredevops-repository.yaml"
+
+diagram:
+  pages:
+    - id: "DEPS"
+      name: "Dependency Chain Test"
+
+      elements:
+        - type: "template"
+          id: "org"
+          name: "Test Organization"
+          template: "azuredevops-organization"
+          children:
+            - type: "template"
+              id: "project"
+              name: "Test Project"
+              template: "azuredevops-project"
+              children:
+                - type: "template"
+                  id: "repo"
+                  name: "Test Repository"
+                  template: "azuredevops-repository"

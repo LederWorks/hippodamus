@@ -1,0 +1,46 @@
+name: "kubernetes-deployment"
+description: "Kubernetes Deployment resource"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+  - name: "cluster"
+    type: "kubernetes-cluster"
+    required: false
+    relationship: "parent"
+    description: "Parent Kubernetes cluster (optional)"
+
+parameters:
+  - name: "deploymentName"
+    type: "string"
+    default: "my-deployment"
+    description: "Name of the deployment"
+  - name: "replicas"
+    type: "number"
+    default: 3
+    description: "Number of replicas"
+  - name: "image"
+    type: "string"
+    default: "nginx:latest"
+    description: "Container image"
+  - name: "clusterType"
+    type: "string"
+    default: "native"
+    description: "Type of cluster (native, aks, gke, eks, multi-cloud, none)"
+  - name: "fillColor"
+    type: "color"
+    default: "#E8F5E8"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#4CAF50"
+    description: "Border color"
+
+group:
+  autoResize: false
+  arrangement: "free"
+

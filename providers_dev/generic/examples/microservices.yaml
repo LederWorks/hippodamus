@@ -1,0 +1,411 @@
+version: "1.0"
+metadata:
+  title: "Microservices Architecture"
+  description: "Complex diagram showing microservices with multiple layers and nested components"
+  author: "Hippodamus"
+  tags: ["microservices", "architecture", "containers"]
+
+templates:
+  - name: "microservice"
+    template: "microservice.yaml"
+  - name: "container"
+    template: "container.yaml"
+  - name: "loadbalancer"
+    template: "loadbalancer.yaml"
+
+diagram:
+  properties:
+    grid:
+      enabled: true
+      size: 20
+    background:
+      color: "#fafafa"
+
+  pages:
+    - id: "overview"
+      name: "System Overview"
+      properties:
+        width: 1400
+        height: 1000
+
+      layers:
+        - id: "presentation"
+          name: "Presentation Layer"
+          visible: true
+          elements:
+            - type: "container"
+              id: "frontend-cluster"
+              properties:
+                x: 50
+                y: 50
+                width: 300
+                height: 150
+                label: "Frontend Cluster"
+              style:
+                fillColor: "#E3F2FD"
+                strokeColor: "#1976D2"
+                strokeWidth: 2
+              children:
+                - type: "shape"
+                  id: "react-app"
+                  template: "microservice"
+                  properties:
+                    x: 70
+                    y: 90
+                    label: "React App"
+                    custom:
+                      serviceType: "frontend"
+                      technology: "React"
+
+                - type: "shape"
+                  id: "cdn"
+                  template: "microservice"
+                  properties:
+                    x: 220
+                    y: 90
+                    label: "CDN"
+                    custom:
+                      serviceType: "cache"
+                      technology: "CloudFlare"
+
+        - id: "gateway"
+          name: "API Gateway Layer"
+          visible: true
+          elements:
+            - type: "shape"
+              id: "api-gateway"
+              template: "loadbalancer"
+              properties:
+                x: 175
+                y: 250
+                label: "API Gateway"
+                custom:
+                  technology: "Kong"
+
+        - id: "services"
+          name: "Microservices Layer"
+          visible: true
+          elements:
+            - type: "container"
+              id: "user-service-cluster"
+              properties:
+                x: 50
+                y: 400
+                width: 200
+                height: 200
+                label: "User Service"
+              style:
+                fillColor: "#FFF3E0"
+                strokeColor: "#F57C00"
+              children:
+                - type: "shape"
+                  id: "user-api"
+                  template: "microservice"
+                  properties:
+                    x: 70
+                    y: 430
+                    label: "User API"
+                    custom:
+                      serviceType: "api"
+                      port: 8080
+
+                - type: "shape"
+                  id: "user-db"
+                  template: "microservice"
+                  properties:
+                    x: 70
+                    y: 530
+                    label: "User DB"
+                    custom:
+                      serviceType: "database"
+                      technology: "PostgreSQL"
+
+            - type: "container"
+              id: "order-service-cluster"
+              properties:
+                x: 300
+                y: 400
+                width: 200
+                height: 200
+                label: "Order Service"
+              style:
+                fillColor: "#E8F5E8"
+                strokeColor: "#388E3C"
+              children:
+                - type: "shape"
+                  id: "order-api"
+                  template: "microservice"
+                  properties:
+                    x: 320
+                    y: 430
+                    label: "Order API"
+                    custom:
+                      serviceType: "api"
+                      port: 8081
+
+                - type: "shape"
+                  id: "order-db"
+                  template: "microservice"
+                  properties:
+                    x: 320
+                    y: 530
+                    label: "Order DB"
+                    custom:
+                      serviceType: "database"
+                      technology: "MongoDB"
+
+            - type: "container"
+              id: "notification-service-cluster"
+              properties:
+                x: 550
+                y: 400
+                width: 200
+                height: 200
+                label: "Notification Service"
+              style:
+                fillColor: "#FCE4EC"
+                strokeColor: "#C2185B"
+              children:
+                - type: "shape"
+                  id: "notification-api"
+                  template: "microservice"
+                  properties:
+                    x: 570
+                    y: 430
+                    label: "Notification API"
+                    custom:
+                      serviceType: "api"
+                      port: 8082
+
+                - type: "shape"
+                  id: "message-queue"
+                  template: "microservice"
+                  properties:
+                    x: 570
+                    y: 530
+                    label: "Message Queue"
+                    custom:
+                      serviceType: "queue"
+                      technology: "RabbitMQ"
+
+        - id: "infrastructure"
+          name: "Infrastructure Layer"
+          visible: true
+          elements:
+            - type: "container"
+              id: "monitoring"
+              properties:
+                x: 850
+                y: 50
+                width: 200
+                height: 300
+                label: "Monitoring"
+              style:
+                fillColor: "#F3E5F5"
+                strokeColor: "#7B1FA2"
+              children:
+                - type: "shape"
+                  id: "prometheus"
+                  template: "microservice"
+                  properties:
+                    x: 870
+                    y: 90
+                    label: "Prometheus"
+
+                - type: "shape"
+                  id: "grafana"
+                  template: "microservice"
+                  properties:
+                    x: 870
+                    y: 170
+                    label: "Grafana"
+
+                - type: "shape"
+                  id: "alertmanager"
+                  template: "microservice"
+                  properties:
+                    x: 870
+                    y: 250
+                    label: "AlertManager"
+
+        - id: "connections"
+          name: "Service Connections"
+          visible: true
+          elements:
+            # Frontend to Gateway
+            - type: "connector"
+              id: "frontend-to-gateway"
+              properties:
+                source: "react-app"
+                target: "api-gateway"
+                label: "HTTPS"
+              style:
+                strokeColor: "#2196F3"
+                strokeWidth: 2
+
+            # Gateway to Services
+            - type: "connector"
+              id: "gateway-to-user"
+              properties:
+                source: "api-gateway"
+                target: "user-api"
+                label: "REST"
+              style:
+                strokeColor: "#FF9800"
+                strokeWidth: 2
+
+            - type: "connector"
+              id: "gateway-to-order"
+              properties:
+                source: "api-gateway"
+                target: "order-api"
+                label: "REST"
+              style:
+                strokeColor: "#4CAF50"
+                strokeWidth: 2
+
+            - type: "connector"
+              id: "gateway-to-notification"
+              properties:
+                source: "api-gateway"
+                target: "notification-api"
+                label: "REST"
+              style:
+                strokeColor: "#E91E63"
+                strokeWidth: 2
+
+            # Service to Database connections
+            - type: "connector"
+              id: "user-api-to-db"
+              properties:
+                source: "user-api"
+                target: "user-db"
+                label: "SQL"
+              style:
+                strokeColor: "#FF9800"
+                strokeWidth: 1
+                strokeDashArray: "5,5"
+
+            - type: "connector"
+              id: "order-api-to-db"
+              properties:
+                source: "order-api"
+                target: "order-db"
+                label: "NoSQL"
+              style:
+                strokeColor: "#4CAF50"
+                strokeWidth: 1
+                strokeDashArray: "5,5"
+
+            - type: "connector"
+              id: "notification-api-to-queue"
+              properties:
+                source: "notification-api"
+                target: "message-queue"
+                label: "AMQP"
+              style:
+                strokeColor: "#E91E63"
+                strokeWidth: 1
+                strokeDashArray: "5,5"
+
+    - id: "deployment"
+      name: "Deployment View"
+      properties:
+        width: 1200
+        height: 800
+
+      elements:
+        - type: "swimlane"
+          id: "kubernetes-cluster"
+          properties:
+            x: 50
+            y: 50
+            width: 1100
+            height: 700
+            label: "Kubernetes Cluster"
+          style:
+            fillColor: "#E8EAF6"
+            strokeColor: "#3F51B5"
+          children:
+            - type: "swimlane"
+              id: "namespace-frontend"
+              properties:
+                x: 70
+                y: 100
+                width: 300
+                height: 150
+                label: "frontend-namespace"
+              children:
+                - type: "shape"
+                  id: "frontend-pod"
+                  template: "container"
+                  properties:
+                    x: 90
+                    y: 140
+                    label: "Frontend Pod"
+
+            - type: "swimlane"
+              id: "namespace-services"
+              properties:
+                x: 70
+                y: 300
+                width: 1000
+                height: 200
+                label: "services-namespace"
+              children:
+                - type: "shape"
+                  id: "user-pod"
+                  template: "container"
+                  properties:
+                    x: 100
+                    y: 340
+                    label: "User Service Pod"
+
+                - type: "shape"
+                  id: "order-pod"
+                  template: "container"
+                  properties:
+                    x: 400
+                    y: 340
+                    label: "Order Service Pod"
+
+                - type: "shape"
+                  id: "notification-pod"
+                  template: "container"
+                  properties:
+                    x: 700
+                    y: 340
+                    label: "Notification Pod"
+
+            - type: "swimlane"
+              id: "namespace-data"
+              properties:
+                x: 70
+                y: 550
+                width: 1000
+                height: 150
+                label: "data-namespace"
+              children:
+                - type: "shape"
+                  id: "postgres-pod"
+                  template: "container"
+                  properties:
+                    x: 200
+                    y: 590
+                    label: "PostgreSQL Pod"
+
+                - type: "shape"
+                  id: "mongodb-pod"
+                  template: "container"
+                  properties:
+                    x: 500
+                    y: 590
+                    label: "MongoDB Pod"
+
+                - type: "shape"
+                  id: "rabbitmq-pod"
+                  template: "container"
+                  properties:
+                    x: 800
+                    y: 590
+                    label: "RabbitMQ Pod"

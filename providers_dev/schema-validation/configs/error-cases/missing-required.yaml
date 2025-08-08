@@ -1,0 +1,16 @@
+# Missing version field - should fail validation
+metadata:
+  title: "Missing Required Fields"
+  description: "Test case missing required version field - should fail validation"
+
+diagram:
+  pages:
+    - id: "missing-fields-page"
+      # Missing name field
+      elements:
+        - type: "shape"
+          # Missing id field
+          properties:
+            x: 100
+            y: 100
+            # Missing required width/height

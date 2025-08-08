@@ -1,0 +1,17 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - kubernetes-namespace"
+      elements:
+        - id: "kubernetes-namespace-test-id"
+          name: "kubernetes-namespace-test"
+          template: "kubernetes-namespace"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          namespaceName: "default"
+          environment: "development"
+          fillColor: "#F1F8E9"
+          strokeColor: "#689F38"

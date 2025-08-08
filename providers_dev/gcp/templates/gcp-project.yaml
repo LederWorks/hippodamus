@@ -1,0 +1,49 @@
+name: "gcp-project"
+description: "Google Cloud Project container"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+  - name: "organization"
+    type: "gcp-organization"
+    required: false
+    relationship: "parent"
+    description: "Parent GCP organization"
+  - name: "folder"
+    type: "gcp-folder"
+    required: false
+    relationship: "parent"
+    description: "Parent folder"
+
+parameters:
+  - name: "projectName"
+    type: "string"
+    default: "production-project"
+    description: "Project name"
+  - name: "projectId"
+    type: "string"
+    default: "my-project-123456"
+    description: "Project ID"
+  - name: "projectNumber"
+    type: "string"
+    default: "123456789012"
+    description: "Project number"
+  - name: "environment"
+    type: "string"
+    default: "Production"
+    description: "Environment type"
+  - name: "fillColor"
+    type: "color"
+    default: "#F3E5F5"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#7B1FA2"
+    description: "Border color"
+
+group:
+

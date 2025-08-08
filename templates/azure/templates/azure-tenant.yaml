@@ -1,0 +1,75 @@
+name: "azure-tenant"
+description: "Azure AD Tenant root container"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+
+parameters:
+  - name: "tenantName"
+    type: "string"
+    default: "Azure Tenant"
+    description: "Tenant name"
+  - name: "tenantId"
+    type: "string"
+    default: "00000000-0000-0000-0000-000000000000"
+    description: "Azure Tenant ID"
+  - name: "domain"
+    type: "string"
+    default: "contoso.onmicrosoft.com"
+    description: "Primary domain"
+  - name: "fillColor"
+    type: "color"
+    default: "#E8F4FD"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#0078D4"
+    description: "Border color"
+
+group:
+  properties:
+    width: 400
+    height: 200
+    label: "{{.tenantName}}"
+  style:
+    fillColor: "{{.fillColor}}"
+    strokeColor: "{{.strokeColor}}"
+    strokeWidth: 2
+    fontFamily: "Segoe UI, Arial, sans-serif"
+    fontSize: 16
+    fontStyle: "bold"
+    fontColor: "#0078D4"
+    textAlign: "center"
+    verticalAlign: "top"
+    rounded: true
+    custom:
+      html: "1"
+      whiteSpace: "wrap"
+      spacingTop: "20"
+      spacingLeft: "20"
+      spacingRight: "60"
+      spacingBottom: "20"
+  autoResize: true
+  arrangement: "free"
+  children:
+    - type: "shape"
+      id: "icon"
+      properties:
+        x: 340
+        y: 10
+        width: 50
+        height: 50
+        label: " "
+      style:
+        custom:
+          html: "1"
+          aspect: "fixed"
+          shape: "img/lib/azure2/identity/Azure_Active_Directory.svg"
+          fillColor: "#0078D4"
+          strokeColor: "none"
+

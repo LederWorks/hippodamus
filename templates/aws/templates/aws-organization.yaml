@@ -1,0 +1,71 @@
+name: "aws-organization"
+description: "AWS Organization root container"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+
+parameters:
+  - name: "orgName"
+    type: "string"
+    default: "AWS Organization"
+    description: "Organization name"
+  - name: "managementAccountId"
+    type: "string"
+    default: "123456789012"
+    description: "Management account ID"
+  - name: "fillColor"
+    type: "color"
+    default: "#FFF8E1"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#FF9900"
+    description: "Border color"
+
+group:
+  properties:
+    width: 400
+    height: 200
+    label: "{{.orgName}}"
+  style:
+    fillColor: "{{.fillColor}}"
+    strokeColor: "{{.strokeColor}}"
+    strokeWidth: 2
+    fontFamily: "Amazon Ember, Arial, sans-serif"
+    fontSize: 16
+    fontStyle: "bold"
+    fontColor: "#232F3E"
+    textAlign: "center"
+    verticalAlign: "top"
+    rounded: true
+    custom:
+      html: "1"
+      whiteSpace: "wrap"
+      spacingTop: "20"
+      spacingLeft: "20"
+      spacingRight: "60"
+      spacingBottom: "20"
+  autoResize: true
+  arrangement: "free"
+  children:
+    - type: "shape"
+      id: "icon"
+      properties:
+        x: 340
+        y: 10
+        width: 50
+        height: 50
+        label: " "
+      style:
+        custom:
+          html: "1"
+          aspect: "fixed"
+          shape: "img/lib/aws4/General/Organizations.svg"
+          fillColor: "#FF9900"
+          strokeColor: "none"
+

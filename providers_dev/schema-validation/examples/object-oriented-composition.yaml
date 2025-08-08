@@ -1,0 +1,195 @@
+# Object-Oriented Composition Example
+# This example shows how to use individual element type configurations 
+# as building blocks for larger, complex diagrams
+
+version: "1.0"
+
+# Project metadata
+metadata:
+  title: "Object-Oriented Diagram Composition"
+  description: "Demonstrates composing a complex diagram from reusable element configurations"
+  author: "Schema Validation Provider"
+  version: "1.0.0"
+  created: "2024-01-01"
+
+# Global diagram settings
+settings:
+  canvas:
+    width: 1200
+    height: 800
+    background_color: "#f8f9fa"
+    grid:
+      enabled: true
+      size: 20
+      color: "#e9ecef"
+  
+  # Export configuration
+  export:
+    format: "svg"
+    quality: "high"
+    include_metadata: true
+
+# Template inputs - reference individual element configurations
+template_inputs:
+  # Import basic shape configuration
+  basic_shapes: "@element-types/shape.yaml"
+  
+  # Import connector configuration  
+  connectors: "@element-types/connector.yaml"
+  
+  # Import text configuration
+  text_elements: "@element-types/text.yaml"
+  
+  # Import container configuration
+  containers: "@element-types/container.yaml"
+  
+  # Import process flow configuration
+  process_flows: "@element-types/swimlane.yaml"
+
+# Composed diagram using imported configurations
+diagram:
+  elements:
+    # Use container configuration as foundation
+    - id: "main_container"
+      type: "container"
+      config_source: "containers"
+      overrides:
+        position: { x: 100, y: 100 }
+        size: { width: 1000, height: 600 }
+        style:
+          background_color: "#ffffff"
+          border_color: "#dee2e6"
+        title: "System Architecture Overview"
+      
+      # Child elements within container
+      children:
+        # Use shape configurations for components
+        - id: "web_server"
+          type: "shape"
+          config_source: "basic_shapes"
+          overrides:
+            position: { x: 50, y: 50 }
+            size: { width: 120, height: 80 }
+            content: "Web Server"
+            style:
+              shape_type: "rectangle"
+              background_color: "#e3f2fd"
+              border_color: "#1976d2"
+        
+        - id: "database"
+          type: "shape"
+          config_source: "basic_shapes"
+          overrides:
+            position: { x: 300, y: 50 }
+            size: { width: 120, height: 80 }
+            content: "Database"
+            style:
+              shape_type: "cylinder"
+              background_color: "#f3e5f5"
+              border_color: "#7b1fa2"
+        
+        - id: "api_gateway"
+          type: "shape"
+          config_source: "basic_shapes"
+          overrides:
+            position: { x: 550, y: 50 }
+            size: { width: 120, height: 80 }
+            content: "API Gateway"
+            style:
+              shape_type: "hexagon"
+              background_color: "#e8f5e8"
+              border_color: "#388e3c"
+    
+    # Use connector configurations for relationships
+    - id: "web_to_db"
+      type: "connector"
+      config_source: "connectors"
+      overrides:
+        source: "web_server"
+        target: "database"
+        style:
+          line_type: "straight"
+          arrow_style: "standard"
+          color: "#666666"
+        labels:
+          - text: "queries"
+            position: "middle"
+    
+    - id: "web_to_api"
+      type: "connector"
+      config_source: "connectors"
+      overrides:
+        source: "web_server"
+        target: "api_gateway"
+        style:
+          line_type: "curved"
+          arrow_style: "standard"
+          color: "#666666"
+        labels:
+          - text: "requests"
+            position: "middle"
+    
+    # Use text configuration for documentation
+    - id: "architecture_notes"
+      type: "text"
+      config_source: "text_elements"
+      overrides:
+        position: { x: 50, y: 200 }
+        size: { width: 600, height: 150 }
+        content: |
+          Architecture Notes:
+          • Web Server handles HTTP requests
+          • Database stores application data
+          • API Gateway manages external integrations
+          • All components are containerized
+        style:
+          font_family: "Arial"
+          font_size: 12
+          color: "#495057"
+          background_color: "#f8f9fa"
+          border_style: "dashed"
+
+# Validation rules for composed diagram
+validation:
+  rules:
+    - name: "container_has_children"
+      description: "Containers must have child elements"
+      condition: "elements[type='container'].children.length > 0"
+    
+    - name: "connectors_have_valid_targets"
+      description: "All connectors must reference existing elements"
+      condition: "elements[type='connector'].source in elements[].id AND elements[type='connector'].target in elements[].id"
+    
+    - name: "text_elements_have_content"
+      description: "Text elements must have non-empty content"
+      condition: "elements[type='text'].content != ''"
+
+# Layout configuration
+layout:
+  algorithm: "hierarchical"
+  direction: "top_to_bottom"
+  spacing:
+    node: 50
+    rank: 100
+  alignment: "center"
+
+# Style inheritance
+style_inheritance:
+  # Global defaults
+  defaults:
+    font_family: "Arial, sans-serif"
+    font_size: 11
+    stroke_width: 1.5
+    
+  # Type-specific defaults
+  shape_defaults:
+    border_radius: 4
+    shadow: true
+    
+  connector_defaults:
+    arrow_size: 8
+    line_smoothing: true
+    
+  text_defaults:
+    line_height: 1.4
+    text_align: "left"

@@ -1,0 +1,18 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - gcp-organization"
+      elements:
+        - id: "gcp-organization-test-id"
+          name: "gcp-organization-test"
+          template: "gcp-organization"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          organizationName: "GCP Organization"
+          orgId: "123456789012"
+          domain: "example.com"
+          fillColor: "#F9F9FF"
+          strokeColor: "#4285F4"

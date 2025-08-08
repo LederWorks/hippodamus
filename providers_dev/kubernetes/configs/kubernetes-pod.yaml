@@ -1,0 +1,18 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - kubernetes-pod"
+      elements:
+        - id: "kubernetes-pod-test-id"
+          name: "kubernetes-pod-test"
+          template: "kubernetes-pod"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          podName: "pod"
+          image: "nginx:latest"
+          replicas: "1"
+          fillColor: "#FFF3E0"
+          strokeColor: "#F57C00"

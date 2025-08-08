@@ -1,0 +1,63 @@
+name: "azuredevops-organization"
+description: "Azure DevOps Organization container with clean professional styling"
+version: "1.0"
+
+parameters:
+  - name: "orgName"
+    type: "string"
+    default: "Azure DevOps Organization"
+    description: "Organization name"
+  - name: "fillColor"
+    type: "color"
+    default: "#E8F5E8"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#4CAF50"
+    description: "Border color"
+  - name: "showIcon"
+    type: "boolean"
+    default: true
+    description: "Whether to show the organization icon"
+  - name: "iconImage"
+    type: "string"
+    default: "img/lib/mscae/Azure_DevOps.svg"
+    description: "Icon image path or URL"
+
+group:
+  properties:
+    name: "{{.orgName}}"
+    value: "container"
+  style:
+    fillColor: "{{.fillColor}}"
+    strokeColor: "{{.strokeColor}}"
+    strokeWidth: 2
+    rounded: true
+    whiteSpace: "wrap"
+    html: 1
+    fontSize: 14
+    fontColor: "#333333"
+    fontStyle: 1
+    verticalAlign: "top"
+    spacing: 10
+    spacingTop: 40
+  autoResize: true
+  arrangement: "free"
+  children:
+    - type: "shape"
+      id: "icon"
+      condition: "{{.showIcon}}"
+      properties:
+        x: 330
+        y: 10
+        width: 40
+        height: 40
+        label: " "
+      style:
+        custom:
+          html: "1"
+          aspect: "fixed"
+          shape: "{{.iconImage}}"
+          fillColor: "#4CAF50"
+          strokeColor: "none"
+

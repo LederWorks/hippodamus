@@ -1,0 +1,397 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hippodamus Diagram Configuration",
+  "description": "Schema for YAML configuration files used to generate draw.io diagrams",
+  "type": "object",
+  "required": ["version", "diagram"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Configuration schema version"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Diagram title"
+        },
+        "description": {
+          "type": "string",
+          "description": "Diagram description"
+        },
+        "author": {
+          "type": "string",
+          "description": "Diagram author"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last modification timestamp"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Diagram tags"
+        }
+      }
+    },
+    "templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "template"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Template name"
+          },
+          "template": {
+            "type": "string",
+            "description": "Path to template file"
+          }
+        }
+      }
+    },
+    "diagram": {
+      "type": "object",
+      "required": ["pages"],
+      "properties": {
+        "properties": {
+          "$ref": "#/definitions/DiagramProperties"
+        },
+        "pages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/Page"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DiagramProperties": {
+      "type": "object",
+      "properties": {
+        "grid": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "size": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          }
+        },
+        "background": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "image": {
+              "type": "string"
+            }
+          }
+        },
+        "scale": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 10
+        }
+      }
+    },
+    "Page": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique page identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Page display name"
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Layer"
+          }
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Element"
+          }
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "background": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "Layer": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique layer identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Layer display name"
+        },
+        "visible": {
+          "type": "boolean",
+          "default": true
+        },
+        "locked": {
+          "type": "boolean",
+          "default": false
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Element"
+          }
+        }
+      }
+    },
+    "Element": {
+      "type": "object",
+      "required": ["type", "id", "properties"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["shape", "connector", "text", "group", "container", "swimlane"],
+          "description": "Element type"
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique element identifier"
+        },
+        "template": {
+          "type": "string",
+          "description": "Template name to apply"
+        },
+        "properties": {
+          "$ref": "#/definitions/ElementProperties"
+        },
+        "style": {
+          "$ref": "#/definitions/Style"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Element"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ElementProperties": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": {
+        "x": {
+          "type": "number",
+          "description": "X coordinate"
+        },
+        "y": {
+          "type": "number",
+          "description": "Y coordinate"
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Element width"
+        },
+        "height": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Element height"
+        },
+        "z": {
+          "type": "integer",
+          "description": "Z-index for layering"
+        },
+        "label": {
+          "type": "string",
+          "description": "Element label"
+        },
+        "value": {
+          "type": "string",
+          "description": "Element value"
+        },
+        "shape": {
+          "type": "string",
+          "description": "Shape type"
+        },
+        "shapeType": {
+          "type": "string",
+          "description": "Shape subtype"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source element ID for connectors"
+        },
+        "target": {
+          "type": "string",
+          "description": "Target element ID for connectors"
+        },
+        "sourcePort": {
+          "type": "string",
+          "description": "Source port for connectors"
+        },
+        "targetPort": {
+          "type": "string",
+          "description": "Target port for connectors"
+        },
+        "waypoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["x", "y"],
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "collapsible": {
+          "type": "boolean",
+          "description": "Whether the element can be collapsed"
+        },
+        "collapsed": {
+          "type": "boolean",
+          "description": "Whether the element is currently collapsed"
+        },
+        "custom": {
+          "type": "object",
+          "description": "Custom properties for templates"
+        }
+      }
+    },
+    "Style": {
+      "type": "object",
+      "properties": {
+        "fillColor": {
+          "type": "string",
+          "description": "Fill color"
+        },
+        "fillOpacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "strokeColor": {
+          "type": "string",
+          "description": "Stroke color"
+        },
+        "strokeWidth": {
+          "type": "number",
+          "minimum": 0
+        },
+        "strokeOpacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "strokeDashArray": {
+          "type": "string",
+          "description": "Dash pattern for strokes"
+        },
+        "fontFamily": {
+          "type": "string",
+          "description": "Font family"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Font size"
+        },
+        "fontColor": {
+          "type": "string",
+          "description": "Font color"
+        },
+        "fontStyle": {
+          "type": "string",
+          "enum": ["normal", "bold", "italic", "underline"],
+          "description": "Font style"
+        },
+        "textAlign": {
+          "type": "string",
+          "enum": ["left", "center", "right"],
+          "description": "Text alignment"
+        },
+        "rounded": {
+          "type": "boolean",
+          "description": "Whether shape has rounded corners"
+        },
+        "shadow": {
+          "type": "boolean",
+          "description": "Whether shape has shadow"
+        },
+        "glass": {
+          "type": "boolean",
+          "description": "Whether shape has glass effect"
+        },
+        "sketch": {
+          "type": "boolean",
+          "description": "Whether shape has sketch style"
+        },
+        "rotation": {
+          "type": "number",
+          "description": "Rotation angle in degrees"
+        },
+        "custom": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "description": "Custom style properties"
+        }
+      }
+    }
+  }
+}

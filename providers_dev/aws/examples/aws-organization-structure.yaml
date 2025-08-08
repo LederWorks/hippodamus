@@ -1,0 +1,89 @@
+version: "1.0"
+metadata:
+  title: "AWS Organizational Structure"
+  description: "AWS organization with multiple OUs and accounts"
+
+variables:
+  companyName: "TechCorp"
+  
+diagram:
+  pages:
+    - id: "main"
+      name: "AWS Organization Structure"
+      elements:
+        # Root Organization
+        - id: "aws-org"
+          name: "aws-org"
+          type: "template"
+          template: "aws-organization"
+          parameters:
+            organizationName: "{{.companyName}} AWS Organization"
+            
+        # Core OU
+        - id: "core-ou"
+          name: "core-ou"
+          type: "template"
+          template: "aws-organization-unit"
+          parameters:
+            ouName: "Core OU"
+            ouId: "ou-core123456"
+            description: "Core infrastructure organizational unit"
+          dependencies:
+            - "aws-org"
+            
+        # Production OU under Core
+        - id: "prod-ou"
+          name: "prod-ou"
+          type: "template"
+          template: "aws-organization-unit"
+          parameters:
+            ouName: "Production OU"
+            ouId: "ou-prod789012"
+            description: "Production workloads organizational unit"
+          dependencies:
+            - "core-ou"
+            
+        # Development OU under Core
+        - id: "dev-ou"
+          name: "dev-ou"
+          type: "template"
+          template: "aws-organization-unit"
+          parameters:
+            ouName: "Development OU"
+            ouId: "ou-dev345678"
+            description: "Development workloads organizational unit"
+          dependencies:
+            - "core-ou"
+            
+        # Production Account
+        - id: "prod-account"
+          name: "prod-account"
+          type: "template"
+          template: "aws-account"
+          parameters:
+            accountName: "Production Account"
+            accountId: "111111111111"
+          dependencies:
+            - "prod-ou"
+            
+        # Development Account
+        - id: "dev-account"
+          name: "dev-account"
+          type: "template"
+          template: "aws-account"
+          parameters:
+            accountName: "Development Account"
+            accountId: "222222222222"
+          dependencies:
+            - "dev-ou"
+            
+        # Shared Services Account
+        - id: "shared-account"
+          name: "shared-account"
+          type: "template"
+          template: "aws-account"
+          parameters:
+            accountName: "Shared Services Account"
+            accountId: "333333333333"
+          dependencies:
+            - "core-ou"

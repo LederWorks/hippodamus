@@ -1,0 +1,96 @@
+name: "azure-microservices-platform"
+description: "Azure AKS cluster with microservices architecture"
+
+variables:
+  companyName: "Enterprise Solutions"
+  environment: "staging"
+  
+elements:
+  # Azure Infrastructure Hierarchy
+  - name: "azure-tenant"
+    template: "azure-tenant"
+    parameters:
+      tenantName: "{{.companyName}} Azure AD"
+      tenantId: "aaaabbbb-cccc-dddd-eeee-ffff00001111"
+      
+  - name: "dev-subscription"
+    template: "azure-subscription"
+    parameters:
+      subscriptionName: "Development & Testing"
+      subscriptionId: "11112222-3333-4444-5555-666677778888"
+    dependencies:
+      - "azure-tenant"
+      
+  - name: "microservices-rg"
+    template: "azure-resource-group"
+    parameters:
+      resourceGroupName: "microservices-{{.environment}}"
+      location: "East US 2"
+    dependencies:
+      - "dev-subscription"
+      
+  - name: "aks-cluster"
+    template: "azure-aks-cluster"
+    parameters:
+      clusterName: "{{.environment}}-aks"
+      version: "1.27"
+      nodePoolName: "system-pool"
+      vmSize: "Standard_DS2_v2"
+      nodeCount: 4
+    dependencies:
+      - "microservices-rg"
+
+  # Microservices Architecture
+  - name: "gateway-service"
+    template: "kubernetes-service"
+    parameters:
+      serviceName: "api-gateway"
+      serviceType: "LoadBalancer"
+      clusterType: "aks"
+    dependencies:
+      - "aks-cluster"
+      
+  - name: "user-microservice"
+    template: "kubernetes-deployment"
+    parameters:
+      deploymentName: "user-service"
+      replicas: 2
+      clusterType: "aks"
+    dependencies:
+      - "aks-cluster"
+      
+  - name: "order-microservice"
+    template: "kubernetes-deployment"
+    parameters:
+      deploymentName: "order-service"
+      replicas: 3
+      clusterType: "aks"
+    dependencies:
+      - "aks-cluster"
+      
+  - name: "payment-microservice"
+    template: "kubernetes-deployment"
+    parameters:
+      deploymentName: "payment-service"
+      replicas: 2
+      clusterType: "aks"
+    dependencies:
+      - "aks-cluster"
+      
+  - name: "notification-microservice"
+    template: "kubernetes-deployment"
+    parameters:
+      deploymentName: "notification-service"
+      replicas: 1
+      clusterType: "aks"
+    dependencies:
+      - "aks-cluster"
+      
+  - name: "monitoring-stack"
+    template: "kubernetes-deployment"
+    parameters:
+      deploymentName: "prometheus-grafana"
+      replicas: 1
+      clusterType: "aks"
+    dependencies:
+      - "aks-cluster"

@@ -1,0 +1,17 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - database"
+      elements:
+        - id: "database-test-id"
+          name: "database-test"
+          template: "database"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          dbType: "generic"
+          version: "latest"
+          fillColor: "#E8F5E8"
+          strokeColor: "#388E3C"

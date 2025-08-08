@@ -1,0 +1,17 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - github-organization"
+      elements:
+        - id: "github-organization-test-id"
+          name: "github-organization-test"
+          template: "github-organization"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          orgName: "Organization"
+          plan: "Free"
+          fillColor: "#F6F8FA"
+          strokeColor: "#24292F"

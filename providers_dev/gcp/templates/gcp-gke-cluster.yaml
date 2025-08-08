@@ -1,0 +1,48 @@
+name: "gcp-gke-cluster"
+description: "Google Kubernetes Engine (GKE) Cluster"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+  - name: "region"
+    type: "gcp-region"
+    required: true
+    relationship: "parent"
+    description: "Parent GCP region"
+
+parameters:
+  - name: "clusterName"
+    type: "string"
+    default: "gke-cluster"
+    description: "GKE cluster name"
+  - name: "version"
+    type: "string"
+    default: "1.28"
+    description: "Kubernetes version"
+  - name: "nodePoolName"
+    type: "string"
+    default: "default-pool"
+    description: "Node pool name"
+  - name: "machineType"
+    type: "string"
+    default: "e2-standard-4"
+    description: "Machine type"
+  - name: "nodeCount"
+    type: "number"
+    default: 3
+    description: "Node count"
+  - name: "fillColor"
+    type: "color"
+    default: "#E3F2FD"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#1976D2"
+    description: "Border color"
+
+group:
+

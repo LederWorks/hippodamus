@@ -1,0 +1,19 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - kubernetes-deployment"
+      elements:
+        - id: "kubernetes-deployment-test-id"
+          name: "kubernetes-deployment-test"
+          template: "kubernetes-deployment"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          deploymentName: "my-deployment"
+          replicas: "3"
+          image: "nginx:latest"
+          clusterType: "native"
+          fillColor: "#E8F5E8"
+          strokeColor: "#4CAF50"

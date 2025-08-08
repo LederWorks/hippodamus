@@ -1,0 +1,26 @@
+version: "1.0"
+metadata:
+  title: "Azure DevOps Organization"
+  description: "Azure DevOps organization using template defaults"
+  author: "@Ledermayer"
+  tags: ["azuredevops", "organization"]
+
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test - azuredevops-organization"
+      elements:
+        - id: "test-id"
+          name: "test-element"
+          template: "azuredevops-organization"
+          properties:
+            x: 100
+            y: 100
+
+group:
+  orgName: "Azure DevOps Organization"
+  fillColor: "#E8F5E8"
+  strokeColor: "#4CAF50"
+  showIcon: true
+  description: "Example Azure DevOps Organization"
+  iconImage: "img/lib/mscae/Azure_DevOps.svg"

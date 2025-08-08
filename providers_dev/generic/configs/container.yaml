@@ -1,0 +1,14 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - container"
+      elements:
+        - id: "container-test-id"
+          name: "container-test"
+          template: "container"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          technology: "docker"

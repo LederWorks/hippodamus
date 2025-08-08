@@ -1,0 +1,17 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - aws-organization"
+      elements:
+        - id: "aws-organization-test-id"
+          name: "aws-organization-test"
+          template: "aws-organization"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          orgName: "AWS Organization"
+          managementAccountId: "123456789012"
+          fillColor: "#FFF8E1"
+          strokeColor: "#FF9900"

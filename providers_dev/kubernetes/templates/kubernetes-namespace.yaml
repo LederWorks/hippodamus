@@ -1,0 +1,36 @@
+name: "kubernetes-namespace"
+description: "Kubernetes Namespace container"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+  - name: "cluster"
+    type: "kubernetes-cluster"
+    required: false
+    relationship: "parent"
+    description: "Parent Kubernetes cluster (optional for inner-only diagrams)"
+
+parameters:
+  - name: "namespaceName"
+    type: "string"
+    default: "default"
+    description: "Namespace name"
+  - name: "environment"
+    type: "string"
+    default: "development"
+    description: "Environment (development, staging, production)"
+  - name: "fillColor"
+    type: "color"
+    default: "#F1F8E9"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#689F38"
+    description: "Border color"
+
+group:
+

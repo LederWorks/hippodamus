@@ -1,0 +1,50 @@
+name: "azuredevops-service-connection"
+description: "Azure DevOps Service Connection"
+version: "1.0"
+
+dependencies:
+  - name: "custom"
+    type: "container" #container or group, defaults to container
+    required: false
+    relationship: "parent"
+    description: "Custom parent object"
+
+parameters:
+  - name: "connectionName"
+    type: "string"
+    default: "Service Connection"
+    description: "Service connection name"
+  - name: "connectionType"
+    type: "string"
+    default: "Azure Resource Manager"
+    description: "Connection type"
+  - name: "fillColor"
+    type: "color"
+    default: "#FCE4EC"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#C2185B"
+    description: "Border color"
+
+group:
+  properties:
+    width: 200
+    height: 80
+    label: "{{.connectionName}}"
+  style:
+    fillColor: "{{.fillColor}}"
+    strokeColor: "{{.strokeColor}}"
+    strokeWidth: 2
+    fontFamily: "Segoe UI"
+    fontSize: 12
+    fontColor: "#000000"
+    textAlign: "center"
+    verticalAlign: "middle"
+    rounded: true
+    custom:
+      html: "1"
+      whiteSpace: "wrap"
+  autoResize: false
+  arrangement: "free"
+

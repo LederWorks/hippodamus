@@ -1,0 +1,15 @@
+# Code Owners for Hippodamus
+# This file defines who must review changes to specific parts of the codebase
+
+# Global owners - require review for all changes
+* @Ledermayer
+
+# Configuration files - require senior team review
+/go.mod @Ledermayer
+/go.sum @Ledermayer
+/.golangci.yml @Ledermayer
+/GitVersion.yml @Ledermayer
+
+# Security-sensitive files - require security team review
+<!-- /SECURITY.md @LederWorks/hippodamus-security-team
+/.github/workflows/ @LederWorks/hippodamus-security-team -->

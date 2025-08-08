@@ -1,0 +1,17 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "page1"
+      name: "Test Page - aws-region"
+      elements:
+        - id: "aws-region-test-id"
+          name: "aws-region-test"
+          template: "aws-region"
+          position:
+            x: 100
+            y: 100
+          parameters:
+          regionName: "us-west-2"
+          regionDisplayName: "US West (Oregon)"
+          fillColor: "#E8F5E8"
+          strokeColor: "#4CAF50"

@@ -1,0 +1,24 @@
+name: "github-organization"
+description: "GitHub Organization container"
+version: "1.0"
+
+parameters:
+  - name: "orgName"
+    type: "string"
+    default: "Organization"
+    description: "Organization name"
+  - name: "plan"
+    type: "string"
+    default: "Free"
+    description: "GitHub plan (Free, Pro, Team, Enterprise)"
+  - name: "fillColor"
+    type: "color"
+    default: "#F6F8FA"
+    description: "Background color"
+  - name: "strokeColor"
+    type: "color"
+    default: "#24292F"
+    description: "Border color"
+
+group:
+

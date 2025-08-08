@@ -1,0 +1,93 @@
+version: "1.0"
+metadata:
+  title: "Custom Parent Example"
+  description: "Enterprise container with all cloud organizations as children"
+
+variables:
+  orgName: "Enterprise Corp"
+
+diagram:
+  pages:
+    - id: "main"
+      name: "Enterprise Cloud Infrastructure"
+      elements:
+        - id: "enterprise"
+          name: "enterprise"
+          type: "container"
+          style:
+            fillColor: "#f0f0f0"
+            strokeColor: "#cccccc"
+            fontColor: "#333333"
+          parameters:
+            description: "Enterprise-wide container for all cloud organizations"
+
+        - id: "aws-org"
+          name: "aws-org"
+          type: "template"
+          template: "aws-organization"
+          dependencies:
+            - id: "enterprise"
+              relationship: "custom"
+          parameters:
+            organizationName: "{{.orgName}} AWS"
+            organizationId: "o-example123456"
+            masterAccountId: "123456789012"
+
+        - id: "azure-org"
+          name: "azure-org"
+          type: "template"
+          template: "azure-tenant"
+          dependencies:
+            - id: "enterprise"
+              relationship: "custom"
+          parameters:
+            tenantName: "{{.orgName}} Azure"
+            tenantId: "12345678-1234-1234-1234-123456789012"
+            domainName: "contoso.onmicrosoft.com"
+
+        - id: "gcp-org"
+          name: "gcp-org"
+          type: "template"
+          template: "gcp-organization"
+          dependencies:
+            - id: "enterprise"
+              relationship: "custom"
+          parameters:
+            organizationName: "{{.orgName}} GCP"
+            organizationId: "123456789012"
+            domain: "example.com"
+
+        - id: "dev-ou"
+          name: "dev-ou"
+          type: "template"
+          template: "aws-organization-unit"
+          dependencies:
+            - id: "aws-org"
+              relationship: "organization"
+          parameters:
+            ouName: "Development OU"
+            ouId: "ou-root-example123"
+
+        - id: "dev-mg"
+          name: "dev-mg"
+          type: "template"
+          template: "azure-management-group"
+          dependencies:
+            - id: "azure-org"
+              relationship: "tenant"
+          parameters:
+            managementGroupName: "Development MG"
+            managementGroupId: "dev-mg"
+            displayName: "Development Management Group"
+
+        - id: "dev-folder"
+          name: "dev-folder"
+          type: "template"
+          template: "gcp-folder"
+          dependencies:
+            - id: "gcp-org"
+              relationship: "organization"
+          parameters:
+            folderName: "Development Folder"
+            folderId: "123456789012"
+            displayName: "Development Folder"

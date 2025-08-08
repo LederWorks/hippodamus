@@ -1,0 +1,45 @@
+version: "1.0"
+
+metadata:
+  title: "Modular Provider Test"
+  description: "Testing the refactored modular provider structure"
+
+diagram:
+  pages:
+    - id: "test"
+      name: "Modular Test"
+      elements:
+        - id: "server"
+          name: "Server Shape"
+          type: "template"
+          template: "core-shape"
+          parameters:
+            label: "Web Server"
+            shape: "rectangle"
+            fillColor: "#E3F2FD"
+            strokeColor: "#1976D2"
+            width: 140
+            height: 80
+
+        - id: "db"
+          name: "Database Shape"
+          type: "template"
+          template: "core-shape"
+          parameters:
+            label: "Database"
+            shape: "cylinder"
+            fillColor: "#F3E5F5"
+            strokeColor: "#7B1FA2"
+            width: 120
+            height: 90
+
+        - id: "connection"
+          name: "Server to DB"
+          type: "template"
+          template: "core-connector"
+          parameters:
+            source: "server"
+            target: "db"
+            label: "SQL queries"
+            strokeColor: "#424242"
+            strokeWidth: 2

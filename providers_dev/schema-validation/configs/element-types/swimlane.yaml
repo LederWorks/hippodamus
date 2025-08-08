@@ -1,0 +1,216 @@
+version: "1.0"
+metadata:
+  title: "Swimlane Element Configuration"
+  description: "Standalone swimlane element that can be used independently or as a template input"
+  author: "Hippodamus Schema"
+  created: "2025-08-06T10:00:00Z"
+  tags: ["swimlane", "element", "standalone", "reusable"]
+
+diagram:
+  properties:
+    grid:
+      enabled: true
+      size: 10
+      color: "#E0E0E0"
+    background:
+      color: "#FFFFFF"
+    scale: 1.0
+
+  pages:
+    - id: "swimlane-page"
+      name: "Swimlane Element"
+      properties:
+        width: 800
+        height: 400
+        background: "#F8F9FA"
+      
+      elements:
+        # Standalone swimlane element with comprehensive configuration
+        - type: "swimlane"
+          id: "primary-swimlane"
+          name: "Primary Swimlane"
+          properties:
+            x: 50
+            y: 50
+            width: 700
+            height: 300
+            label: "Process Swimlane"
+            collapsible: false
+            collapsed: false
+            custom:
+              swimlaneType: "process"
+              orientation: "horizontal"
+              phases: 4
+              processName: "Standard Workflow"
+          style:
+            # Fill properties
+            fillColor: "#E0F2F1"
+            fillOpacity: 0.7
+            
+            # Stroke properties
+            strokeColor: "#00695C"
+            strokeWidth: 3
+            strokeOpacity: 1.0
+            strokeDashArray: ""
+            
+            # Typography for swimlane label
+            fontFamily: "Arial"
+            fontSize: 18
+            fontColor: "#004D40"
+            fontStyle: "bold"
+            textAlign: "center"
+            verticalAlign: "top"
+            labelPosition: "center"
+            verticalLabelPosition: "top"
+            
+            # Swimlane effects
+            rounded: false
+            shadow: true
+            glass: false
+            sketch: false
+            rotation: 0
+            
+            # Custom swimlane properties
+            custom:
+              html: "1"
+              whiteSpace: "wrap"
+              swimlaneHead: "0"
+              horizontal: "1"
+          tags: ["primary", "swimlane", "reusable"]
+          nesting:
+            mode: "child"
+            autoResize: false
+            spacing: 20
+            arrangement: "horizontal"
+            padding:
+              top: 40
+              right: 15
+              bottom: 15
+              left: 15
+            childDefaults:
+              style:
+                fillColor: "#B2DFDB"
+                strokeColor: "#00796B"
+                strokeWidth: 2
+                rounded: true
+                fontSize: 12
+          children:
+            # Swimlane process steps
+            - type: "shape"
+              id: "process-step-1"
+              name: "Process Step 1"
+              properties:
+                x: 0
+                y: 0
+                width: 140
+                height: 80
+                label: "Initialize"
+                shape: "process"
+              style:
+                fillColor: "#A5D6A7"
+                strokeColor: "#388E3C"
+                strokeWidth: 2
+                fontSize: 12
+                fontStyle: "bold"
+                textAlign: "center"
+                verticalAlign: "middle"
+
+            - type: "shape"
+              id: "process-step-2"
+              name: "Process Step 2"
+              properties:
+                x: 160
+                y: 0
+                width: 140
+                height: 80
+                label: "Process"
+                shape: "process"
+              style:
+                fillColor: "#81C784"
+                strokeColor: "#388E3C"
+                strokeWidth: 2
+                fontSize: 12
+                fontStyle: "bold"
+                textAlign: "center"
+                verticalAlign: "middle"
+
+            - type: "shape"
+              id: "process-step-3"
+              name: "Process Step 3"
+              properties:
+                x: 320
+                y: 0
+                width: 140
+                height: 80
+                label: "Validate"
+                shape: "process"
+              style:
+                fillColor: "#66BB6A"
+                strokeColor: "#388E3C"
+                strokeWidth: 2
+                fontSize: 12
+                fontStyle: "bold"
+                textAlign: "center"
+                verticalAlign: "middle"
+
+            - type: "shape"
+              id: "process-step-4"
+              name: "Process Step 4"
+              properties:
+                x: 480
+                y: 0
+                width: 140
+                height: 80
+                label: "Complete"
+                shape: "process"
+              style:
+                fillColor: "#4CAF50"
+                strokeColor: "#388E3C"
+                strokeWidth: 2
+                fontSize: 12
+                fontStyle: "bold"
+                textAlign: "center"
+                verticalAlign: "middle"
+
+            # Process flow connectors within swimlane
+            - type: "connector"
+              id: "flow-1-2"
+              name: "Flow 1 to 2"
+              properties:
+                source: "process-step-1"
+                target: "process-step-2"
+                sourcePort: "right"
+                targetPort: "left"
+              style:
+                strokeColor: "#2E7D32"
+                strokeWidth: 2
+                custom:
+                  endArrow: "classic"
+
+            - type: "connector"
+              id: "flow-2-3"
+              name: "Flow 2 to 3"
+              properties:
+                source: "process-step-2"
+                target: "process-step-3"
+                sourcePort: "right"
+                targetPort: "left"
+              style:
+                strokeColor: "#2E7D32"
+                strokeWidth: 2
+                custom:
+                  endArrow: "classic"
+
+            - type: "connector"
+              id: "flow-3-4"
+              name: "Flow 3 to 4"
+              properties:
+                source: "process-step-3"
+                target: "process-step-4"
+                sourcePort: "right"
+                targetPort: "left"
+              style:
+                strokeColor: "#2E7D32"
+                strokeWidth: 2
+                custom:
+                  endArrow: "classic"

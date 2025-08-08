@@ -1,0 +1,17 @@
+version: "1.0"
+diagram:
+  pages:
+    - id: "pipeline"
+      name: "azuredevops-pipeline"
+      elements:
+        - id: "azuredevops-pipeline-test-id"
+          name: "azuredevops-pipeline-test"
+          template: "azuredevops-pipeline"
+          position:
+            x: 100
+            y: 100
+          parameters:
+            pipelineName: "TestpipelineName"
+            pipelineType: "Build"
+            fillColor: "#F3E5F5"
+            strokeColor: "#7B1FA2"

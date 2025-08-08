@@ -1,0 +1,117 @@
+version: "1.0"
+metadata:
+  title: "Azure Management Group Structure"
+  description: "Azure tenant with hierarchical management groups and subscriptions"
+
+variables:
+  companyName: "Enterprise Solutions"
+  
+diagram:
+  pages:
+    - id: "main"
+      name: "Azure Management Group Structure"
+      elements:
+        # Root Tenant
+        - id: "azure-tenant"
+          name: "azure-tenant"
+          type: "template"
+          template: "azure-tenant"
+          parameters:
+            tenantName: "{{.companyName}} Azure AD"
+            tenantId: "aaaabbbb-cccc-dddd-eeee-ffff00001111"
+            
+        # Root Management Group
+        - id: "root-mg"
+          name: "root-mg"
+          type: "template"
+          template: "azure-management-group"
+          parameters:
+            managementGroupName: "Root MG"
+            managementGroupId: "root-mg"
+            displayName: "Root Management Group"
+          dependencies:
+            - "azure-tenant"
+            
+        # Platform Management Group
+        - id: "platform-mg"
+          name: "platform-mg"
+          type: "template"
+          template: "azure-management-group"
+          parameters:
+            managementGroupName: "Platform MG"
+            managementGroupId: "platform-mg"
+            displayName: "Platform Management Group"
+          dependencies:
+            - "root-mg"
+            
+        # Workloads Management Group
+        - id: "workloads-mg"
+          name: "workloads-mg"
+          type: "template"
+          template: "azure-management-group"
+          parameters:
+            managementGroupName: "Workloads MG"
+            managementGroupId: "workloads-mg"
+            displayName: "Workloads Management Group"
+          dependencies:
+            - "root-mg"
+            
+        # Production Management Group under Workloads
+        - id: "prod-mg"
+          name: "prod-mg"
+          type: "template"
+          template: "azure-management-group"
+          parameters:
+            managementGroupName: "Production MG"
+            managementGroupId: "prod-mg"
+            displayName: "Production Management Group"
+          dependencies:
+            - "workloads-mg"
+            
+        # Development Management Group under Workloads
+        - id: "dev-mg"
+          name: "dev-mg"
+          type: "template"
+          template: "azure-management-group"
+          parameters:
+            managementGroupName: "Development MG"
+            managementGroupId: "dev-mg"
+            displayName: "Development Management Group"
+          dependencies:
+            - "workloads-mg"
+            
+        # Production Subscription
+        - id: "prod-subscription"
+          name: "prod-subscription"
+          type: "template"
+          template: "azure-subscription"
+          parameters:
+            subscriptionName: "Production Subscription"
+            subscriptionId: "11111111-2222-3333-4444-555555555555"
+            subscriptionType: "Enterprise Agreement"
+          dependencies:
+            - "prod-mg"
+            
+        # Development Subscription
+        - id: "dev-subscription"
+          name: "dev-subscription"
+          type: "template"
+          template: "azure-subscription"
+          parameters:
+            subscriptionName: "Development Subscription"
+            subscriptionId: "66666666-7777-8888-9999-aaaaaaaaaaaa"
+            subscriptionType: "Pay-As-You-Go"
+          dependencies:
+            - "dev-mg"
+            
+        # Shared Platform Subscription
+        - id: "platform-subscription"
+          name: "platform-subscription"
+          type: "template"
+          template: "azure-subscription"
+          parameters:
+            subscriptionName: "Platform Services Subscription"
+            subscriptionId: "bbbbbbbb-cccc-dddd-eeee-ffffffffffff"
+            subscriptionType: "Enterprise Agreement"
+          dependencies:
+            - "platform-mg"
