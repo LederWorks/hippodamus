@@ -28,7 +28,7 @@ type CoreProvider struct {
 
 // NewCoreProvider creates a new core provider instance
 func NewCoreProvider() *CoreProvider {
-	return NewCoreProviderWithVersion(DefaultCoreProviderVersion)
+	return NewCoreProviderWithVersion("dev")
 }
 
 // NewCoreProviderWithVersion creates a new core provider instance with a specific version
