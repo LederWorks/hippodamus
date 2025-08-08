@@ -4,15 +4,15 @@ import (
 	"testing"
 )
 
-func TestModularCoreProvider_Basic(t *testing.T) {
+func TestCoreProvider_Basic(t *testing.T) {
 	provider := NewCoreProvider()
 
 	if provider.Name() != "core" {
 		t.Errorf("Expected provider name 'core', got '%s'", provider.Name())
 	}
 
-	if provider.Version() != "1.0.0" {
-		t.Errorf("Expected version '1.0.0', got '%s'", provider.Version())
+	if provider.Version() != "dev" {
+		t.Errorf("Expected version 'dev', got '%s'", provider.Version())
 	}
 
 	// Test that we have some resources (at least shape and connector)
@@ -42,7 +42,7 @@ func TestModularCoreProvider_Basic(t *testing.T) {
 	}
 }
 
-func TestModularCoreProvider_ShapeValidation(t *testing.T) {
+func TestCoreProvider_ShapeValidation(t *testing.T) {
 	provider := NewCoreProvider()
 
 	// Test valid shape parameters
@@ -68,7 +68,7 @@ func TestModularCoreProvider_ShapeValidation(t *testing.T) {
 	}
 }
 
-func TestModularCoreProvider_ShapeTemplate(t *testing.T) {
+func TestCoreProvider_ShapeTemplate(t *testing.T) {
 	provider := NewCoreProvider()
 
 	params := map[string]interface{}{
@@ -98,7 +98,7 @@ func TestModularCoreProvider_ShapeTemplate(t *testing.T) {
 	}
 }
 
-func TestModularCoreProvider_ConnectorValidation(t *testing.T) {
+func TestCoreProvider_ConnectorValidation(t *testing.T) {
 	provider := NewCoreProvider()
 
 	// Test valid connector parameters
@@ -123,7 +123,7 @@ func TestModularCoreProvider_ConnectorValidation(t *testing.T) {
 	}
 }
 
-func TestModularCoreProvider_UnsupportedResource(t *testing.T) {
+func TestCoreProvider_UnsupportedResource(t *testing.T) {
 	provider := NewCoreProvider()
 
 	err := provider.Validate("unsupported", map[string]interface{}{})

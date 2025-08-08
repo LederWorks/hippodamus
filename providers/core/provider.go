@@ -28,8 +28,13 @@ type CoreProvider struct {
 
 // NewCoreProvider creates a new core provider instance
 func NewCoreProvider() *CoreProvider {
+	return NewCoreProviderWithVersion("dev")
+}
+
+// NewCoreProviderWithVersion creates a new core provider instance with a specific version
+func NewCoreProviderWithVersion(version string) *CoreProvider {
 	return &CoreProvider{
-		version:           "1.0.0",
+		version:           version,
 		shapeResource:     resources.NewShapeResource(),
 		connectorResource: resources.NewConnectorResource(),
 		textResource:      resources.NewTextResource(),
@@ -129,4 +134,9 @@ func (p *CoreProvider) GetSchema(resourceType string) (map[string]interface{}, e
 		Message:  fmt.Sprintf("schema not found for resource type: %s", resourceType),
 		Code:     "SCHEMA_NOT_FOUND",
 	}
+}
+
+// GetVersion returns the provider version
+func (p *CoreProvider) GetVersion() string {
+	return p.version
 }
