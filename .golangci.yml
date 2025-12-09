@@ -1,14 +1,12 @@
+version: 2
+
 linters:
   enable:
     - errcheck
-    - gosimple
     - govet
     - ineffassign
     - staticcheck
-    - typecheck
-    - goimports
     - misspell
-    - gofmt
   disable:
     - unused
     - gocyclo
@@ -17,6 +15,11 @@ linters:
     - revive
     - unconvert
     - unparam
+
+formatters:
+  enable:
+    - goimports
+    - gofmt
 
 run:
   timeout: 5m
