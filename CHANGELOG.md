@@ -69,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Code formatting issues across all Go files to meet linting standards
 - Provider registration error messages now include provider name for better debugging context
 - Removed unused `InitializeBuiltinProviders()` function to eliminate dead code
+- GitVersion configuration compatibility with version 6.x (replaced deprecated 'tag' property with 'label' property)
 
 ### Security
 - Updated all GitHub Actions to latest secure versions
